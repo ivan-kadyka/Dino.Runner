@@ -1,5 +1,6 @@
 using System.Threading;
 using Character.Controller;
+using Controllers;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,15 +8,18 @@ namespace AppContext
 {
     public class AppController : ControllerBase
     {
-        public AppController()
+        private readonly IController _characterController;
+
+        public AppController(IController characterController)
         {
+            _characterController = characterController;
         }
 
-        protected override UniTask OnStarted(CancellationToken token = default)
+        protected override async UniTask OnStarted(CancellationToken token = default)
         {
             Debug.Log("AppController: Started");
-            
-            return base.OnStarted(token);
+
+            await _characterController.Start(token);
         }
     }
 }

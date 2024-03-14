@@ -41,5 +41,4 @@ public class Player : MonoBehaviour
             GameManager.Instance.GameOver();
         }
     }
-
 }

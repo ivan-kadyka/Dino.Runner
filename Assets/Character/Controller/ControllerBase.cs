@@ -1,13 +1,12 @@
 using System.Threading;
 using Controllers;
 using Cysharp.Threading.Tasks;
+using Types;
 
 namespace Character.Controller
 {
-    public abstract class ControllerBase : IController
+    public abstract class ControllerBase : DisposableBase, IController
     {
-        private bool _isDisposed;
-        
         public async UniTask Start(CancellationToken token = default)
         {
             await OnStarted(token);
@@ -28,16 +27,7 @@ namespace Character.Controller
             return UniTask.CompletedTask;
         }
         
-        public void Dispose()
-        {
-            if (_isDisposed)
-                return;
-
-            OnDisposed(true);
-            _isDisposed = true;
-        }
-
-        protected virtual void OnDisposed(bool disposing)
+        protected override void Dispose(bool disposing)
         {
         }
     }
