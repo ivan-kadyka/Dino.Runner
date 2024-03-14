@@ -1,3 +1,4 @@
+using Character.View;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private Button retryButton;
 
-    private Player player;
+    private CharacterView player;
     private Spawner spawner;
 
     private float score;
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<CharacterView>();
         spawner = FindObjectOfType<Spawner>();
 
         NewGame();
