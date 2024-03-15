@@ -1,39 +1,47 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Character.View
 {
     public class CharacterView : MonoBehaviour, ICharacterView
     {
-        private CharacterController character;
-        private Vector3 direction;
+        private CharacterController _character;
+        private Vector3 _direction;
 
         public float jumpForce = 8f;
         public float gravity = 9.81f * 2f;
 
+        private CharacterState _state;
+        private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
+
         private void Awake()
         {
-            character = GetComponent<CharacterController>();
+            _character = GetComponent<CharacterController>();
         }
 
         private void OnEnable()
         {
-            direction = Vector3.zero;
+            _direction = Vector3.zero;
         }
 
         private void Update()
         {
-            direction += gravity * Time.deltaTime * Vector3.down;
-
-            if (character.isGrounded)
+            switch (_state)
             {
-                direction = Vector3.down;
-
-                if (Input.GetButton("Jump")) {
-                    direction = Vector3.up * jumpForce;
-                }
+                case  CharacterState.Jumping:
+                    if (_character.isGrounded)
+                    {
+                        _jumpingTaskCompletionSource.TrySetResult();
+                        _state = CharacterState.Run;
+                    }
+                    else
+                    {
+                        ExecuteJumping();
+                    }
+                       
+                    break;
             }
-
-            character.Move(direction * Time.deltaTime);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -46,6 +54,33 @@ namespace Character.View
         public void Move()
         {
             throw new System.NotImplementedException();
+        }
+
+        public UniTask Jump(CancellationToken token = default)
+        {
+            if (_state == CharacterState.Jumping)
+                return UniTask.CompletedTask;
+
+            _jumpingTaskCompletionSource = new UniTaskCompletionSource();
+
+            _state = CharacterState.Jumping;
+            _direction = Vector3.up * jumpForce;
+
+            ExecuteJumping();
+
+            return _jumpingTaskCompletionSource.Task;
+        }
+
+        private void ExecuteJumping()
+        {
+            _direction += gravity * Time.deltaTime * Vector3.down;
+            _character.Move(_direction * Time.deltaTime);
+        }
+
+        enum CharacterState
+        {
+           Run,
+           Jumping
         }
     }
 }
