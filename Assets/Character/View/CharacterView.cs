@@ -51,9 +51,9 @@ namespace Character.View
             }
         }
 
-        public void Move()
+        public async UniTask Move(CancellationToken token = default)
         {
-            throw new System.NotImplementedException();
+            await UniTask.Never(token);
         }
 
         public UniTask Jump(CancellationToken token = default)

@@ -5,7 +5,7 @@ namespace Character.View
 {
     public interface ICharacterView
     {
-        void Move();
+        UniTask Move(CancellationToken token = default);
         UniTask Jump(CancellationToken token = default);
     }
 }

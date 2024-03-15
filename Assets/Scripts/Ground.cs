@@ -1,7 +1,8 @@
+using Controllers;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
-public class Ground : MonoBehaviour
+public class Ground : MonoBehaviour, IView
 {
     private MeshRenderer meshRenderer;
 
@@ -16,4 +17,8 @@ public class Ground : MonoBehaviour
         meshRenderer.material.mainTextureOffset += speed * Time.deltaTime * Vector2.right;
     }
 
+    public void Dispose()
+    {
+        Destroy(gameObject);
+    }
 }

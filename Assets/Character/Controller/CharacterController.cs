@@ -30,12 +30,9 @@ namespace Character.Controller
             await _view.Jump();
         }
 
-
-        protected override UniTask OnStarted(CancellationToken token = default)
+        protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            Debug.Log("CharacterController: Started");
-            
-            return base.OnStarted(token);
+            await _view.Move(token);
         }
 
         protected override void Dispose(bool disposing)

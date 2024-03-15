@@ -1,25 +1,36 @@
+using System;
 using System.Threading;
 using Character.Controller;
 using Controllers;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace AppContext
 {
     public class AppController : ControllerBase
     {
-        private readonly IController _characterController;
+        private readonly IController _roundController;
+        private readonly IController _retryPopupController;
 
-        public AppController(IController characterController)
+        public AppController(IController roundController, IController retryPopupController)
         {
-            _characterController = characterController;
+            _roundController = roundController;
+            _retryPopupController = retryPopupController;
         }
 
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            Debug.Log("AppController: Started");
+            try
+            {
+                await _roundController.Start(token);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
 
-            await _characterController.Start(token);
+        protected override async UniTask OnStopped(CancellationToken token = default)
+        {
+            await _retryPopupController.Start(token);
         }
     }
 }
