@@ -17,7 +17,7 @@ public class AppContextComponent : MonoBehaviour
 
         try
         {
-            while (!token.IsCancellationRequested)
+            while (!token.IsCancellationRequested && appController != null)
             {
                 await appController.Start(token);
                 await appController.Stop(token);

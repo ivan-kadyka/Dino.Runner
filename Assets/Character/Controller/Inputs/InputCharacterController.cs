@@ -5,7 +5,7 @@ namespace Character.Controller.Inputs
 {
     public class InputCharacterController: MonoBehaviour, IInputCharacterController
     {
-        public event Action Jumped;
+        public event Action JumpPressed;
 
         private void Update()
         {
@@ -20,7 +20,7 @@ namespace Character.Controller.Inputs
         protected virtual void OnJumped()
         {
             // Invoke the Jumped event, using the ?. operator to only invoke it if there are any subscribers
-            Jumped?.Invoke();
+            JumpPressed?.Invoke();
         }
     }
 }

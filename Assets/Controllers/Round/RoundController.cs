@@ -18,6 +18,7 @@ namespace Controllers.Round
         
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
+            GameManager.Instance.NewGame(); // temp
             await _characterController.Start(token);
         }
     }

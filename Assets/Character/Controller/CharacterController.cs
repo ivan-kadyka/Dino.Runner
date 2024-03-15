@@ -22,10 +22,10 @@ namespace Character.Controller
             _view = view;
             _inputCharacterController = inputCharacterController;
             
-            _inputCharacterController.Jumped += OnJumpedExecuted;
+            _inputCharacterController.JumpPressed += OnJumpPressedExecuted;
         }
 
-        private async void OnJumpedExecuted()
+        private async void OnJumpPressedExecuted()
         {
             await _view.Jump();
         }
@@ -39,7 +39,7 @@ namespace Character.Controller
         {
             if (disposing)
             {
-                _inputCharacterController.Jumped -= OnJumpedExecuted;
+                _inputCharacterController.JumpPressed -= OnJumpPressedExecuted;
             }
             
             base.Dispose(disposing);

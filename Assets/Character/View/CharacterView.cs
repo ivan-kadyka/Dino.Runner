@@ -15,6 +15,7 @@ namespace Character.View
 
         private CharacterState _state;
         private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
+        private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
         private void Awake()
         {
@@ -24,6 +25,7 @@ namespace Character.View
         private void OnEnable()
         {
             _direction = Vector3.zero;
+            _moveTaskCompletionSource = new UniTaskCompletionSource();
         }
 
         private void Update()
@@ -48,14 +50,15 @@ namespace Character.View
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Obstacle")) {
-                enabled = false;
                 GameManager.Instance.GameOver();
+                _moveTaskCompletionSource.TrySetResult();
             }
         }
 
         public async UniTask Move(CancellationToken token = default)
         {
-            await UniTask.Never(token);
+            _moveTaskCompletionSource = new UniTaskCompletionSource();
+            await _moveTaskCompletionSource.Task;
         }
 
         public UniTask Jump(CancellationToken token = default)

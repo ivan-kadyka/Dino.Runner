@@ -15,6 +15,8 @@ public class BootstraperInstaller : MonoInstaller
     [SerializeField] private GameObject RoundPrefab;
     
     [SerializeField] private GameObject RentryPopupPrefab;
+    
+    [SerializeField] private GameObject Canvas;
 
     public override void InstallBindings()
     {
@@ -43,7 +45,13 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IView>("RoundView"))).AsSingle();
 
         // Retry popup
-        Container.Bind<IPopupView>().WithId("RetryPopupView").To<RetryPopupView>().FromComponentInNewPrefab(RentryPopupPrefab).AsCached();
+        Container.Bind<IPopupView>()
+            .WithId("RetryPopupView")
+            .To<RetryPopupView>()
+            .FromComponentInNewPrefab(RentryPopupPrefab)
+            .UnderTransform(Canvas.transform)
+            .AsCached();
+        
         Container.Bind<IController>().WithId("RetryPopupController")
             .FromMethod(it => new RetryPopupController(
             it.Container.ResolveId<IPopupView>("RetryPopupView")

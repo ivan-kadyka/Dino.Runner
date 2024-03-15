@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI hiscoreText;
-    [SerializeField] private GameObject retryPopup;
     
     private Spawner spawner;
     
@@ -56,8 +55,6 @@ public class GameManager : MonoBehaviour
         enabled = true;
         
         spawner.gameObject.SetActive(true);
-        
-        retryPopup.gameObject.SetActive(false);
 
         UpdateHiscore();
     }
@@ -68,7 +65,6 @@ public class GameManager : MonoBehaviour
         enabled = false;
         
         spawner.gameObject.SetActive(false);
-        retryPopup.gameObject.SetActive(true);
 
         UpdateHiscore();
     }
