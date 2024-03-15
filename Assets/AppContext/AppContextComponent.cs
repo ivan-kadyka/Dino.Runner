@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using AppContext;
 using UnityEngine;
@@ -13,11 +14,17 @@ public class AppContextComponent : MonoBehaviour
     async void Start()
     {
         var token = _cancellationSource.Token;
-        
-        while (!token.IsCancellationRequested)
+
+        try
         {
-            await appController.Start(token);
-            await appController.Stop(token);
+            while (!token.IsCancellationRequested)
+            {
+                await appController.Start(token);
+                await appController.Stop(token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
         }
     }
 

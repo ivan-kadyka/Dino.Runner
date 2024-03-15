@@ -19,13 +19,7 @@ namespace AppContext
 
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            try
-            {
-                await _roundController.Start(token);
-            }
-            catch (OperationCanceledException)
-            {
-            }
+            await _roundController.Start(token);
         }
 
         protected override async UniTask OnStopped(CancellationToken token = default)

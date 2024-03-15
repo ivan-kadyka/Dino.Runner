@@ -7,6 +7,7 @@ namespace Character.View
     public class CharacterView : MonoBehaviour, ICharacterView
     {
         private CharacterController _character;
+        
         private Vector3 _direction;
 
         public float jumpForce = 8f;
@@ -47,6 +48,7 @@ namespace Character.View
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Obstacle")) {
+                enabled = false;
                 GameManager.Instance.GameOver();
             }
         }

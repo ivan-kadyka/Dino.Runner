@@ -1,7 +1,5 @@
-using Character.View;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
@@ -14,11 +12,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI hiscoreText;
-    [SerializeField] private TextMeshProUGUI gameOverText;
-    [SerializeField] private Button retryButton;
-
-    private CharacterView player;
+    [SerializeField] private GameObject retryPopup;
+    
     private Spawner spawner;
+    
 
     private float score;
     public float Score => score;
@@ -41,7 +38,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<CharacterView>();
         spawner = FindObjectOfType<Spawner>();
 
         NewGame();
@@ -58,11 +54,10 @@ public class GameManager : MonoBehaviour
         score = 0f;
         gameSpeed = initialGameSpeed;
         enabled = true;
-
-        player.gameObject.SetActive(true);
+        
         spawner.gameObject.SetActive(true);
-        gameOverText.gameObject.SetActive(false);
-        retryButton.gameObject.SetActive(false);
+        
+        retryPopup.gameObject.SetActive(false);
 
         UpdateHiscore();
     }
@@ -71,11 +66,9 @@ public class GameManager : MonoBehaviour
     {
         gameSpeed = 0f;
         enabled = false;
-
-        player.gameObject.SetActive(false);
+        
         spawner.gameObject.SetActive(false);
-        gameOverText.gameObject.SetActive(true);
-        retryButton.gameObject.SetActive(true);
+        retryPopup.gameObject.SetActive(true);
 
         UpdateHiscore();
     }
