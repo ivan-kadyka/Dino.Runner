@@ -3,7 +3,6 @@ using Character.Controller.Inputs;
 using Character.Model;
 using Character.View;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace Character.Controller
 {
@@ -22,17 +21,19 @@ namespace Character.Controller
             _view = view;
             _inputCharacterController = inputCharacterController;
             
+            _view.Initialize(character);
+            
             _inputCharacterController.JumpPressed += OnJumpPressedExecuted;
         }
 
         private async void OnJumpPressedExecuted()
         {
-            await _view.Jump();
+            await _character.Jump();
         }
 
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            await _view.Move(token);
+            await _character.Run(token);
         }
 
         protected override void Dispose(bool disposing)

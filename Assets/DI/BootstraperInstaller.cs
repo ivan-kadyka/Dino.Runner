@@ -32,7 +32,7 @@ public class BootstraperInstaller : MonoInstaller
         Container.Bind<IInputCharacterController>().To<InputCharacterController>().FromComponentsInHierarchy()
             .AsSingle();
         Container.Bind<ICharacter>().To<Character.Model.Character>().AsSingle();
-        Container.Bind<ICharacterView>().To<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
+        Container.BindInterfacesTo<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
         Container.Bind<IController>().WithId("CharacterController").To<Character.Controller.CharacterController>()
             .AsSingle();
 

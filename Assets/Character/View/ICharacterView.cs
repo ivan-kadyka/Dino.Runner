@@ -1,11 +1,10 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
+using Character.Model;
+using Controllers;
 
 namespace Character.View
 {
-    public interface ICharacterView
+    public interface ICharacterView : IView
     {
-        UniTask Move(CancellationToken token = default);
-        UniTask Jump(CancellationToken token = default);
+        void Initialize(ICharacter character);
     }
 }
