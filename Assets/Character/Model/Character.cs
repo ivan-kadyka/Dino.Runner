@@ -1,18 +1,16 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Types;
+using UniRx;
 using UnityEngine;
+using Unit = Types.Unit;
 
 namespace Character.Model
 {
-    public class Character : ICharacter
+    public class Character : DisposableBase, ICharacter
     {
         private readonly ICharacterPhysics _physics;
         public CharacterState State => _state;
-
-        public Vector3 Motion => _motion;
-
-
-        public int Speed { get; }
 
         private CharacterState _state;
         private Vector3 _motion;
@@ -23,12 +21,53 @@ namespace Character.Model
         private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
+        private readonly CompositeDisposable _disposable = new CompositeDisposable();
+        
         public Character(ICharacterPhysics physics)
         {
             _physics = physics;
+            _disposable.Add( _physics.Updated.Subscribe(Update));
+            _disposable.Add( _physics.Collider.Subscribe(OnCollider));
         }
 
-        public void Update()
+        public UniTask Idle(CancellationToken token = default)
+        {
+            _motion = Vector3.zero;
+            _state = CharacterState.Idle;
+            _moveTaskCompletionSource.TrySetResult();
+            
+            return UniTask.CompletedTask;
+        }
+
+        public async UniTask Run(CancellationToken token = default)
+        {
+            _state = CharacterState.Run;
+            _moveTaskCompletionSource = new UniTaskCompletionSource();
+            await _moveTaskCompletionSource.Task;
+        }
+
+        public UniTask Jump(CancellationToken token = default)
+        {
+            if (_state != CharacterState.Run)
+                return UniTask.CompletedTask;
+
+            _jumpingTaskCompletionSource = new UniTaskCompletionSource();
+
+            _state = CharacterState.Jumping;
+            _motion = Vector3.up * jumpForce;
+
+            ExecuteJumping();
+
+            return _jumpingTaskCompletionSource.Task;
+        }
+
+        private void ExecuteJumping()
+        {
+            _motion += gravity * Time.deltaTime * Vector3.down;
+            _physics.Move(_motion * Time.deltaTime);
+        }
+        
+        private void Update(Unit unit)
         {
             switch (_state)
             {
@@ -50,41 +89,20 @@ namespace Character.Model
             }
         }
 
-        public UniTask Idle(CancellationToken token = default)
+        private async void OnCollider(string objectTag)
         {
-            _motion = Vector3.zero;
-            _state = CharacterState.Idle;
-            _moveTaskCompletionSource.TrySetResult();
-            
-            return UniTask.CompletedTask;
+            if (objectTag == "Obstacle") {
+                GameManager.Instance.GameOver();
+                await Idle();
+            }
         }
 
-        public async UniTask Run(CancellationToken token = default)
+        protected override void Dispose(bool disposing)
         {
-            _state = CharacterState.Run;
-            _moveTaskCompletionSource = new UniTaskCompletionSource();
-            await _moveTaskCompletionSource.Task;
-        }
-
-        public UniTask Jump(CancellationToken token = default)
-        {
-            if (_state == CharacterState.Jumping)
-                return UniTask.CompletedTask;
-
-            _jumpingTaskCompletionSource = new UniTaskCompletionSource();
-
-            _state = CharacterState.Jumping;
-            _motion = Vector3.up * jumpForce;
-
-            ExecuteJumping();
-
-            return _jumpingTaskCompletionSource.Task;
-        }
-
-        private void ExecuteJumping()
-        {
-            _motion += gravity * Time.deltaTime * Vector3.down;
-            _physics.Move(_motion * Time.deltaTime);
+            if (disposing)
+            {
+                _disposable.Dispose();
+            }
         }
     }
 }

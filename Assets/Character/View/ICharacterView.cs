@@ -5,6 +5,5 @@ namespace Character.View
 {
     public interface ICharacterView : IView
     {
-        void Initialize(ICharacter character);
     }
 }

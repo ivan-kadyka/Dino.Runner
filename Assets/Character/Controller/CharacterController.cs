@@ -14,14 +14,10 @@ namespace Character.Controller
 
         public CharacterController(
             ICharacter character,
-            ICharacterView view,
             IInputCharacterController inputCharacterController)
         {
             _character = character;
-            _view = view;
             _inputCharacterController = inputCharacterController;
-            
-            _view.Initialize(character);
             
             _inputCharacterController.JumpPressed += OnJumpPressedExecuted;
         }

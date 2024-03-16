@@ -1,19 +1,21 @@
+using System;
 using Character.Model;
+using UniRx;
 using UnityEngine;
+using Unit = Types.Unit;
 
 namespace Character.View
 {
-    public class CharacterView : MonoBehaviour, ICharacterView, ICharacterPhysics
+    public class CharacterView : MonoBehaviour, ICharacterPhysics
     {
+        public IObservable<Unit> Updated => _updateSubject;
+        public IObservable<string> Collider => _colliderSubject;
         public bool IsGrounded => _characterComponentController.isGrounded;
 
         private CharacterController _characterComponentController;
-        private ICharacter _character;
 
-        public void Initialize(ICharacter character)
-        {
-            _character = character;
-        }
+        private readonly Subject<Unit> _updateSubject = new Subject<Unit>();
+        private readonly Subject<string> _colliderSubject = new Subject<string>();
 
         private void Awake()
         {
@@ -22,10 +24,7 @@ namespace Character.View
 
         private void Update()
         {
-            if (_character != null)
-            {
-                _character.Update();
-            }
+            _updateSubject.OnNext(Unit.Nothing);
         }
         
         public void Move(Vector3 motion)
@@ -33,12 +32,9 @@ namespace Character.View
             _characterComponentController.Move(motion);
         }
 
-        private async void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Obstacle")) {
-                GameManager.Instance.GameOver();
-                await _character.Idle();
-            }
+            _colliderSubject.OnNext(other.tag);
         }
 
         public void Dispose()
