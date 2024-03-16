@@ -38,10 +38,5 @@ namespace Character.View
         {
             _colliderSubject.OnNext(other.tag);
         }
-
-        public void Dispose()
-        {
-          //  Destroy(gameObject);
-        }
     }
 }
