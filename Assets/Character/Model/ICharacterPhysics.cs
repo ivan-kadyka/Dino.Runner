@@ -11,6 +11,8 @@ namespace Character.Model
         IObservable<string> Collider { get; }
         
         bool IsGrounded { get; }
+        
+        Transform Transform { get; }
 
         void Move(Vector3 motion);
     }

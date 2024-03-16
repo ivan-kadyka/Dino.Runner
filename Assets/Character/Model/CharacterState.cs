@@ -4,6 +4,7 @@ namespace Character.Model
     {
         Idle,
         Run,
-        Jumping
+        Jumping,
+        Fly
     }
 }

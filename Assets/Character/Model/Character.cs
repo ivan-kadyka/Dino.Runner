@@ -41,19 +41,22 @@ namespace Character.Model
 
         public async UniTask Run(CancellationToken token = default)
         {
-            _state = CharacterState.Run;
+            _state = CharacterState.Fly;
             _moveTaskCompletionSource = new UniTaskCompletionSource();
             await _moveTaskCompletionSource.Task;
         }
 
         public UniTask Jump(CancellationToken token = default)
         {
-            if (_state != CharacterState.Run)
+            if (!CanJump())
                 return UniTask.CompletedTask;
-
+            
+            _jumpingTaskCompletionSource.TrySetResult();
             _jumpingTaskCompletionSource = new UniTaskCompletionSource();
-
-            _state = CharacterState.Jumping;
+            
+            if (_state == CharacterState.Run)
+                _state = CharacterState.Jumping;
+            
             _motion = Vector3.up * jumpForce;
 
             ExecuteJumping();
@@ -61,9 +64,28 @@ namespace Character.Model
             return _jumpingTaskCompletionSource.Task;
         }
 
+        private bool CanJump()
+        {
+            return _state == CharacterState.Run || _state == CharacterState.Fly;
+        }
+
         private void ExecuteJumping()
         {
+            // Apply gravity to the motion
             _motion += gravity * Time.deltaTime * Vector3.down;
+    
+            // Calculate the potential new position without actually moving the character
+            Vector3 potentialPosition = _physics.Transform.position + (_motion * Time.deltaTime);
+
+            // Check if the potential new position exceeds the maximum allowed height
+            if (potentialPosition.y > 5.5f)
+            {
+                // If it does, adjust the _motion vector so that the final position will exactly be at the height limit
+                float deltaY = 5.5f - _physics.Transform.position.y; // Difference between current height and maximum allowed height
+                _motion = (deltaY / Time.deltaTime) * Vector3.up; // Adjust _motion so after the movement, the character ends up at 5f
+            }
+
+            // Apply the movement
             _physics.Move(_motion * Time.deltaTime);
         }
         
@@ -74,6 +96,9 @@ namespace Character.Model
                 case CharacterState.Idle:
                     return;
                 
+                case CharacterState.Fly:
+                    ExecuteJumping();
+                    break;
                 case CharacterState.Jumping:
                     if (_physics.IsGrounded)
                     {
@@ -91,11 +116,13 @@ namespace Character.Model
 
         private async void OnCollider(string objectTag)
         {
-            if (objectTag == "Obstacle") {
-                GameManager.Instance.GameOver();
-                await Idle();
+            if (objectTag == "Obstacle")
+            {
+               GameManager.Instance.GameOver();
+               await Idle();
             }
         }
+
 
         protected override void Dispose(bool disposing)
         {

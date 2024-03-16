@@ -12,6 +12,8 @@ namespace Character.View
         public IObservable<string> Collider => _colliderSubject;
         public bool IsGrounded => _characterComponentController.isGrounded;
 
+        public Transform Transform => transform;
+
         private CharacterController _characterComponentController;
 
         private readonly Subject<Unit> _updateSubject = new Subject<Unit>();
