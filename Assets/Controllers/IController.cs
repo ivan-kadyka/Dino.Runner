@@ -10,4 +10,17 @@ namespace Controllers
 
         UniTask Stop(CancellationToken token = default);
     }
+
+    public static class ControllerExt
+    {
+        public static async UniTask Run(this IController controller, CancellationToken token = default)
+        {
+            await controller.Start(token);
+
+            token.ThrowIfCancellationRequested();
+            
+            await controller.Stop(token);
+        }
+    }
+    
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using Character.Controller;
 using Controllers;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace AppContext
 {
@@ -19,12 +20,24 @@ namespace AppContext
 
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            await _roundController.Start(token);
-        }
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await _roundController.Run(token);
 
-        protected override async UniTask OnStopped(CancellationToken token = default)
-        {
-            await _retryPopupController.Start(token);
+                    await _retryPopupController.Run(token);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                //here high level generic handling logic for unhandled exceptions.
+                //for example: show popup "Something went wrong" and send logs to analytics
+            }
         }
     }
 }
