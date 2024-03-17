@@ -1,3 +1,4 @@
+using System;
 using AppContext;
 using Character.Controller.Inputs;
 using Character.Model;
@@ -6,6 +7,8 @@ using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
 using Controllers.Round.View;
+using Controllers.Spawner.Obstacle;
+using Controllers.Spawner.Obstacle.Model;
 using Controllers.TopPanel;
 using Models;
 using Models.Tickable;
@@ -31,6 +34,9 @@ public class BootstraperInstaller : MonoInstaller
     
     [SerializeField]
     private GameObject _tickableGameObject;
+    
+    [SerializeField]
+    private ObstacleScriptableObject _obstacleObjects;
 
     public override void InstallBindings()
     {
@@ -44,8 +50,11 @@ public class BootstraperInstaller : MonoInstaller
             .AsSingle();
 
         // Character
-        Container.Bind<IInputCharacterController>().To<InputCharacterController>().FromComponentsInHierarchy()
+        Container.Bind<IInputCharacterController>()
+            .To<InputCharacterController>()
+            .FromComponentsInHierarchy()
             .AsSingle();
+        
         Container.BindInterfacesTo<Character.Model.Character>().AsSingle();
         Container.BindInterfacesTo<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
         Container.Bind<IController>().WithId("CharacterController").To<Character.Controller.CharacterController>()
@@ -67,9 +76,19 @@ public class BootstraperInstaller : MonoInstaller
         Container.Bind<IController>().WithId("RoundController")
             .FromMethod(it => new RoundController(
                 it.Container.ResolveId<IController>("CharacterController"),
+                it.Container.ResolveId<IController>("ObstaclesController"),
                 it.Container.Resolve<IRoundView>(),
                 it.Container.Resolve<ICharacterContext>())).AsSingle();
+        
+        // Obstacles
+        Container.Bind<IObstacleFactory>().FromMethod(it =>
+            new ObstacleFactory(it.Container,_obstacleObjects)).AsSingle();
 
+        Container.Bind<IController>() 
+            .WithId("ObstaclesController")
+            .FromMethod(it => new ObstaclesController(
+                it.Container.Resolve<IObstacleFactory>()));
+        
         // Retry popup
         Container.Bind<IPopupView>()
             .WithId("RetryPopupView")
@@ -86,5 +105,26 @@ public class BootstraperInstaller : MonoInstaller
         // Utils
         var tickableComponent = _tickableGameObject.GetComponent<TickableContext>();
         Container.Rebind<ITickableContext>().FromInstance(tickableComponent).AsSingle();
+    }
+    
+    public class ObstacleFactory : PlaceholderFactory<ObstacleOptions, IObstacleView>, IObstacleFactory
+    {
+        private readonly DiContainer _container;
+        private readonly ObstacleScriptableObject _obstacleSo;
+
+        public ObstacleFactory(DiContainer container, ObstacleScriptableObject obstacleSo)
+        {
+            _container = container;
+            _obstacleSo = obstacleSo;
+        }
+
+        public override IObstacleView Create(ObstacleOptions options)
+        {
+            int index = (int)options.Type;
+
+            var obstacleObject = _obstacleSo.items[index];
+            
+            return _container.InstantiatePrefab(obstacleObject.prefab).GetComponent<IObstacleView>();
+        }
     }
 }

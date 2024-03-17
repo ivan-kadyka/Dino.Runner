@@ -494,6 +494,7 @@ MonoBehaviour:
   _topPanelPrefab: {fileID: 7134783175086555799, guid: bb778cea110f0492cbbe9ccf9a4f279b, type: 3}
   Canvas: {fileID: 808728476}
   _tickableGameObject: {fileID: 2070956615}
+  _obstacleObjects: {fileID: 11400000, guid: afee2a949d1c84b52ba0d255528164f6, type: 2}
 --- !u!114 &1561776543
 MonoBehaviour:
   m_ObjectHideFlags: 0
