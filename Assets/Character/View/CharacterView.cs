@@ -2,13 +2,12 @@ using System;
 using Character.Model;
 using UniRx;
 using UnityEngine;
-using Unit = Types.Unit;
 
 namespace Character.View
 {
     public class CharacterView : MonoBehaviour, ICharacterPhysics
     {
-        public IObservable<Unit> Updated => _updateSubject;
+        public IObservable<float> Updated => _updateSubject;
         public IObservable<string> Collider => _colliderSubject;
         public bool IsGrounded => _characterComponentController.isGrounded;
 
@@ -16,7 +15,7 @@ namespace Character.View
 
         private CharacterController _characterComponentController;
 
-        private readonly Subject<Unit> _updateSubject = new Subject<Unit>();
+        private readonly Subject<float> _updateSubject = new Subject<float>();
         private readonly Subject<string> _colliderSubject = new Subject<string>();
 
         private void Awake()
@@ -26,7 +25,7 @@ namespace Character.View
 
         private void Update()
         {
-            _updateSubject.OnNext(Unit.Nothing);
+            _updateSubject.OnNext(Time.deltaTime);
         }
         
         public void Move(Vector3 motion)

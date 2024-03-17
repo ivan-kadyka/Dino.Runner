@@ -3,20 +3,25 @@ using Cysharp.Threading.Tasks;
 using Types;
 using UniRx;
 using UnityEngine;
-using Unit = Types.Unit;
 
 namespace Character.Model
 {
     public class Character : DisposableBase, ICharacter
     {
-        private readonly ICharacterPhysics _physics;
+        public float Speed => _gameSpeed;
         public CharacterState State => _state;
 
         private CharacterState _state;
         private Vector3 _motion;
 
-        private float jumpForce = 8f;
-        private float gravity = 9.81f * 2f;
+        private const float jumpForce = 8f;
+        private const float gravity = 9.81f * 2f;
+        
+        private float _initialGameSpeed = 5f;
+        private float _gameSpeedIncrease = 0.1f;
+        private float _gameSpeed;
+        
+        private readonly ICharacterPhysics _physics;
         
         private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
@@ -34,6 +39,8 @@ namespace Character.Model
         {
             _motion = Vector3.zero;
             _state = CharacterState.Idle;
+            _gameSpeed = 0;
+            
             _moveTaskCompletionSource.TrySetResult();
             
             return UniTask.CompletedTask;
@@ -41,7 +48,9 @@ namespace Character.Model
 
         public async UniTask Run(CancellationToken token = default)
         {
-            _state = CharacterState.Fly;
+            _state = CharacterState.Run;
+
+            _gameSpeed = _initialGameSpeed;
             _moveTaskCompletionSource = new UniTaskCompletionSource();
             await _moveTaskCompletionSource.Task;
         }
@@ -89,13 +98,15 @@ namespace Character.Model
             _physics.Move(_motion * Time.deltaTime);
         }
         
-        private void Update(Unit unit)
+        private void Update(float deltaTime)
         {
+            if (_state == CharacterState.Idle)
+                return;
+            
+            _gameSpeed += _gameSpeedIncrease * Time.deltaTime;
+            
             switch (_state)
             {
-                case CharacterState.Idle:
-                    return;
-                
                 case CharacterState.Fly:
                     ExecuteJumping();
                     break;

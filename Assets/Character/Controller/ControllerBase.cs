@@ -2,11 +2,14 @@ using System.Threading;
 using Controllers;
 using Cysharp.Threading.Tasks;
 using Types;
+using UniRx;
 
 namespace Character.Controller
 {
     public abstract class ControllerBase : DisposableBase, IController
     {
+        protected CompositeDisposable _disposable = new CompositeDisposable();
+        
         public async UniTask Start(CancellationToken token = default)
         {
             await OnStarted(token);
@@ -29,6 +32,10 @@ namespace Character.Controller
         
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                _disposable.Dispose();
+            }
         }
     }
 }

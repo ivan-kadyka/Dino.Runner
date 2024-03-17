@@ -1,13 +1,12 @@
 using System;
-using Types;
+using Models;
+using Models.Tickable;
 using UnityEngine;
 
 namespace Character.Model
 {
-    public interface ICharacterPhysics
+    public interface ICharacterPhysics : ITickableContext
     {
-        IObservable<Unit> Updated { get; }
-        
         IObservable<string> Collider { get; }
         
         bool IsGrounded { get; }

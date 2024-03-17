@@ -9,11 +9,16 @@ namespace AppContext
 {
     public class AppController : ControllerBase
     {
+        private readonly IController _topPanelController;
         private readonly IController _roundController;
         private readonly IController _retryPopupController;
 
-        public AppController(IController roundController, IController retryPopupController)
+        public AppController(
+            IController topPanelController,
+            IController roundController,
+            IController retryPopupController)
         {
+            _topPanelController = topPanelController;
             _roundController = roundController;
             _retryPopupController = retryPopupController;
         }
@@ -24,7 +29,9 @@ namespace AppContext
             {
                 while (!token.IsCancellationRequested)
                 {
+                    await _topPanelController.Start(token);
                     await _roundController.Run(token);
+                    await _topPanelController.Stop(token);
 
                     await _retryPopupController.Run(token);
                 }
