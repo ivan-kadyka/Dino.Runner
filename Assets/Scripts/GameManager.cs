@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour
     public float initialGameSpeed = 5f;
     public float gameSpeedIncrease = 0.1f;
     public float gameSpeed { get; private set; }
-    
-    private Spawner spawner;
 
     private void Awake()
     {
@@ -29,8 +27,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        spawner = FindObjectOfType<Spawner>();
-
         NewGame();
     }
 
@@ -44,16 +40,12 @@ public class GameManager : MonoBehaviour
         
         gameSpeed = initialGameSpeed;
         enabled = true;
-        
-        spawner.gameObject.SetActive(true);
     }
 
     public void GameOver()
     {
         gameSpeed = 0f;
         enabled = false;
-        
-        spawner.gameObject.SetActive(false);
     }
 
     private void Update()

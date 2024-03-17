@@ -28,6 +28,7 @@ namespace Controllers.TopPanel
 
         protected override UniTask OnStarted(CancellationToken token = default)
         {
+            _score = 0;
             UpdateHiScore();
             return base.OnStarted(token);
         }

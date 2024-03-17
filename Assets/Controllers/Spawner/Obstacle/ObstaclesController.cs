@@ -3,50 +3,84 @@ using System.Threading;
 using Character.Controller;
 using Controllers.Spawner.Obstacle.Model;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Models.Tickable;
+using UniRx;
+using Random = UnityEngine.Random;
 
 namespace Controllers.Spawner.Obstacle
 {
     public class ObstaclesController : ControllerBase
     {
         private readonly IObstacleFactory _obstacleFactory;
-        
-        private float minSpawnRate = 1f;
-        private float maxSpawnRate = 2f;
+        private readonly IObstacleSettings _settings;
+        private readonly ITickableContext _tickableContext;
 
         private readonly List<IObstacleView> _obstacles = new List<IObstacleView>();
 
-        public ObstaclesController(IObstacleFactory obstacleFactory)
+        private readonly SerialDisposable _spawnDisposable = new SerialDisposable();
+
+        private float _nextSpawnTime;
+        
+        public ObstaclesController(
+            IObstacleFactory obstacleFactory,
+            IObstacleSettings settings,
+            ITickableContext tickableContext)
         {
             _obstacleFactory = obstacleFactory;
+            _settings = settings;
+            _tickableContext = tickableContext;
+            
+            _disposable.Add(_spawnDisposable);
         }
         
         protected override UniTask OnStarted(CancellationToken token = default)
         {
-            StartSpawn();
+            _spawnDisposable.Disposable = _tickableContext.Updated.Subscribe(OnSpawnUpdate);
+            UpdateNextDeltaTime();
             
             return base.OnStarted(token);
         }
-        
-        private void StartSpawn()
+
+        protected override UniTask OnStopped(CancellationToken token = default)
         {
+            _spawnDisposable.Disposable = default;
+            return base.OnStopped(token);
+        }
+
+        private void UpdateNextDeltaTime()
+        {
+            _nextSpawnTime = Random.Range(_settings.MinSpawnRate, _settings.MaxSpawnRate);
+        }
+
+        private bool IsReadyToSpawn(float deltaTime)
+        {
+            _nextSpawnTime -= deltaTime;
+            
+            return _nextSpawnTime < 0;
+        }
+        
+        private void OnSpawnUpdate(float deltaTime)
+        {
+            if (!IsReadyToSpawn(deltaTime))
+                return;
+            
             float spawnChance = Random.value;
 
-            /*
-            foreach (var obj in objects)
+            for (int i = 0; i < _settings.ObjectChances.Length; i++)
             {
-                if (spawnChance < obj.spawnChance)
+                var currentChance = _settings.ObjectChances[i];
+                
+                if (spawnChance < currentChance)
                 {
-                    GameObject obstacle = Instantiate(obj.prefab);
-                    obstacle.transform.position += transform.position;
+                    var obstacleView = _obstacleFactory.Create(new ObstacleOptions(i));
+                   // _obstacles.Add(obstacleView);
                     break;
                 }
 
-                spawnChance -= obj.spawnChance;
+                spawnChance -= currentChance;
             }
 
-            Invoke(nameof(Spawn), Random.Range(minSpawnRate, maxSpawnRate));
-            */
+            UpdateNextDeltaTime();
         }
     }
 }

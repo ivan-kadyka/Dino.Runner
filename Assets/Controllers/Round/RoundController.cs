@@ -33,10 +33,17 @@ namespace Controllers.Round
         
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
-            //await _obstaclesController.Start(token);
+            await _obstaclesController.Start(token);
             
             GameManager.Instance.NewGame(); // temp
             await _characterController.Start(token);
+        }
+
+        protected override async UniTask OnStopped(CancellationToken token = default)
+        {
+            await _obstaclesController.Stop(token);
+            
+            await base.OnStopped(token);
         }
     }
 }

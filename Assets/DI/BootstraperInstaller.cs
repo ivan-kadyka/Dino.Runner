@@ -1,4 +1,3 @@
-using System;
 using AppContext;
 using Character.Controller.Inputs;
 using Character.Model;
@@ -8,6 +7,7 @@ using Controllers.RetryPopup;
 using Controllers.Round;
 using Controllers.Round.View;
 using Controllers.Spawner.Obstacle;
+using Controllers.Spawner.Obstacle.Factory;
 using Controllers.Spawner.Obstacle.Model;
 using Controllers.TopPanel;
 using Models;
@@ -82,12 +82,16 @@ public class BootstraperInstaller : MonoInstaller
         
         // Obstacles
         Container.Bind<IObstacleFactory>().FromMethod(it =>
-            new ObstacleFactory(it.Container,_obstacleObjects)).AsSingle();
+            new ObstacleFactory(it.Container, _obstacleObjects)).AsSingle();
 
         Container.Bind<IController>() 
             .WithId("ObstaclesController")
             .FromMethod(it => new ObstaclesController(
-                it.Container.Resolve<IObstacleFactory>()));
+                it.Container.Resolve<IObstacleFactory>(),
+                it.Container.Resolve<IObstacleSettings>(),
+                it.Container.Resolve<ITickableContext>()));
+
+        Container.Bind<IObstacleSettings>().FromInstance(new ObstacleSettings(_obstacleObjects));
         
         // Retry popup
         Container.Bind<IPopupView>()
@@ -105,26 +109,5 @@ public class BootstraperInstaller : MonoInstaller
         // Utils
         var tickableComponent = _tickableGameObject.GetComponent<TickableContext>();
         Container.Rebind<ITickableContext>().FromInstance(tickableComponent).AsSingle();
-    }
-    
-    public class ObstacleFactory : PlaceholderFactory<ObstacleOptions, IObstacleView>, IObstacleFactory
-    {
-        private readonly DiContainer _container;
-        private readonly ObstacleScriptableObject _obstacleSo;
-
-        public ObstacleFactory(DiContainer container, ObstacleScriptableObject obstacleSo)
-        {
-            _container = container;
-            _obstacleSo = obstacleSo;
-        }
-
-        public override IObstacleView Create(ObstacleOptions options)
-        {
-            int index = (int)options.Type;
-
-            var obstacleObject = _obstacleSo.items[index];
-            
-            return _container.InstantiatePrefab(obstacleObject.prefab).GetComponent<IObstacleView>();
-        }
     }
 }
