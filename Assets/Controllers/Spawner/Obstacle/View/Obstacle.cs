@@ -3,9 +3,15 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour, IObstacleView
 {
+    public bool IsActive
+    {
+        get => gameObject.activeSelf;
+        set => gameObject.SetActive(value);
+    }
+    
     private float leftEdge;
 
-    private void Start()
+    private void OnEnable()
     {
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 2f;
         transform.position = new Vector3(10, 0, 0);
@@ -17,8 +23,13 @@ public class Obstacle : MonoBehaviour, IObstacleView
 
         if (transform.position.x < leftEdge)
         {
-            Dispose();
+            SetActive(false);
         }
+    }
+
+    public void SetActive(bool enable)
+    {
+        gameObject.SetActive(enable);
     }
 
     public void Dispose()

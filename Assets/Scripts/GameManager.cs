@@ -25,11 +25,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        NewGame();
-    }
-
     public void NewGame()
     {
         Obstacle[] obstacles = FindObjectsOfType<Obstacle>();

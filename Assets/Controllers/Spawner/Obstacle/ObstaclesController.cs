@@ -73,7 +73,6 @@ namespace Controllers.Spawner.Obstacle
                 if (spawnChance < currentChance)
                 {
                     var obstacleView = _obstacleFactory.Create(new ObstacleOptions(i));
-                   // _obstacles.Add(obstacleView);
                     break;
                 }
 

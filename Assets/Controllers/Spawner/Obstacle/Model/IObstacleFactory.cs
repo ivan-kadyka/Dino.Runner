@@ -14,7 +14,7 @@ namespace Controllers.Spawner.Obstacle.Model
 
     public interface IObstacleView : IView
     {
-        
+        bool IsActive { get; set; }
     }
     
     public interface IObstacleFactory : IFactory<ObstacleOptions, IObstacleView>
