@@ -11,8 +11,6 @@ public class GameManager : MonoBehaviour
     
     private Spawner spawner;
 
-    private float score;
-
     private void Awake()
     {
         if (Instance != null) {
@@ -43,8 +41,7 @@ public class GameManager : MonoBehaviour
         foreach (var obstacle in obstacles) {
             Destroy(obstacle.gameObject);
         }
-
-        score = 0f;
+        
         gameSpeed = initialGameSpeed;
         enabled = true;
         
@@ -62,7 +59,5 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
-        score += gameSpeed * Time.deltaTime;
-       // scoreText.text = Mathf.FloorToInt(score).ToString("D5");
     }
 }

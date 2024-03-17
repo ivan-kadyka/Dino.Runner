@@ -5,6 +5,7 @@ using Character.View;
 using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
+using Controllers.Round.View;
 using Controllers.TopPanel;
 using Models;
 using Models.Tickable;
@@ -61,12 +62,13 @@ public class BootstraperInstaller : MonoInstaller
             .AsSingle();
 
         //Round
-        Container.Bind<IView>().WithId("RoundView").To<Ground>().FromComponentInNewPrefab(RoundPrefab).AsSingle();
+        Container.Bind<IRoundView>().To<Ground>().FromComponentInNewPrefab(RoundPrefab).AsSingle();
 
         Container.Bind<IController>().WithId("RoundController")
             .FromMethod(it => new RoundController(
                 it.Container.ResolveId<IController>("CharacterController"),
-                it.Container.ResolveId<IView>("RoundView"))).AsSingle();
+                it.Container.Resolve<IRoundView>(),
+                it.Container.Resolve<ICharacterContext>())).AsSingle();
 
         // Retry popup
         Container.Bind<IPopupView>()

@@ -1,20 +1,29 @@
-using Controllers;
+using Controllers.Round.View;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]
-public class Ground : MonoBehaviour, IView
+public class Ground : MonoBehaviour, IRoundView
 {
-    private MeshRenderer meshRenderer;
+    private MeshRenderer _meshRenderer;
+    private float _speed;
 
     private void Awake()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
+        _meshRenderer = GetComponent<MeshRenderer>();
     }
-
+    
+    public void SetUp(float speed)
+    {
+        _speed = speed;
+    }
+    
     private void Update()
     {
-        float speed = GameManager.Instance.gameSpeed / transform.localScale.x;
-        meshRenderer.material.mainTextureOffset += speed * Time.deltaTime * Vector2.right;
+        if (_speed == 0)
+            return;
+        
+        float localSpeed = _speed / transform.localScale.x;
+        _meshRenderer.material.mainTextureOffset += localSpeed * Time.deltaTime * Vector2.right;
     }
 
     public void Dispose()

@@ -1,5 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Observables;
 using Types;
 using UniRx;
 using UnityEngine;
@@ -8,8 +9,9 @@ namespace Character.Model
 {
     public class Character : DisposableBase, ICharacter
     {
-        public float Speed => _gameSpeed;
         public CharacterState State => _state;
+
+        public IObservableValue<float> Speed => _speedSubject;
 
         private CharacterState _state;
         private Vector3 _motion;
@@ -19,7 +21,6 @@ namespace Character.Model
         
         private float _initialGameSpeed = 5f;
         private float _gameSpeedIncrease = 0.1f;
-        private float _gameSpeed;
         
         private readonly ICharacterPhysics _physics;
         
@@ -27,6 +28,7 @@ namespace Character.Model
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
         private readonly CompositeDisposable _disposable = new CompositeDisposable();
+        private readonly ObservableValue<float> _speedSubject = new ObservableValue<float>(0);
         
         public Character(ICharacterPhysics physics)
         {
@@ -39,7 +41,7 @@ namespace Character.Model
         {
             _motion = Vector3.zero;
             _state = CharacterState.Idle;
-            _gameSpeed = 0;
+            _speedSubject.OnNext(0);
             
             _moveTaskCompletionSource.TrySetResult();
             
@@ -49,8 +51,8 @@ namespace Character.Model
         public async UniTask Run(CancellationToken token = default)
         {
             _state = CharacterState.Run;
-
-            _gameSpeed = _initialGameSpeed;
+            
+            _speedSubject.OnNext(_initialGameSpeed);
             _moveTaskCompletionSource = new UniTaskCompletionSource();
             await _moveTaskCompletionSource.Task;
         }
@@ -102,8 +104,10 @@ namespace Character.Model
         {
             if (_state == CharacterState.Idle)
                 return;
-            
-            _gameSpeed += _gameSpeedIncrease * Time.deltaTime;
+
+            float nextSpeed = _speedSubject.Value;
+            nextSpeed += _gameSpeedIncrease * Time.deltaTime;
+            _speedSubject.OnNext(nextSpeed);
             
             switch (_state)
             {

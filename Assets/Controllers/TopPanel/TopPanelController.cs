@@ -11,7 +11,7 @@ namespace Controllers.TopPanel
     public class TopPanelController : ControllerBase
     {
         private readonly ITopPanelView _view;
-        private readonly ICharacterSpeed _character;
+        private readonly ICharacterContext _characterContext;
         private readonly ITickableContext _tickableContext;
 
         private float _score;
@@ -19,10 +19,10 @@ namespace Controllers.TopPanel
         public TopPanelController(
             ITopPanelView view,
             ITickableContext tickableContext,
-            ICharacterSpeed character)
+            ICharacterContext characterContext)
         {
             _view = view;
-            _character = character;
+            _characterContext = characterContext;
             _disposable.Add(tickableContext.Updated.Subscribe(OnUpdated));
         }
 
@@ -40,7 +40,7 @@ namespace Controllers.TopPanel
 
         private void OnUpdated(float deltaTime)
         {
-            _score += _character.Speed * Time.deltaTime;
+            _score += _characterContext.Speed.Value * Time.deltaTime;
             _view.UpdateScore(Mathf.FloorToInt(_score));
         }
         
