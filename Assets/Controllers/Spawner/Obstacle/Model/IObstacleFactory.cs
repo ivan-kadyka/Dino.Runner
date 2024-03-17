@@ -15,6 +15,8 @@ namespace Controllers.Spawner.Obstacle.Model
     public interface IObstacleView : IView
     {
         bool IsActive { get; set; }
+
+        void UpdateSpeed(float speed);
     }
     
     public interface IObstacleFactory : IFactory<ObstacleOptions, IObstacleView>

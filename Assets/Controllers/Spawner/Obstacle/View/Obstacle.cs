@@ -8,8 +8,14 @@ public class Obstacle : MonoBehaviour, IObstacleView
         get => gameObject.activeSelf;
         set => gameObject.SetActive(value);
     }
-    
+
+    public void UpdateSpeed(float speed)
+    {
+        _speed = speed;
+    }
+
     private float leftEdge;
+    private float _speed;
 
     private void OnEnable()
     {
@@ -19,7 +25,7 @@ public class Obstacle : MonoBehaviour, IObstacleView
 
     private void Update()
     {
-        transform.position += GameManager.Instance.gameSpeed * Time.deltaTime * Vector3.left;
+        transform.position += _speed * Time.deltaTime * Vector3.left;
 
         if (transform.position.x < leftEdge)
         {

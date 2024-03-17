@@ -133,7 +133,6 @@ namespace Character.Model
         {
             if (objectTag == "Obstacle")
             {
-               GameManager.Instance.GameOver();
                await Idle();
             }
         }

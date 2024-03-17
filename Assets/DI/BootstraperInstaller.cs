@@ -86,10 +86,7 @@ public class BootstraperInstaller : MonoInstaller
 
         Container.Bind<IController>() 
             .WithId("ObstaclesController")
-            .FromMethod(it => new ObstaclesController(
-                it.Container.Resolve<IObstacleFactory>(),
-                it.Container.Resolve<IObstacleSettings>(),
-                it.Container.Resolve<ITickableContext>()));
+            .To<ObstaclesController>().AsSingle();
 
         Container.Bind<IObstacleSettings>().FromInstance(new ObstacleSettings(_obstacleObjects));
         

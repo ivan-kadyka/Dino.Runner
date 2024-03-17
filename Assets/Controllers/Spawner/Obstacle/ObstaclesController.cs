@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Threading;
 using Character.Controller;
+using Character.Model;
 using Controllers.Spawner.Obstacle.Model;
 using Cysharp.Threading.Tasks;
 using Models.Tickable;
@@ -15,26 +15,31 @@ namespace Controllers.Spawner.Obstacle
         private readonly IObstacleSettings _settings;
         private readonly ITickableContext _tickableContext;
 
-        private readonly List<IObstacleView> _obstacles = new List<IObstacleView>();
-
         private readonly SerialDisposable _spawnDisposable = new SerialDisposable();
 
         private float _nextSpawnTime;
+
+        private readonly ObstaclesPool _obstaclesPool;
         
         public ObstaclesController(
             IObstacleFactory obstacleFactory,
             IObstacleSettings settings,
-            ITickableContext tickableContext)
+            ITickableContext tickableContext,
+            ICharacterContext characterContext)
         {
             _obstacleFactory = obstacleFactory;
             _settings = settings;
             _tickableContext = tickableContext;
             
+            _obstaclesPool = new ObstaclesPool(_obstacleFactory, characterContext);
+            
+            _disposable.Add(_obstaclesPool);
             _disposable.Add(_spawnDisposable);
         }
         
         protected override UniTask OnStarted(CancellationToken token = default)
         {
+            _obstaclesPool.Reset();
             _spawnDisposable.Disposable = _tickableContext.Updated.Subscribe(OnSpawnUpdate);
             UpdateNextDeltaTime();
             
@@ -72,7 +77,7 @@ namespace Controllers.Spawner.Obstacle
                 
                 if (spawnChance < currentChance)
                 {
-                    var obstacleView = _obstacleFactory.Create(new ObstacleOptions(i));
+                    _obstaclesPool.GetObject(i);
                     break;
                 }
 
