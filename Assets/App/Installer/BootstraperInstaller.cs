@@ -95,7 +95,7 @@ public class BootstraperInstaller : MonoInstaller
             .FromMethod(it => new CompositeSpawnerController(
                 it.Container.Resolve<SpawnSettings>(),
                     it.Container.ResolveId<ISpawnerController>("ObstaclesController"),
-                //    it.Container.ResolveId<ISpawnerController>("CoinController"),
+                    it.Container.ResolveId<ISpawnerController>("CoinController"),
                 it.Container.Resolve<ITickableContext>()));
 
         Container.BindInstance(new SpawnSettings(1, 1.5f)).AsSingle();
@@ -111,16 +111,12 @@ public class BootstraperInstaller : MonoInstaller
         
         Container.Bind<IObstacleSettings>().FromInstance(new ObstacleSettings(_obstacleObjects));
         
-        /*
-
-      Container.Bind<ISpawnerController>()
+        Container.Bind<ISpawnerController>()
           .WithId("CoinController")
           .To<CoinSpawnerController>().AsSingle();
 
-      Container.Bind<ICoinFactory>().FromMethod(it =>
+        Container.Bind<ICoinFactory>().FromMethod(it =>
           new CoinFactory(it.Container, _coinsScriptableObject)).AsSingle();
-      */
-        
       
         
         // Retry popup

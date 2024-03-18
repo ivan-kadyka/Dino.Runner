@@ -11,7 +11,7 @@ namespace App.Domains.Spawner
     {
         private readonly SpawnSettings _settings;
         private readonly ISpawnerController _obstacleController;
-     //   private readonly ISpawnerController _coinController;
+        private readonly ISpawnerController _coinController;
         private readonly ITickableContext _tickableContext;
 
         private readonly SerialDisposable _spawnDisposable = new SerialDisposable();
@@ -21,12 +21,12 @@ namespace App.Domains.Spawner
         public CompositeSpawnerController(
             SpawnSettings settings,
             ISpawnerController obstacleController,
-         //   ISpawnerController coinController,
+            ISpawnerController coinController,
             ITickableContext tickableContext)
         {
             _settings = settings;
             _obstacleController = obstacleController;
-       //     _coinController = coinController;
+            _coinController = coinController;
             _tickableContext = tickableContext;
 
             _disposable.Add(_spawnDisposable);
@@ -35,7 +35,7 @@ namespace App.Domains.Spawner
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
             await _obstacleController.Start(token);
-        //    await _coinController.Start(token);
+            await _coinController.Start(token);
             
             _spawnDisposable.Disposable = _tickableContext.Updated.Subscribe(OnSpawnUpdate);
             UpdateNextDeltaTime();
@@ -46,7 +46,7 @@ namespace App.Domains.Spawner
             _spawnDisposable.Disposable = default;
             
             await _obstacleController.Stop(token);
-      //      await _coinController.Stop(token);
+            await _coinController.Stop(token);
         }
 
         private void UpdateNextDeltaTime()
