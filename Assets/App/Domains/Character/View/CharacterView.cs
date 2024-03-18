@@ -35,6 +35,11 @@ namespace Character.View
 
         public void OnTriggerEnter(Collider other)
         {
+            if (other.CompareTag("Coin"))
+            {
+                other.gameObject.SetActive(false);
+            }
+            
             _colliderSubject.OnNext(other.tag);
         }
     }

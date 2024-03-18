@@ -1,4 +1,6 @@
 using System.Threading;
+using App.Domains.Character.Model;
+using App.Domains.Character.Model.Behaviors;
 using Cysharp.Threading.Tasks;
 using Observables;
 using Types;
@@ -9,38 +11,42 @@ namespace Character.Model
 {
     public class Character : DisposableBase, ICharacter
     {
-        public CharacterState State => _state;
-
         public IObservableValue<float> Speed => _speedSubject;
 
         private CharacterState _state;
-        private Vector3 _motion;
-
-        private const float jumpForce = 8f;
-        private const float gravity = 9.81f * 2f;
         
         private float _initialGameSpeed = 5f;
         private float _gameSpeedIncrease = 0.1f;
         
         private readonly ICharacterPhysics _physics;
         
-        private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
         private readonly CompositeDisposable _disposable = new CompositeDisposable();
         private readonly ObservableValue<float> _speedSubject = new ObservableValue<float>(0);
+
+        private ICharacterBehavior _currentBehavior;
+        private readonly ICharacterBehavior _defaultBehavior;
+        private readonly ICharacterBehavior _flyBehavior;
         
         public Character(ICharacterPhysics physics)
         {
             _physics = physics;
             _disposable.Add( _physics.Updated.Subscribe(Update));
             _disposable.Add( _physics.Collider.Subscribe(OnCollider));
+
+            var settings = new CharacterSettings();
+            
+            _defaultBehavior = new DefaultCharacterBehavior(physics, settings);
+            _flyBehavior = new FlyCharacterBehavior(physics, settings);
+            
+            _currentBehavior = _defaultBehavior;
         }
 
         public UniTask Idle(CancellationToken token = default)
         {
-            _motion = Vector3.zero;
             _state = CharacterState.Idle;
+            _currentBehavior = new IdleCharacterBehavior();
             _speedSubject.OnNext(0);
             
             _moveTaskCompletionSource.TrySetResult();
@@ -51,53 +57,17 @@ namespace Character.Model
         public async UniTask Run(CancellationToken token = default)
         {
             _state = CharacterState.Run;
+            _currentBehavior = _defaultBehavior;
             
             _speedSubject.OnNext(_initialGameSpeed);
             _moveTaskCompletionSource = new UniTaskCompletionSource();
             await _moveTaskCompletionSource.Task;
         }
 
-        public UniTask Jump(CancellationToken token = default)
+        public async UniTask Jump(CancellationToken token = default)
         {
-            if (!CanJump())
-                return UniTask.CompletedTask;
-            
-            _jumpingTaskCompletionSource.TrySetResult();
-            _jumpingTaskCompletionSource = new UniTaskCompletionSource();
-            
-            if (_state == CharacterState.Run)
-                _state = CharacterState.Jumping;
-            
-            _motion = Vector3.up * jumpForce;
-
-            ExecuteJumping();
-
-            return _jumpingTaskCompletionSource.Task;
-        }
-
-        private bool CanJump()
-        {
-            return _state == CharacterState.Run || _state == CharacterState.Fly;
-        }
-
-        private void ExecuteJumping()
-        {
-            // Apply gravity to the motion
-            _motion += gravity * Time.deltaTime * Vector3.down;
-    
-            // Calculate the potential new position without actually moving the character
-            Vector3 potentialPosition = _physics.Transform.position + (_motion * Time.deltaTime);
-
-            // Check if the potential new position exceeds the maximum allowed height
-            if (potentialPosition.y > 5f)
-            {
-                // If it does, adjust the _motion vector so that the final position will exactly be at the height limit
-                float deltaY = 5f - _physics.Transform.position.y; // Difference between current height and maximum allowed height
-                _motion = (deltaY / Time.deltaTime) * Vector3.up; // Adjust _motion so after the movement, the character ends up 
-            }
-
-            // Apply the movement
-            _physics.Move(_motion * Time.deltaTime);
+            if (_state != CharacterState.Idle && _currentBehavior.CanExecute())
+                await _currentBehavior.Execute(token);
         }
         
         private void Update(float deltaTime)
@@ -109,24 +79,7 @@ namespace Character.Model
             nextSpeed += _gameSpeedIncrease * Time.deltaTime;
             _speedSubject.OnNext(nextSpeed);
             
-            switch (_state)
-            {
-                case CharacterState.Fly:
-                    ExecuteJumping();
-                    break;
-                case CharacterState.Jumping:
-                    if (_physics.IsGrounded)
-                    {
-                        _jumpingTaskCompletionSource.TrySetResult();
-                        _state = CharacterState.Run;
-                    }
-                    else
-                    {
-                        ExecuteJumping();
-                    }
-                       
-                    break;
-            }
+            _currentBehavior.Update(deltaTime);
         }
 
         private async void OnCollider(string objectTag)
@@ -134,6 +87,12 @@ namespace Character.Model
             if (objectTag == "Obstacle")
             {
                await Idle();
+            }
+            
+            else if (objectTag == "Coin")
+            {
+                _currentBehavior = _flyBehavior;
+                Debug.Log("Coin collider");
             }
         }
 
