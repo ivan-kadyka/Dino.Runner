@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using App.Domains.Spawner.View;
 using Controllers.Spawner.Obstacle.Model;
 using Types;
 using UniRx;

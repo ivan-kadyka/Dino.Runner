@@ -1,4 +1,5 @@
 using System.Threading;
+using App.Domains.Spawner.View;
 using Controllers.Spawner.Obstacle.Model;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;

@@ -11,7 +11,6 @@ using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
 using Controllers.Round.View;
-using Controllers.Spawner.Coins.Factory;
 using Controllers.Spawner.Obstacle.Factory;
 using Controllers.Spawner.Obstacle.Model;
 using Controllers.TopPanel;
@@ -88,9 +87,7 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.Resolve<IRoundView>(),
                 it.Container.Resolve<ICharacterContext>())).AsSingle();
         
-        // Spawner
-        // Obstacles
-        
+        // Spawner - Generic
         Container.Bind<IController>().WithId("CompositeSpawnerController")
             .FromMethod(it => new CompositeSpawnerController(
                 it.Container.Resolve<SpawnSettings>(),
@@ -100,7 +97,7 @@ public class BootstraperInstaller : MonoInstaller
 
         Container.BindInstance(new SpawnSettings(1, 1.5f)).AsSingle();
         
-      
+        // Spawner - Obstacles
         Container.Bind<IObstacleFactory>().FromMethod(it =>
             new ObstacleFactory(it.Container, _obstacleObjects, it.Container.Resolve<IGameContext>())).AsSingle();
 
@@ -111,12 +108,13 @@ public class BootstraperInstaller : MonoInstaller
         
         Container.Bind<IObstacleSettings>().FromInstance(new ObstacleSettings(_obstacleObjects));
         
+        // Spawner - Coins
         Container.Bind<ISpawnerController>()
           .WithId("CoinController")
           .To<CoinSpawnerController>().AsSingle();
 
         Container.Bind<ICoinFactory>().FromMethod(it =>
-          new CoinFactory(it.Container, _coinsScriptableObject)).AsSingle();
+          new CoinFactory(it.Container, _coinsScriptableObject, it.Container.Resolve<IGameContext>())).AsSingle();
       
         
         // Retry popup

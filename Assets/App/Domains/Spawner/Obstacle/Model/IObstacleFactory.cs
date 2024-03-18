@@ -1,4 +1,5 @@
 using App.Domains.Spawner;
+using App.Domains.Spawner.View;
 using Zenject;
 
 namespace Controllers.Spawner.Obstacle.Model

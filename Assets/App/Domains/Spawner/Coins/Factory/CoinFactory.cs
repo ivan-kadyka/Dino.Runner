@@ -1,6 +1,7 @@
-using Controllers.Spawner.Coins.Factory;
-using Controllers.Spawner.Coins.View;
+using App.Domains.Spawner.View;
+using App.Models;
 using Controllers.Spawner.Obstacle.Factory;
+using Controllers.Spawner.Obstacle.Model;
 using Zenject;
 
 namespace App.Domains.Spawner.Coins.Factory
@@ -9,16 +10,24 @@ namespace App.Domains.Spawner.Coins.Factory
     {
         private readonly DiContainer _container;
         private readonly CoinsScriptableObject _coinsScriptableObject;
+        private readonly IGameContext _gameContext;
 
-        public CoinFactory(DiContainer container, CoinsScriptableObject coinsScriptableObject)
+        public CoinFactory(DiContainer container, CoinsScriptableObject coinsScriptableObject, IGameContext gameContext)
         {
             _container = container;
             _coinsScriptableObject = coinsScriptableObject;
+            _gameContext = gameContext;
         }
-        
-        public ICoinView Create(CoinOptions param)
+
+        public ISpawnView Create(SpawnOptions options)
         {
-            throw new System.NotImplementedException();
+            var spawnObject = _coinsScriptableObject.prefabs[options.Id];
+            
+            var view = _container.InstantiatePrefab(spawnObject).GetComponent<ISpawnView>();
+            
+            view.SetUp(_gameContext);
+
+            return view;
         }
     }
 }

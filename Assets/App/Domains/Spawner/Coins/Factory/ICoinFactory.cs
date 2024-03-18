@@ -1,14 +1,9 @@
-using Controllers.Spawner.Coins.View;
-using Zenject;
+using App.Domains.Spawner.View;
+using Controllers.Spawner.Obstacle.Model;
 
-namespace Controllers.Spawner.Coins.Factory
+namespace App.Domains.Spawner.Coins.Factory
 {
-    public interface ICoinFactory : IFactory<CoinOptions, ICoinView>
+    public interface ICoinFactory : ISpawnFactory<SpawnOptions, ISpawnView>
     {
-    }
-
-    public class CoinOptions
-    {
-        
     }
 }

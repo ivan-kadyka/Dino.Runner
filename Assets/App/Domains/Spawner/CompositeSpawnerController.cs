@@ -65,10 +65,21 @@ namespace App.Domains.Spawner
         {
             if (!IsReadyToSpawn(deltaTime))
                 return;
-
-            await _obstacleController.Spawn();
+            
+            if (IsNextCoin())
+                await _coinController.Spawn();
+            else
+                await _obstacleController.Spawn();
             
             UpdateNextDeltaTime();
+        }
+
+        private bool IsNextCoin()
+        {
+            // 33% change to show coin
+            int value = Random.Range(0, 3);
+
+            return value == 0;
         }
     }
 }
