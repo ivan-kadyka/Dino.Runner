@@ -1,25 +1,26 @@
+using App.Domains.Spawner;
 using Zenject;
 
 namespace Controllers.Spawner.Obstacle.Model
 {
-    public class ObstacleOptions
+    public class SpawnOptions
     {
-        public int Index { get;}
+        public int Id { get;}
 
-        public ObstacleOptions(int index)
+        public SpawnOptions(int id)
         {
-            Index = index;
+            Id = id;
         }
     }
 
-    public interface IObstacleView : IView
+    public interface ISpawnFactory<in TOptions, out TView> 
+        where TView : ISpawnView
+        where TOptions: SpawnOptions
     {
-        bool IsActive { get; set; }
-
-        void UpdateSpeed(float speed);
+        TView Create(TOptions options);
     }
-    
-    public interface IObstacleFactory : IFactory<ObstacleOptions, IObstacleView>
+
+    public interface IObstacleFactory : ISpawnFactory<SpawnOptions, ISpawnView>
     {
     }
     

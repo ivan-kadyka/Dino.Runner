@@ -2,6 +2,7 @@ using System.Threading;
 using Character.Controller;
 using Character.Model;
 using Cysharp.Threading.Tasks;
+using Infra.Controllers;
 using Models.Tickable;
 using UniRx;
 using UnityEngine;

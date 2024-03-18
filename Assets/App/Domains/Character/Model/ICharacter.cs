@@ -1,15 +1,13 @@
 using System;
 using System.Threading;
+using App.Models;
 using Cysharp.Threading.Tasks;
-using Observables;
 
 namespace Character.Model
 {
-    public interface ICharacterContext
+    public interface ICharacterContext : IGameContext
     {
         CharacterState State { get; }
-        
-        IObservableValue<float> Speed { get; }
     }
     
     public interface ICharacter : ICharacterContext, IDisposable

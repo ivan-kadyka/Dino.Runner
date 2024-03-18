@@ -3,6 +3,7 @@ using Character.Controller;
 using Character.Model;
 using Controllers.Round.View;
 using Cysharp.Threading.Tasks;
+using Infra.Controllers;
 using UniRx;
 
 namespace Controllers.Round

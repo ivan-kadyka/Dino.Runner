@@ -1,74 +1,68 @@
 using System.Collections.Generic;
 using System.Linq;
-using Character.Model;
 using Controllers.Spawner.Obstacle.Model;
 using Types;
 using UniRx;
 
-public class ObstaclesPool : DisposableBase
+namespace App.Domains.Spawner
 {
-    private readonly Dictionary<int, List<IObstacleView>> _poolDictionary = new Dictionary<int, List<IObstacleView>>();
-    private readonly IObstacleFactory _objectFactory;
-
-    private readonly CompositeDisposable _disposable = new CompositeDisposable();
-
-    public ObstaclesPool(IObstacleFactory objectFactory, ICharacterContext characterContext)
+    public class SpawnPool<TOptions, TView>  : DisposableBase 
+        where TView : ISpawnView
+        where TOptions: SpawnOptions
     {
-        _objectFactory = objectFactory;
-        _disposable.Add(characterContext.Speed.Subscribe(OnSpeedUpdate));
-    }
+        private readonly Dictionary<int, List<ISpawnView>> _poolDictionary = new Dictionary<int, List<ISpawnView>>();
+        private readonly ISpawnFactory<TOptions, TView> _objectFactory;
 
-    private void OnSpeedUpdate(float speed)
-    {
-        foreach (var list in _poolDictionary.Values)
+        private readonly CompositeDisposable _disposable = new CompositeDisposable();
+
+        public SpawnPool(ISpawnFactory<TOptions, TView> objectFactory)
         {
-            foreach (var item in list.Where(it => it.IsActive))
-            {
-                item.UpdateSpeed(speed);
-            }
+            _objectFactory = objectFactory;
         }
-    }
     
-    public IObstacleView GetObject(int id)
-    {
-        if (!_poolDictionary.ContainsKey(id))
+        public ISpawnView GetObject(TOptions options)
         {
-            _poolDictionary[id] = new List<IObstacleView>();
-        }
-
-        var localPool = _poolDictionary[id];
-        var availableObject = localPool.FirstOrDefault(it => !it.IsActive);
-
-        if (availableObject == null)
-        {
-            IObstacleView newObject = _objectFactory.Create(new ObstacleOptions(id));
-            localPool.Add(newObject);
-            _disposable.Add(newObject);
-            availableObject = newObject;
-        }
-
-        availableObject.IsActive = true;
-
-        return availableObject;
-    }
-
-    public void Reset()
-    {
-        foreach (var list in _poolDictionary.Values)
-        {
-            foreach (var item in list)
+            var id = options.Id;
+        
+            if (!_poolDictionary.ContainsKey(id))
             {
-                item.IsActive = false;
+                _poolDictionary[id] = new List<ISpawnView>();
+            }
+
+            var localPool = _poolDictionary[id];
+            var availableObject = localPool.FirstOrDefault(it => !it.IsActive);
+
+            if (availableObject == null)
+            {
+                ISpawnView newObject = _objectFactory.Create(options);
+                localPool.Add(newObject);
+                _disposable.Add(newObject);
+                availableObject = newObject;
+            }
+
+            availableObject.IsActive = true;
+
+            return availableObject;
+        }
+
+        public void Reset()
+        {
+            foreach (var list in _poolDictionary.Values)
+            {
+                foreach (var item in list)
+                {
+                    item.IsActive = false;
+                }
             }
         }
-    }
 
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
+        protected override void Dispose(bool disposing)
         {
-            _disposable.Dispose();
-            _poolDictionary.Clear();
+            if (disposing)
+            {
+                _disposable.Dispose();
+                _poolDictionary.Clear();
+            }
         }
     }
 }

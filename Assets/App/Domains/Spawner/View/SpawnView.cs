@@ -1,9 +1,9 @@
-using Controllers.Spawner.Coins.View;
+using App.Models;
 using UnityEngine;
 
-namespace App.Domains.Spawner.Coins.View
+namespace App.Domains.Spawner.View
 {
-    public class CoinView : MonoBehaviour, ICoinView
+    public class SpawnView : MonoBehaviour, ISpawnView
     {
         public bool IsActive
         {
@@ -11,13 +11,14 @@ namespace App.Domains.Spawner.Coins.View
             set => gameObject.SetActive(value);
         }
 
-        public void UpdateSpeed(float speed)
-        {
-            _speed = speed;
-        }
-
         private float leftEdge;
-        private float _speed;
+
+        private IGameContext _gameContext;
+    
+        public void SetUp(IGameContext gameContext)
+        {
+            _gameContext = gameContext;
+        }
 
         private void OnEnable()
         {
@@ -27,7 +28,10 @@ namespace App.Domains.Spawner.Coins.View
 
         private void Update()
         {
-            transform.position += _speed * Time.deltaTime * Vector3.left;
+            if (_gameContext == null)
+                return;
+        
+            transform.position += _gameContext.Speed.Value * Time.deltaTime * Vector3.left;
 
             if (transform.position.x < leftEdge)
             {

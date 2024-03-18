@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185eb7e6a1c44c9480377689d7cb7af6, type: 3}
   m_Name: CoinsSO
   m_EditorClassIdentifier: 
-  prefabs: []
+  prefabs:
+  - {fileID: 3926917011630731405, guid: a3b5c8e757b5441fd8c6505b3bfe9432, type: 3}
+  - {fileID: 3926917011630731405, guid: ac0607d18acb9424b94180aa2caa247c, type: 3}
+  - {fileID: 3926917011630731405, guid: 2a4264443d53141fbb4bc5d7a04929dc, type: 3}

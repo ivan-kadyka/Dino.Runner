@@ -3,6 +3,7 @@ using Character.Controller.Inputs;
 using Character.Model;
 using Character.View;
 using Cysharp.Threading.Tasks;
+using Infra.Controllers;
 
 namespace Character.Controller
 {

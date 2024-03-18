@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using Types;
 using UniRx;
 
-namespace Character.Controller
+namespace Infra.Controllers
 {
     public abstract class ControllerBase : DisposableBase, IController
     {
