@@ -15,7 +15,7 @@ namespace App.Domains.Spawner.Coins
         public CoinSpawnerController(ICoinFactory coinFactory)
         {
             _spawnPool = new SpawnPool<SpawnOptions, ISpawnView>(coinFactory);
-            _disposable.Add(_spawnPool);
+            _disposables.Add(_spawnPool);
         }
 
         protected override UniTask OnStarted(CancellationToken token = default)

@@ -6,11 +6,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Character.Model
 {
-    public interface ICharacterContext : IGameContext
-    {
-    }
-    
-    public interface ICharacter : ICharacterContext, IDisposable
+    public interface ICharacter : IGameContext, IDisposable
     {
         UniTask Jump(CancellationToken token = default);
 

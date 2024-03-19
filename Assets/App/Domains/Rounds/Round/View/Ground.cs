@@ -23,7 +23,7 @@ public class Ground : MonoBehaviour, IRoundView
         if (_gameContext == null)
             return;
         
-        float localSpeed = _gameContext.Speed.Value / transform.localScale.x;
+        float localSpeed = _gameContext.Speed / transform.localScale.x;
         _meshRenderer.material.mainTextureOffset += localSpeed * Time.deltaTime * Vector2.right;
     }
 

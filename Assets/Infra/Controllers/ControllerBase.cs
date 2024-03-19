@@ -8,7 +8,7 @@ namespace Infra.Controllers
 {
     public abstract class ControllerBase : DisposableBase, IController
     {
-        protected CompositeDisposable _disposable = new CompositeDisposable();
+        protected CompositeDisposable _disposables = new CompositeDisposable();
         
         public async UniTask Start(CancellationToken token = default)
         {
@@ -34,7 +34,7 @@ namespace Infra.Controllers
         {
             if (disposing)
             {
-                _disposable.Dispose();
+                _disposables.Dispose();
             }
         }
     }

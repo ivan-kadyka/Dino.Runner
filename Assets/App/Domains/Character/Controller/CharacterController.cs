@@ -1,7 +1,7 @@
 using System.Threading;
+using App.Domains.Character.Controller.Inputs;
 using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
-using Character.Controller.Inputs;
 using Character.Model;
 using Character.View;
 using Cysharp.Threading.Tasks;
@@ -32,9 +32,8 @@ namespace Character.Controller
             _defaultBehavior = new DefaultCharacterBehavior(_physics, settings);
             _flyBehavior = new FlyCharacterBehavior(_physics, settings);
             
-            _disposable.Add(_physics.Collider.Subscribe(OnCollider));
-            
-            _inputCharacterController.JumpPressed += OnJumpPressedExecuted;
+            _disposables.Add(_physics.Collider.Subscribe(OnCollider));
+            _disposables.Add(_inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
         }
 
         private async void OnCollider(string objectTag)
@@ -50,7 +49,7 @@ namespace Character.Controller
             }
         }
 
-        private async void OnJumpPressedExecuted()
+        private async void OnJumpPressed(Types.Unit unit)
         {
             await _character.Jump();
         }
@@ -65,7 +64,7 @@ namespace Character.Controller
         {
             if (disposing)
             {
-                _inputCharacterController.JumpPressed -= OnJumpPressedExecuted;
+               _disposables.Dispose();
             }
             
             base.Dispose(disposing);

@@ -31,7 +31,7 @@ namespace App.Domains.Spawner.View
             if (_gameContext == null)
                 return;
         
-            transform.position += _gameContext.Speed.Value * Time.deltaTime * Vector3.left;
+            transform.position += _gameContext.Speed * Time.deltaTime * Vector3.left;
 
             if (transform.position.x < leftEdge)
             {

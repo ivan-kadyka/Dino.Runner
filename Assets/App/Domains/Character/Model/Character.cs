@@ -3,7 +3,6 @@ using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
 using Cysharp.Threading.Tasks;
 using Models.Tickable;
-using Observables;
 using Types;
 using UniRx;
 using UnityEngine;
@@ -12,24 +11,24 @@ namespace Character.Model
 {
     public class Character : DisposableBase, ICharacter
     {
-        public IObservableValue<float> Speed => _speedSubject;
+        public float Speed => _speed;
         
         private const float _initialGameSpeed = 5f;
         private float _gameSpeedIncrease = 0.1f;
+        private float _speed; 
         
         private readonly ICharacterPhysics _physics;
         
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
         private readonly CompositeDisposable _disposable = new CompositeDisposable();
-        private readonly ObservableValue<float> _speedSubject;
 
         private ICharacterBehavior _currentBehavior;
         
         public Character(ITickableContext tickableContext)
         {
             var settings = new CharacterSettings();
-            _speedSubject = new ObservableValue<float>(settings.InitialGameSpeed);
+            _speed = settings.InitialGameSpeed;
             
             _currentBehavior = new IdleCharacterBehavior();
             
@@ -43,7 +42,7 @@ namespace Character.Model
 
         public async UniTask Run(CancellationToken token = default)
         {
-            _speedSubject.OnNext(_initialGameSpeed);
+            _speed = _initialGameSpeed;
             _moveTaskCompletionSource = new UniTaskCompletionSource();
             await _moveTaskCompletionSource.Task;
         }
@@ -51,7 +50,7 @@ namespace Character.Model
         public UniTask Idle(CancellationToken token = default)
         {
             _currentBehavior = new IdleCharacterBehavior();
-            _speedSubject.OnNext(0);
+            _speed = 0;
             
             _moveTaskCompletionSource.TrySetResult();
             
@@ -67,9 +66,7 @@ namespace Character.Model
         
         private void Update(float deltaTime)
         {
-            float nextSpeed = _speedSubject.Value;
-            nextSpeed += _gameSpeedIncrease * Time.deltaTime;
-            _speedSubject.OnNext(nextSpeed);
+            _speed += _gameSpeedIncrease * Time.deltaTime;
             
             _currentBehavior.Update(deltaTime);
         }

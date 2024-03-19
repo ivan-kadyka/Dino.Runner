@@ -18,7 +18,7 @@ namespace App.Domains.Spawner.Obstacle
             _settings = settings;
             _spawnPool = new SpawnPool<SpawnOptions, ISpawnView>(obstacleFactory);
             
-            _disposable.Add(_spawnPool);
+            _disposables.Add(_spawnPool);
         }
         
         protected override UniTask OnStarted(CancellationToken token = default)

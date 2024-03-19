@@ -23,7 +23,7 @@ namespace Controllers.TopPanel
         {
             _view = view;
             _gameContext = gameContext;
-            _disposable.Add(tickableContext.Updated.Subscribe(OnUpdated));
+            _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
         }
 
         protected override UniTask OnStarted(CancellationToken token = default)
@@ -41,7 +41,7 @@ namespace Controllers.TopPanel
 
         private void OnUpdated(float deltaTime)
         {
-            _score += _gameContext.Speed.Value * Time.deltaTime;
+            _score += _gameContext.Speed * Time.deltaTime;
             _view.UpdateScore(Mathf.FloorToInt(_score));
         }
         

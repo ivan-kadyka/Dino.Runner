@@ -1,11 +1,10 @@
+using App.Domains.Character.Controller.Inputs;
 using App.Domains.Spawner;
 using App.Domains.Spawner.Coins;
 using App.Domains.Spawner.Coins.Factory;
 using App.Domains.Spawner.Obstacle;
 using App.Models;
 using AppContext;
-using Character.Controller.Inputs;
-using Character.Model;
 using Character.View;
 using Controllers;
 using Controllers.RetryPopup;
@@ -85,7 +84,7 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IController>("CharacterController"),
                 it.Container.ResolveId<IController>("CompositeSpawnerController"),
                 it.Container.Resolve<IRoundView>(),
-                it.Container.Resolve<ICharacterContext>())).AsSingle();
+                it.Container.Resolve<IGameContext>())).AsSingle();
         
         // Spawner - Generic
         Container.Bind<IController>().WithId("CompositeSpawnerController")

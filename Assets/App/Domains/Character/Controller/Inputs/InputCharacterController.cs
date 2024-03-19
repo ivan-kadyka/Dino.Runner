@@ -1,47 +1,40 @@
 using System;
+using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using Unit = Types.Unit;
 
-namespace Character.Controller.Inputs
+namespace App.Domains.Character.Controller.Inputs
 {
     public class InputCharacterController: MonoBehaviour, IInputCharacterController
     {
-        public event Action JumpPressed;
+        public IObservable<Unit> JumpPressed => _jumpSubject;
+
+        private readonly Subject<Unit> _jumpSubject = new Subject<Unit>();
         
         void Update()
-        {
-            // Check if the space key was pressed down this frame
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                // If it was, invoke the Jumped event
-                OnJumped();
-                return;
-            }
-            
-            // Check if we have any touch input (for mobile devices)
+        { 
             if (Input.touchCount > 0)
             {
-                Touch touch = Input.GetTouch(0); // Get the first touch
+                Touch touch = Input.GetTouch(0);
 
-                if (touch.phase == TouchPhase.Began) // Check if the touch has just begun
+                if (touch.phase == TouchPhase.Began)
                 {
-                    // Call your method to handle touch input here
                     OnJumped();
                 }
             }
-
-            // Check for mouse input (for PC)
-            else if (Input.GetMouseButtonDown(0)) // Check if the left mouse button was clicked
+            else if (Input.GetMouseButtonDown(0)) 
             {
-                // Call your method to handle mouse input here
+                OnJumped();
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
                 OnJumped();
             }
         }
 
         private  void OnJumped()
         {
-            // Invoke the Jumped event, using the ?. operator to only invoke it if there are any subscribers
-            JumpPressed?.Invoke();
+            _jumpSubject.OnNext(Unit.Nothing);
         }
     }
 }

@@ -1,9 +1,10 @@
 using System;
+using Types;
 
-namespace Character.Controller.Inputs
+namespace App.Domains.Character.Controller.Inputs
 {
     public interface IInputCharacterController
     {
-        event Action JumpPressed;
+        IObservable<Unit> JumpPressed { get; }
     }
 }

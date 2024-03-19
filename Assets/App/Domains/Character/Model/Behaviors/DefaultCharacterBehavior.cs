@@ -1,19 +1,15 @@
 using System.Threading;
 using Character.Model;
 using Cysharp.Threading.Tasks;
-using Types;
-using UniRx;
 using UnityEngine;
 
 namespace App.Domains.Character.Model.Behaviors
 {
-    public class DefaultCharacterBehavior : DisposableBase, ICharacterBehavior
+    public class DefaultCharacterBehavior : ICharacterBehavior
     {
         private readonly ICharacterPhysics _physics;
         private readonly CharacterSettings _settings;
         private Vector3 _motion;
-        
-        private readonly CompositeDisposable _disposable = new CompositeDisposable();
         
         private UniTaskCompletionSource _jumpingTaskCompletionSource = new UniTaskCompletionSource();
 
@@ -44,21 +40,8 @@ namespace App.Domains.Character.Model.Behaviors
             
             _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
             _physics.Move(_motion * Time.deltaTime);
-            
-            //
-            // ExecuteJumping();
 
             return UniTask.CompletedTask;
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _disposable.Dispose();
-            }
-        }
-
-       
     }
 }

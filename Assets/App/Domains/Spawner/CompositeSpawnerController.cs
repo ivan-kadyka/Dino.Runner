@@ -29,7 +29,7 @@ namespace App.Domains.Spawner
             _coinController = coinController;
             _tickableContext = tickableContext;
 
-            _disposable.Add(_spawnDisposable);
+            _disposables.Add(_spawnDisposable);
         }
         
         protected override async UniTask OnStarted(CancellationToken token = default)
