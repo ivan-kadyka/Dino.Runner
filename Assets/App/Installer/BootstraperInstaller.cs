@@ -1,4 +1,7 @@
 using App.Domains.Character.Controller.Inputs;
+using App.Domains.Character.Model;
+using App.Domains.Character.Model.Behaviors.Factory;
+using App.Domains.Character.Model.Behaviors.Jump.Factory;
 using App.Domains.Spawner;
 using App.Domains.Spawner.Coins;
 using App.Domains.Spawner.Coins.Factory;
@@ -65,6 +68,10 @@ public class BootstraperInstaller : MonoInstaller
         Container.BindInterfacesTo<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
         Container.Bind<IController>().WithId("CharacterController").To<Character.Controller.CharacterController>()
             .AsSingle();
+
+        Container.Bind<ICharacterBehaviorFactory>().To<CharacterBehaviorFactory>().AsSingle();
+        Container.Bind<IJumpBehaviorFactory>().To<JumpBehaviorFactory>().AsSingle();
+        Container.BindInstance(new CharacterSettings());
         
         // Top Panel
         Container.Bind<ITopPanelView>()

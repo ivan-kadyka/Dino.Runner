@@ -2,6 +2,7 @@ using System.Threading;
 using App.Domains.Character.Controller.Inputs;
 using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
+using App.Domains.Character.Model.Behaviors.Factory;
 using Character.Model;
 using Character.View;
 using Cysharp.Threading.Tasks;
@@ -13,27 +14,21 @@ namespace Character.Controller
     public class CharacterController : ControllerBase
     {
         private readonly ICharacter _character;
-        private readonly ICharacterPhysics _physics;
         private readonly ICharacterView _view;
-        private readonly IInputCharacterController _inputCharacterController;
+        private readonly ICharacterBehaviorFactory _behaviorFactory;
 
-        private readonly ICharacterBehavior _defaultBehavior;
-        private readonly ICharacterBehavior _flyBehavior;
+        private ICharacterBehavior _defaultBehavior;
         public CharacterController(
             ICharacter character,
             ICharacterPhysics physics, 
-            IInputCharacterController inputCharacterController)
+            IInputCharacterController inputCharacterController,
+            ICharacterBehaviorFactory behaviorFactory)
         {
             _character = character;
-            _physics = physics;
-            _inputCharacterController = inputCharacterController;
-
-            var settings = new CharacterSettings();
-            _defaultBehavior = new DefaultCharacterBehavior(_physics, settings);
-            _flyBehavior = new FlyCharacterBehavior(_physics, settings);
+            _behaviorFactory = behaviorFactory;
             
-            _disposables.Add(_physics.Collider.Subscribe(OnCollider));
-            _disposables.Add(_inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
+            _disposables.Add(physics.Collider.Subscribe(OnCollider));
+            _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
         }
 
         private async void OnCollider(string objectTag)
@@ -44,7 +39,8 @@ namespace Character.Controller
                     await _character.Idle();
                     break;
                 case "Coin":
-                    _character.ChangeBehavior(_flyBehavior);
+                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Fly);
+                    _character.ChangeBehavior(newBehavior);
                     break;
             }
         }
@@ -56,6 +52,7 @@ namespace Character.Controller
 
         protected override async UniTask OnStarted(CancellationToken token = default)
         {
+            _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorType.Default);
             _character.ChangeBehavior(_defaultBehavior);
             await _character.Run(token);
         }

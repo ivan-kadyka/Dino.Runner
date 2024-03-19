@@ -3,24 +3,16 @@ using Character.Model;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace App.Domains.Character.Model.Behaviors
+namespace App.Domains.Character.Model.Behaviors.Jump
 {
-    public class FlyCharacterBehavior : ICharacterBehavior
+    public class FlyJumpBehavior : JumpBaseBehavior
     {
-        public float Speed { get; }
-        
-        private readonly ICharacterPhysics _physics;
-        private readonly CharacterSettings _settings;
-        private Vector3 _motion;
-        
-        public FlyCharacterBehavior(ICharacterPhysics physics, CharacterSettings settings)
+        public FlyJumpBehavior(ICharacterPhysics physics, CharacterSettings settings) 
+            : base(physics, settings)
         {
-            _physics = physics;
-            _settings = settings;
-            Speed = 5;
         }
-        
-        public void Update(float deltaTime)
+
+        public override void Update(float deltaTime)
         {
             if (_physics.IsGrounded)
                 return;
@@ -28,7 +20,7 @@ namespace App.Domains.Character.Model.Behaviors
             ExecuteJumping();
         }
 
-        public UniTask Execute(CancellationToken token = default)
+        public override UniTask Execute(CancellationToken token = default)
         {
             _motion = Vector3.up * _settings.JumpForce;
             ExecuteJumping();

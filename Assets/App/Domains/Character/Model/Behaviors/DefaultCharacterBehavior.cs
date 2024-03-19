@@ -1,4 +1,5 @@
 using System.Threading;
+using App.Domains.Character.Model.Behaviors.Jump;
 using Character.Model;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -10,14 +11,15 @@ namespace App.Domains.Character.Model.Behaviors
         public float Speed => _speed;
         
         private readonly ICharacterPhysics _physics;
+        private readonly IJumpBehavior _jumpBehavior;
         private readonly CharacterSettings _settings;
         private Vector3 _motion;
 
         private float _speed;
 
-        public DefaultCharacterBehavior(ICharacterPhysics physics, CharacterSettings settings)
+        public DefaultCharacterBehavior(IJumpBehavior jumpBehavior, CharacterSettings settings)
         {
-            _physics = physics;
+            _jumpBehavior = jumpBehavior;
             _settings = settings;
             _speed = settings.InitialGameSpeed;
         }
@@ -26,21 +28,12 @@ namespace App.Domains.Character.Model.Behaviors
         {
             _speed += _settings.GameSpeedIncrease * Time.deltaTime;
             
-            if (_physics.IsGrounded)
-                return;
-            
-            _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
-            _physics.Move(_motion * Time.deltaTime);
+            _jumpBehavior.Update(deltaTime);
         }
 
         public UniTask Execute(CancellationToken token = default)
         {
-            _motion = Vector3.up * _settings.JumpForce;
-            
-            _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
-            _physics.Move(_motion * Time.deltaTime);
-
-            return UniTask.CompletedTask;
+            return _jumpBehavior.Execute(token);
         }
     }
 }
