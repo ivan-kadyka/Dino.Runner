@@ -1,5 +1,6 @@
 using App.Domains.Character.Controller.Inputs;
 using App.Domains.Character.Model;
+using App.Domains.Character.Model.Behaviors.Context;
 using App.Domains.Character.Model.Behaviors.Factory;
 using App.Domains.Character.Model.Behaviors.Jump.Factory;
 using App.Domains.Spawner;
@@ -20,6 +21,7 @@ using Models;
 using Models.Tickable;
 using UnityEngine;
 using Zenject;
+using CharacterController = Character.Controller.CharacterController;
 
 public class BootstraperInstaller : MonoInstaller
 {
@@ -66,8 +68,13 @@ public class BootstraperInstaller : MonoInstaller
         
         Container.BindInterfacesTo<App.Domains.Character.Model.Character>().AsSingle();
         Container.BindInterfacesTo<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
-        Container.Bind<IController>().WithId("CharacterController").To<Character.Controller.CharacterController>()
-            .AsSingle();
+        
+        Container.Bind<CharacterController>().AsSingle();
+        Container.Bind<IController>()
+            .WithId("CharacterController")
+            .FromMethod(it => it.Container.Resolve<CharacterController>());
+        Container.Bind<ICharacterBehaviorContext>()
+            .FromMethod(it => it.Container.Resolve<CharacterController>());
 
         Container.Bind<ICharacterBehaviorFactory>().To<CharacterBehaviorFactory>().AsSingle();
         Container.Bind<IJumpBehaviorFactory>().To<JumpBehaviorFactory>().AsSingle();

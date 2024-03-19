@@ -1,59 +1,95 @@
+using System;
 using System.Threading;
 using App.Domains.Character.Controller.Inputs;
 using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
+using App.Domains.Character.Model.Behaviors.Context;
 using App.Domains.Character.Model.Behaviors.Factory;
 using Character.Model;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
+using Models.Tickable;
+using Observables;
 using UniRx;
 
 namespace Character.Controller
 {
-    public class CharacterController : ControllerBase
+    public class CharacterController : ControllerBase, ICharacterBehaviorContext
     {
+        public IObservableValue<CharacterBehaviorType> CurrentType => _behaviorTypeSubject;
+        public IObservable<TimeSpan> TimeLeft => _timeSubject;
+        
         private readonly ICharacter _character;
+        private readonly ITickableContext _tickableContext;
         private readonly ICharacterBehaviorFactory _behaviorFactory;
 
         private ICharacterBehavior _defaultBehavior;
+
+        private readonly ObservableValue<CharacterBehaviorType> _behaviorTypeSubject = new ObservableValue<CharacterBehaviorType>(CharacterBehaviorType.Default);
+        private readonly ObservableValue<TimeSpan> _timeSubject = new ObservableValue<TimeSpan>(TimeSpan.Zero);
+
+        private readonly SerialDisposable _timerDisposable = new SerialDisposable();
+        
         public CharacterController(
             ICharacter character,
             ICharacterPhysics physics, 
             IInputCharacterController inputCharacterController,
+            ITickableContext tickableContext,
             ICharacterBehaviorFactory behaviorFactory)
         {
             _character = character;
+            _tickableContext = tickableContext;
             _behaviorFactory = behaviorFactory;
             
             _disposables.Add(physics.Collider.Subscribe(OnCollider));
             _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
+            _disposables.Add(_timerDisposable);
         }
 
-        private async void OnCollider(string objectTag)
+        private async void OnCollider(string objectName)
         {
-            switch (objectTag)
+            switch (objectName)
             {
                 case "Obstacle":
                     await _character.Idle();
                     break;
                 case "Coin_Fly":
-                {
-                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Fly);
-                    _character.ChangeBehavior(newBehavior);
-                    break; 
-                }
+                    ChangeBehaviour(CharacterBehaviorType.Fly);
+                    break;
                 case "Coin_Slow":
-                {
-                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Slow);
-                    _character.ChangeBehavior(newBehavior);
+                    ChangeBehaviour(CharacterBehaviorType.Slow);
                     break;
-                }
                 case "Coin_Fast":
-                {
-                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Fast);
-                    _character.ChangeBehavior(newBehavior);
+                    ChangeBehaviour(CharacterBehaviorType.Fast);
                     break;
-                }
+            }
+        }
+
+        private void ChangeBehaviour(CharacterBehaviorType type)
+        {
+            var newBehavior = _behaviorFactory.Create(type);
+                  
+            _character.ChangeBehavior(newBehavior);
+            _timerDisposable.Disposable = _tickableContext.Updated.Subscribe(OnEffectTimer);
+                    
+            _behaviorTypeSubject.OnNext(type);
+            _timeSubject.OnNext(TimeSpan.FromMilliseconds(10000));
+        }
+
+        private void OnEffectTimer(float deltaTime)
+        {
+            var deltaTimeSpan = TimeSpan.FromMilliseconds(deltaTime * 1000);
+            var timeLeft = _timeSubject.Value - deltaTimeSpan;
+
+            if (timeLeft.TotalMilliseconds > 0)
+            {
+                _timeSubject.OnNext(timeLeft);
+            }
+            else
+            {
+                _timerDisposable.Disposable = default;
+                _character.ChangeBehavior(_defaultBehavior);
+                _behaviorTypeSubject.OnNext(CharacterBehaviorType.Default);
             }
         }
 
@@ -66,17 +102,14 @@ namespace Character.Controller
         {
             _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorType.Default);
             _character.ChangeBehavior(_defaultBehavior);
+            _behaviorTypeSubject.OnNext(CharacterBehaviorType.Default);
             await _character.Run(token);
         }
 
-        protected override void Dispose(bool disposing)
+        protected override UniTask OnStopped(CancellationToken token = default)
         {
-            if (disposing)
-            {
-               _disposables.Dispose();
-            }
-            
-            base.Dispose(disposing);
+            _timerDisposable.Disposable = default;
+            return base.OnStopped(token);
         }
     }
 }

@@ -1,4 +1,7 @@
+using System;
 using System.Threading;
+using App.Domains.Character.Model;
+using App.Domains.Character.Model.Behaviors.Context;
 using App.Models;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
@@ -19,17 +22,22 @@ namespace Controllers.TopPanel
         public TopPanelController(
             ITopPanelView view,
             ITickableContext tickableContext,
+            ICharacterBehaviorContext characterBehaviorContext,
             IGameContext gameContext)
         {
             _view = view;
             _gameContext = gameContext;
             _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
+            
+            _disposables.Add(characterBehaviorContext.CurrentType.Subscribe(OnBehaviorTypeChanged));
+            _disposables.Add(characterBehaviorContext.TimeLeft.Subscribe(OnTimeLeft));
         }
 
         protected override UniTask OnStarted(CancellationToken token = default)
         {
             _score = 0;
             UpdateHiScore();
+            _view.UpdateEffectType(CharacterBehaviorType.Default);
             return base.OnStarted(token);
         }
 
@@ -37,6 +45,16 @@ namespace Controllers.TopPanel
         {
             UpdateHiScore();
             return base.OnStopped(token);
+        }
+
+        private void OnBehaviorTypeChanged(CharacterBehaviorType type)
+        {
+            _view.UpdateEffectType(type);
+        }
+        
+        private void OnTimeLeft(TimeSpan timeLeft)
+        {
+            _view.UpdateEffectTime(timeLeft);
         }
 
         private void OnUpdated(float deltaTime)

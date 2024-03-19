@@ -10,6 +10,8 @@ namespace Controllers.TopPanel
         
         void UpdateScore(int value);
 
-        void UpdateEffect(CharacterBehaviorType behaviorType, TimeSpan timeLeft);
+        void UpdateEffectType(CharacterBehaviorType behaviorType);
+        
+        void UpdateEffectTime(TimeSpan timeLeft);
     }
 }
