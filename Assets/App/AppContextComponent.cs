@@ -12,6 +12,7 @@ public class AppContextComponent : MonoBehaviour
     
     async void Start()
     {
+        Application.targetFrameRate = 60;
         await appController.Start(_cancellationSource.Token);
     }
 

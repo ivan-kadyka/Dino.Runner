@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4945676691993435500}
   - component: {fileID: 2575146346937837417}
   - component: {fileID: -754154353536037816}
+  - component: {fileID: 596704608624799550}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Obstacle
@@ -128,3 +129,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4aa01bef04456d489a93b8adc7fec01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &596704608624799550
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9020847862631447337}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
