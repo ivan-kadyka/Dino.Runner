@@ -2,6 +2,7 @@ using System.Threading;
 using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
 using Cysharp.Threading.Tasks;
+using Models.Tickable;
 using Observables;
 using Types;
 using UniRx;
@@ -12,10 +13,8 @@ namespace Character.Model
     public class Character : DisposableBase, ICharacter
     {
         public IObservableValue<float> Speed => _speedSubject;
-
-        private CharacterState _state;
         
-        private float _initialGameSpeed = 5f;
+        private const float _initialGameSpeed = 5f;
         private float _gameSpeedIncrease = 0.1f;
         
         private readonly ICharacterPhysics _physics;
@@ -23,29 +22,34 @@ namespace Character.Model
         private UniTaskCompletionSource _moveTaskCompletionSource = new UniTaskCompletionSource();
 
         private readonly CompositeDisposable _disposable = new CompositeDisposable();
-        private readonly ObservableValue<float> _speedSubject = new ObservableValue<float>(0);
+        private readonly ObservableValue<float> _speedSubject;
 
         private ICharacterBehavior _currentBehavior;
-        private readonly ICharacterBehavior _defaultBehavior;
-        private readonly ICharacterBehavior _flyBehavior;
         
-        public Character(ICharacterPhysics physics)
+        public Character(ITickableContext tickableContext)
         {
-            _physics = physics;
-            _disposable.Add( _physics.Updated.Subscribe(Update));
-            _disposable.Add( _physics.Collider.Subscribe(OnCollider));
-
             var settings = new CharacterSettings();
+            _speedSubject = new ObservableValue<float>(settings.InitialGameSpeed);
             
-            _defaultBehavior = new DefaultCharacterBehavior(physics, settings);
-            _flyBehavior = new FlyCharacterBehavior(physics, settings);
+            _currentBehavior = new IdleCharacterBehavior();
             
-            _currentBehavior = _defaultBehavior;
+            _disposable.Add( tickableContext.Updated.Subscribe(Update));
+        }
+        
+        public void ChangeBehavior(ICharacterBehavior behavior)
+        {
+            _currentBehavior = behavior;
+        }
+
+        public async UniTask Run(CancellationToken token = default)
+        {
+            _speedSubject.OnNext(_initialGameSpeed);
+            _moveTaskCompletionSource = new UniTaskCompletionSource();
+            await _moveTaskCompletionSource.Task;
         }
 
         public UniTask Idle(CancellationToken token = default)
         {
-            _state = CharacterState.Idle;
             _currentBehavior = new IdleCharacterBehavior();
             _speedSubject.OnNext(0);
             
@@ -53,49 +57,22 @@ namespace Character.Model
             
             return UniTask.CompletedTask;
         }
-
-        public async UniTask Run(CancellationToken token = default)
-        {
-            _state = CharacterState.Run;
-            _currentBehavior = _defaultBehavior;
-            
-            _speedSubject.OnNext(_initialGameSpeed);
-            _moveTaskCompletionSource = new UniTaskCompletionSource();
-            await _moveTaskCompletionSource.Task;
-        }
+        
 
         public async UniTask Jump(CancellationToken token = default)
         {
-            if (_state != CharacterState.Idle && _currentBehavior.CanExecute())
+            if (_currentBehavior.CanExecute())
                 await _currentBehavior.Execute(token);
         }
         
         private void Update(float deltaTime)
         {
-            if (_state == CharacterState.Idle)
-                return;
-
             float nextSpeed = _speedSubject.Value;
             nextSpeed += _gameSpeedIncrease * Time.deltaTime;
             _speedSubject.OnNext(nextSpeed);
             
             _currentBehavior.Update(deltaTime);
         }
-
-        private async void OnCollider(string objectTag)
-        {
-            if (objectTag == "Obstacle")
-            {
-               await Idle();
-            }
-            
-            else if (objectTag == "Coin")
-            {
-                _currentBehavior = _flyBehavior;
-                Debug.Log("Coin collider");
-            }
-        }
-
 
         protected override void Dispose(bool disposing)
         {

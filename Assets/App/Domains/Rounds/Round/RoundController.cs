@@ -1,16 +1,13 @@
 using System.Threading;
-using Character.Controller;
-using Character.Model;
+using App.Models;
 using Controllers.Round.View;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
-using UniRx;
 
 namespace Controllers.Round
 {
     public class RoundController : ControllerBase
     {
-        private readonly IRoundView _roundView;
         private readonly IController _characterController;
         private readonly IController _obstaclesController;
 
@@ -18,19 +15,14 @@ namespace Controllers.Round
             IController characterController,
             IController obstaclesController,
             IRoundView roundView,
-            ICharacterContext characterContext)
+            IGameContext gameContext)
         {
-            _roundView = roundView;
             _characterController = characterController;
             _obstaclesController = obstaclesController;
-
-            _disposable.Add(characterContext.Speed.Subscribe(OnUpdateSpeed));
+            
+            roundView.SetUp(gameContext);
         }
-
-        private void OnUpdateSpeed(float speed)
-        {
-            _roundView.SetUp(speed);
-        }
+        
         
         protected override async UniTask OnStarted(CancellationToken token = default)
         {

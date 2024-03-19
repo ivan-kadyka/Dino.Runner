@@ -5,6 +5,8 @@ namespace App.Domains.Character.Model.Behaviors
 {
     public interface ICharacterBehavior
     {
+       // float Speed { get; }
+        
         bool CanExecute();
         
         UniTask Execute(CancellationToken token = default);

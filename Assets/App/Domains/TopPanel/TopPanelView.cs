@@ -1,4 +1,5 @@
 using System;
+using App.Domains.Character.Model;
 using Character.Model;
 using TMPro;
 using UnityEngine;
@@ -32,11 +33,11 @@ namespace Controllers.TopPanel
             _scoreText.text = value.ToString("D5");
         }
 
-        public void UpdateEffect(CharacterEffectState effectState, TimeSpan timeLeft)
+        public void UpdateEffect(CharacterBehaviorType behaviorType, TimeSpan timeLeft)
         {
-            _timePanel.SetActive(effectState != CharacterEffectState.None);
+            _timePanel.SetActive(behaviorType != CharacterBehaviorType.Default);
 
-            _effectNameText.text = effectState.ToString();
+            _effectNameText.text = behaviorType.ToString();
             _timeText.text = $"{timeLeft.Seconds}s";
         }
         

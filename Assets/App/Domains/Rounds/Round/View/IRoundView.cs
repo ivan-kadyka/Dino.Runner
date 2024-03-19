@@ -1,7 +1,9 @@
+using App.Models;
+
 namespace Controllers.Round.View
 {
     public interface IRoundView : IView
     {
-        void SetUp(float speed);
+        void SetUp(IGameContext gameContext);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using App.Domains.Character.Model;
 using Character.Model;
 
 namespace Controllers.TopPanel
@@ -9,6 +10,6 @@ namespace Controllers.TopPanel
         
         void UpdateScore(int value);
 
-        void UpdateEffect(CharacterEffectState effectState, TimeSpan timeLeft);
+        void UpdateEffect(CharacterBehaviorType behaviorType, TimeSpan timeLeft);
     }
 }
