@@ -7,6 +7,8 @@ namespace App.Domains.Character.Model.Behaviors
 {
     public class FlyCharacterBehavior : ICharacterBehavior
     {
+        public float Speed { get; }
+        
         private readonly ICharacterPhysics _physics;
         private readonly CharacterSettings _settings;
         private Vector3 _motion;
@@ -15,6 +17,7 @@ namespace App.Domains.Character.Model.Behaviors
         {
             _physics = physics;
             _settings = settings;
+            Speed = 5;
         }
         
         public void Update(float deltaTime)
@@ -23,11 +26,6 @@ namespace App.Domains.Character.Model.Behaviors
                 return;
 
             ExecuteJumping();
-        }
-        
-        public bool CanExecute()
-        {
-            return true;
         }
 
         public UniTask Execute(CancellationToken token = default)

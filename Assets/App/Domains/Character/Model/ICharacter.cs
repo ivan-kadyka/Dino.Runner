@@ -4,7 +4,7 @@ using App.Domains.Character.Model.Behaviors;
 using App.Models;
 using Cysharp.Threading.Tasks;
 
-namespace Character.Model
+namespace App.Domains.Character.Model
 {
     public interface ICharacter : IGameContext, IDisposable
     {

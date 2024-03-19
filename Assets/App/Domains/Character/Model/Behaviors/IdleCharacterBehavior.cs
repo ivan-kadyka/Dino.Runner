@@ -5,11 +5,7 @@ namespace App.Domains.Character.Model.Behaviors
 {
     public class IdleCharacterBehavior : ICharacterBehavior
     {
-        public bool CanExecute()
-        {
-            return false;
-        }
-
+        public float Speed { get; } = 0;
         public UniTask Execute(CancellationToken token = default)
         {
             return UniTask.CompletedTask;
