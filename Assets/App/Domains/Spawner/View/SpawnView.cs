@@ -15,8 +15,9 @@ namespace App.Domains.Spawner.View
 
         private IGameContext _gameContext;
     
-        public void SetUp(IGameContext gameContext)
+        public void SetUp(IGameContext gameContext, string tagName)
         {
+            tag = tagName;
             _gameContext = gameContext;
         }
 

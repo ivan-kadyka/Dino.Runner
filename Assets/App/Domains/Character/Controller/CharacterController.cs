@@ -4,7 +4,6 @@ using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors;
 using App.Domains.Character.Model.Behaviors.Factory;
 using Character.Model;
-using Character.View;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
 using UniRx;
@@ -14,7 +13,6 @@ namespace Character.Controller
     public class CharacterController : ControllerBase
     {
         private readonly ICharacter _character;
-        private readonly ICharacterView _view;
         private readonly ICharacterBehaviorFactory _behaviorFactory;
 
         private ICharacterBehavior _defaultBehavior;
@@ -38,10 +36,24 @@ namespace Character.Controller
                 case "Obstacle":
                     await _character.Idle();
                     break;
-                case "Coin":
+                case "Coin_Fly":
+                {
                     var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Fly);
                     _character.ChangeBehavior(newBehavior);
+                    break; 
+                }
+                case "Coin_Slow":
+                {
+                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Slow);
+                    _character.ChangeBehavior(newBehavior);
                     break;
+                }
+                case "Coin_Fast":
+                {
+                    var newBehavior = _behaviorFactory.Create(CharacterBehaviorType.Fast);
+                    _character.ChangeBehavior(newBehavior);
+                    break;
+                }
             }
         }
 

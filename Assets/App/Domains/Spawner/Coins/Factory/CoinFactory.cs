@@ -24,10 +24,19 @@ namespace App.Domains.Spawner.Coins.Factory
             var spawnObject = _coinsScriptableObject.prefabs[options.Id];
             
             var view = _container.InstantiatePrefab(spawnObject).GetComponent<ISpawnView>();
+            var colliderTag = GetColliderTag(options.Id);
             
-            view.SetUp(_gameContext);
+            view.SetUp(_gameContext, colliderTag);
 
             return view;
+        }
+
+        //temp simplified converting
+        private string GetColliderTag(int id)
+        {
+            CoinType type = (CoinType)id;
+
+            return "Coin_" + type;
         }
     }
 }

@@ -7,6 +7,6 @@ namespace App.Domains.Spawner.View
     {
         bool IsActive { get; set; }
 
-        void SetUp(IGameContext gameContext);
+        void SetUp(IGameContext gameContext, string tagName);
     }
 }

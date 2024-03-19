@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Coin
   - Obstacle
+  - Coin_Slow
+  - Coin_Fast
+  - Coin_Fly
   layers:
   - Default
   - TransparentFX

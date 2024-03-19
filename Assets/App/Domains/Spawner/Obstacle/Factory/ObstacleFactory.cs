@@ -1,4 +1,3 @@
-using App.Domains.Spawner;
 using App.Domains.Spawner.View;
 using App.Models;
 using Controllers.Spawner.Obstacle.Model;
@@ -27,7 +26,7 @@ namespace Controllers.Spawner.Obstacle.Factory
             
             var view = _container.InstantiatePrefab(obstacleObject.prefab).GetComponent<ISpawnView>();
             
-            view.SetUp(_gameContext);
+            view.SetUp(_gameContext, "Obstacle");
 
             return view;
         }
