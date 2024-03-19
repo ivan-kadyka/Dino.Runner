@@ -28,6 +28,7 @@ namespace App.Domains.Character.Model.Behaviors.Jump
 
         public UniTask Execute(CancellationToken token = default)
         {
+            _physics.Play(CharacterSoundType.Jump);
             _motion = Vector3.up * _settings.JumpForce;
             ExecuteJumping();
 

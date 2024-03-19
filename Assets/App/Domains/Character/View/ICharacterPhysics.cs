@@ -1,4 +1,5 @@
 using System;
+using App.Domains.Character.Model;
 using Models.Tickable;
 using UnityEngine;
 
@@ -13,5 +14,7 @@ namespace Character.Model
         Transform Transform { get; }
 
         void Move(Vector3 motion);
+
+        void Play(CharacterSoundType soundType);
     }
 }

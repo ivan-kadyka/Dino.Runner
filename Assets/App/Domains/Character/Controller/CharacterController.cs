@@ -20,6 +20,7 @@ namespace Character.Controller
         public IObservable<TimeSpan> TimeLeft => _timeSubject;
         
         private readonly ICharacter _character;
+        private readonly ICharacterPhysics _physics;
         private readonly ITickableContext _tickableContext;
         private readonly ICharacterBehaviorFactory _behaviorFactory;
 
@@ -38,6 +39,7 @@ namespace Character.Controller
             ICharacterBehaviorFactory behaviorFactory)
         {
             _character = character;
+            _physics = physics;
             _tickableContext = tickableContext;
             _behaviorFactory = behaviorFactory;
             
@@ -65,6 +67,7 @@ namespace Character.Controller
             switch (objectName)
             {
                 case "Obstacle":
+                    _physics.Play(CharacterSoundType.Die);
                     await _character.Idle();
                     break;
                 case "Coin_Fly":
@@ -81,6 +84,7 @@ namespace Character.Controller
 
         private void ChangeBehaviour(CharacterBehaviorType type)
         {
+            _physics.Play(CharacterSoundType.Coin);
             var newBehavior = _behaviorFactory.Create(type);
                   
             _character.ChangeBehavior(newBehavior);

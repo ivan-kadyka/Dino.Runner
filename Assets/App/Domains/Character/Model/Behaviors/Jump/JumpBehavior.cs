@@ -32,6 +32,8 @@ namespace App.Domains.Character.Model.Behaviors.Jump
         {
             if (_physics.IsGrounded)
             {
+                _physics.Play(CharacterSoundType.Jump);
+                
                 _motion = Vector3.up * _settings.JumpForce;
                 _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
                 _physics.Move(_motion * Time.deltaTime);
