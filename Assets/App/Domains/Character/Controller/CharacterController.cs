@@ -45,6 +45,20 @@ namespace Character.Controller
             _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
             _disposables.Add(_timerDisposable);
         }
+        
+        protected override async UniTask OnStarted(CancellationToken token = default)
+        {
+            _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorType.Default);
+            _character.ChangeBehavior(_defaultBehavior);
+            _behaviorTypeSubject.OnNext(CharacterBehaviorType.Default);
+            await _character.Run(token);
+        }
+
+        protected override UniTask OnStopped(CancellationToken token = default)
+        {
+            _timerDisposable.Disposable = default;
+            return base.OnStopped(token);
+        }
 
         private async void OnCollider(string objectName)
         {
@@ -78,8 +92,7 @@ namespace Character.Controller
 
         private void OnEffectTimer(float deltaTime)
         {
-            var deltaTimeSpan = TimeSpan.FromMilliseconds(deltaTime * 1000);
-            var timeLeft = _timeSubject.Value - deltaTimeSpan;
+            var timeLeft = _timeSubject.Value - TimeSpan.FromMilliseconds(deltaTime * 1000);
 
             if (timeLeft.TotalMilliseconds > 0)
             {
@@ -96,20 +109,6 @@ namespace Character.Controller
         private async void OnJumpPressed(Types.Unit unit)
         {
             await _character.Jump();
-        }
-
-        protected override async UniTask OnStarted(CancellationToken token = default)
-        {
-            _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorType.Default);
-            _character.ChangeBehavior(_defaultBehavior);
-            _behaviorTypeSubject.OnNext(CharacterBehaviorType.Default);
-            await _character.Run(token);
-        }
-
-        protected override UniTask OnStopped(CancellationToken token = default)
-        {
-            _timerDisposable.Disposable = default;
-            return base.OnStopped(token);
         }
     }
 }

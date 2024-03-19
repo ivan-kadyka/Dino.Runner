@@ -15,9 +15,9 @@ namespace App.Domains.Spawner.View
 
         private IGameContext _gameContext;
     
-        public void SetUp(IGameContext gameContext, string tagName)
+        public void SetUp(IGameContext gameContext, string typeName)
         {
-            tag = tagName;
+            gameObject.name = typeName;
             _gameContext = gameContext;
         }
 
@@ -36,15 +36,10 @@ namespace App.Domains.Spawner.View
 
             if (transform.position.x < leftEdge)
             {
-                SetActive(false);
+                gameObject.SetActive(false);
             }
         }
-
-        public void SetActive(bool enable)
-        {
-            gameObject.SetActive(enable);
-        }
-
+        
         public void Dispose()
         {
             Destroy(gameObject);

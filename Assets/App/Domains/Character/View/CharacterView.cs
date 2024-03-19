@@ -35,7 +35,7 @@ namespace Character.View
 
         public void OnTriggerEnter(Collider other)
         {
-            _colliderSubject.OnNext(other.tag);
+            _colliderSubject.OnNext(other.name);
         }
     }
 }
