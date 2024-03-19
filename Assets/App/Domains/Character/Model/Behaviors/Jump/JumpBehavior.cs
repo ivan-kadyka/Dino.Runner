@@ -1,29 +1,40 @@
 using System.Threading;
 using Character.Model;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 
 namespace App.Domains.Character.Model.Behaviors.Jump
 {
-    public class JumpBehavior : JumpBaseBehavior
+    public class JumpBehavior : IJumpBehavior
     {
-        public JumpBehavior(ICharacterPhysics physics, CharacterSettings settings) : base(physics, settings)
+        private readonly ICharacterPhysics _physics;
+        private readonly CharacterSettings _settings;
+        
+        private Vector3 _motion;
+
+        public JumpBehavior(ICharacterPhysics physics, CharacterSettings settings)
         {
+            _physics = physics;
+            _settings = settings;
         }
         
-        public override void Update(float deltaTime)
+        public void Update(float deltaTime)
         {
             if (_physics.IsGrounded)
                 return;
             
-            base.Update(deltaTime);
+            _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
+            _physics.Move(_motion * Time.deltaTime);
         }
 
-        public override UniTask Execute(CancellationToken token = default)
+        public UniTask Execute(CancellationToken token = default)
         {
             if (_physics.IsGrounded)
             {
-                return base.Execute(token);
+                _motion = Vector3.up * _settings.JumpForce;
+                _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
+                _physics.Move(_motion * Time.deltaTime);
             }
 
             return UniTask.CompletedTask;
