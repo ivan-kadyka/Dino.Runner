@@ -1,15 +1,9 @@
-using App.Domains.Character.Controller.Inputs;
-using App.Domains.Character.Model;
-using App.Domains.Character.Model.Behaviors.Context;
-using App.Domains.Character.Model.Behaviors.Factory;
-using App.Domains.Character.Model.Behaviors.Jump.Factory;
 using App.Domains.Spawner;
 using App.Domains.Spawner.Coins;
 using App.Domains.Spawner.Coins.Factory;
 using App.Domains.Spawner.Obstacle;
 using App.Models;
 using AppContext;
-using Character.View;
 using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
@@ -21,13 +15,10 @@ using Models;
 using Models.Tickable;
 using UnityEngine;
 using Zenject;
-using CharacterController = Character.Controller.CharacterController;
+
 
 public class BootstraperInstaller : MonoInstaller
 {
-    [SerializeField] 
-    private GameObject CharacterPrefab;
-
     [SerializeField]
     private GameObject RoundPrefab;
     
@@ -59,26 +50,6 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IController>("RetryPopupController")
             ))
             .AsSingle();
-
-        // Character
-        Container.Bind<IInputCharacterController>()
-            .To<InputCharacterController>()
-            .FromComponentsInHierarchy()
-            .AsSingle();
-        
-        Container.BindInterfacesTo<App.Domains.Character.Model.Character>().AsSingle();
-        Container.BindInterfacesTo<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
-        
-        Container.Bind<CharacterController>().AsSingle();
-        Container.Bind<IController>()
-            .WithId("CharacterController")
-            .FromMethod(it => it.Container.Resolve<CharacterController>());
-        Container.Bind<ICharacterBehaviorContext>()
-            .FromMethod(it => it.Container.Resolve<CharacterController>());
-
-        Container.Bind<ICharacterBehaviorFactory>().To<CharacterBehaviorFactory>().AsSingle();
-        Container.Bind<IJumpBehaviorFactory>().To<JumpBehaviorFactory>().AsSingle();
-        Container.BindInstance(new CharacterSettings());
         
         // Top Panel
         Container.Bind<ITopPanelView>()
@@ -89,7 +60,7 @@ public class BootstraperInstaller : MonoInstaller
         
         Container.Bind<IController>().WithId("TopPanelController").To<TopPanelController>()
             .AsSingle();
-
+        
         //Round
         Container.Bind<IRoundView>().To<Ground>().FromComponentInNewPrefab(RoundPrefab).AsSingle();
 
@@ -128,7 +99,6 @@ public class BootstraperInstaller : MonoInstaller
 
         Container.Bind<ICoinFactory>().FromMethod(it =>
           new CoinFactory(it.Container, _coinsScriptableObject, it.Container.Resolve<IGameContext>())).AsSingle();
-      
         
         // Retry popup
         Container.Bind<IPopupView>()
@@ -145,6 +115,6 @@ public class BootstraperInstaller : MonoInstaller
         
         // Utils
         var tickableComponent = _tickableGameObject.GetComponent<TickableContext>();
-        Container.Rebind<ITickableContext>().FromInstance(tickableComponent).AsSingle();
+        Container.Rebind<ITickableContext>().FromInstance(tickableComponent);
     }
 }
