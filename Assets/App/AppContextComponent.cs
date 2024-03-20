@@ -9,10 +9,14 @@ public class AppContextComponent : MonoBehaviour
     private AppController appController;
 
     private readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
-    
-    async void Start()
+
+    private void Awake()
     {
         Application.targetFrameRate = 60;
+    }
+
+    async void Start()
+    {
         await appController.Start(_cancellationSource.Token);
     }
 
