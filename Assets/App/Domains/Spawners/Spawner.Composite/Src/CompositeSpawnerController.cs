@@ -5,7 +5,7 @@ using Infra.Controllers.Base;
 using UniRx;
 using UnityEngine;
 
-namespace App.Spawner
+namespace App.Spawner.Composite
 {
     public class CompositeSpawnerController : ControllerBase
     {

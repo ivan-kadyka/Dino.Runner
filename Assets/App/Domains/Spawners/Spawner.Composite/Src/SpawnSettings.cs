@@ -1,4 +1,4 @@
-namespace App.Spawner
+namespace App.Spawner.Composite
 {
     public class SpawnSettings
     {

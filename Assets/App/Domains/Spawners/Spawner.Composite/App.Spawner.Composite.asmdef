@@ -1,0 +1,23 @@
+{
+    "name": "App.Spawner.Composite",
+    "rootNamespace": "",
+    "references": [
+        "Zenject",
+        "Infra.Controllers",
+        "Infra.Controllers.Base",
+        "App.Spawner",
+        "Infra.Disposable",
+        "Infra.Components.Tickable",
+        "UniRx",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

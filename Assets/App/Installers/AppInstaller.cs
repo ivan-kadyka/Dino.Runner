@@ -1,9 +1,7 @@
-using AppContext;
-using Controllers;
 using Infra.Controllers;
 using Zenject;
 
-namespace App.Installers
+namespace App
 {
     public class AppInstaller : MonoInstaller
     {

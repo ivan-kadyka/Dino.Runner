@@ -2,7 +2,7 @@ using Infra.Components.Tickable;
 using Infra.Controllers;
 using Zenject;
 
-namespace App.Spawner
+namespace App.Spawner.Composite
 {
     public class SpawnerInstaller : MonoInstaller
     {
