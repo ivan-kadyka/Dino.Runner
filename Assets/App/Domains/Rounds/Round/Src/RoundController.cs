@@ -1,11 +1,10 @@
 using System.Threading;
-using App.Domains.GameCore.Src;
-using App.Models;
-using Controllers.Round.View;
+using App.GameCore;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
+using Infra.Controllers.Base;
 
-namespace Controllers.Round
+namespace App.Round
 {
     public class RoundController : ControllerBase
     {

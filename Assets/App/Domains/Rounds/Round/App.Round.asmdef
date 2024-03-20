@@ -1,0 +1,20 @@
+{
+    "name": "App.Round",
+    "references": [
+        "Infra.Controllers.Base",
+        "Infra.Controllers",
+        "Infra.Disposable",
+        "App.GameCore",
+        "UniTask",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

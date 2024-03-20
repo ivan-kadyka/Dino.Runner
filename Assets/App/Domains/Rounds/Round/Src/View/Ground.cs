@@ -1,6 +1,5 @@
-using App.Domains.GameCore.Src;
-using App.Models;
-using Controllers.Round.View;
+using App.GameCore;
+using App.Round;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer))]

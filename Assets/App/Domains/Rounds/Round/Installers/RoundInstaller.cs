@@ -1,13 +1,9 @@
-using App.Domains.GameCore.Src;
-using App.Models;
-using Controllers;
-using Controllers.Round;
-using Controllers.Round.View;
+using App.GameCore;
 using Infra.Controllers;
 using UnityEngine;
 using Zenject;
 
-namespace App.Domains.Rounds.Round.Installers
+namespace App.Round
 {
     public class RoundInstaller : MonoInstaller
     {

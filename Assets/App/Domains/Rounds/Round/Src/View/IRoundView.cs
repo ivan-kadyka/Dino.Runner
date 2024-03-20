@@ -1,9 +1,7 @@
-using App.Domains.GameCore.Src;
-using App.Models;
-using Infra.Controllers;
+using App.GameCore;
 using Infra.Controllers.View;
 
-namespace Controllers.Round.View
+namespace App.Round
 {
     public interface IRoundView : IView
     {
