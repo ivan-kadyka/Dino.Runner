@@ -1,6 +1,10 @@
 {
-    "name": "Infra.Components.Tickable",
-    "references": [],
+    "name": "Infra.Components.Tickable.UniRx",
+    "rootNamespace": "",
+    "references": [
+        "UniRx",
+        "Infra.Components.Tickable"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

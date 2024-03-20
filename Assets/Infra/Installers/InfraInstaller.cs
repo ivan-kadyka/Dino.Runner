@@ -1,4 +1,5 @@
 using Infra.Components.Tickable;
+using Infra.Components.Tickable.UniRx;
 using UnityEngine;
 using Zenject;
 

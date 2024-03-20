@@ -2,7 +2,7 @@ using System;
 using UniRx;
 using UnityEngine;
 
-namespace Infra.Components.Tickable
+namespace Infra.Components.Tickable.UniRx
 {
     public class TickableContext : MonoBehaviour, ITickableContext
     {
