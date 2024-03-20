@@ -68,7 +68,7 @@ namespace App.Character.Dino
             _timerDisposable.Disposable = default;
             ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
             
-            _sounds.Play(CharacterSoundType.Die);
+            _sounds.Play(CharacterSoundType.Idle);
             _runTaskSource.TrySetResult();
             
             return UniTask.CompletedTask;
@@ -76,7 +76,7 @@ namespace App.Character.Dino
 
         public UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default)
         {
-            _sounds.Play(CharacterSoundType.Coin);
+            _sounds.Play(CharacterSoundType.Effect);
             
             var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(options.Type, _currentBehavior.Speed));
                   

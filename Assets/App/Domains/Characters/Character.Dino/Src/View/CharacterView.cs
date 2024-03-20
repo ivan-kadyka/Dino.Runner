@@ -50,10 +50,10 @@ namespace App.Character.Dino
                 case CharacterSoundType.Jump:
                     _audioSource.PlayOneShot(_jumpSound);
                     break;
-                case CharacterSoundType.Die:
+                case CharacterSoundType.Idle:
                     _audioSource.PlayOneShot(_dieSound);
                     break;
-                case CharacterSoundType.Coin:
+                case CharacterSoundType.Effect:
                     _audioSource.PlayOneShot(_coinSound);
                     break;
             }
