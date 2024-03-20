@@ -76,10 +76,9 @@ namespace App.Spawner.Composite
 
         private bool IsNextCoin()
         {
-            // 33% change to show coin
-            int value = Random.Range(0, 3);
+            float value = Random.Range(0f, 1f);
 
-            return value == 0;
+            return value <= _settings.CoinsSpawnChance;
         }
     }
 }
