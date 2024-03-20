@@ -1,5 +1,6 @@
 using AppContext;
 using Controllers;
+using Infra.Controllers;
 using Zenject;
 
 namespace App.Installers

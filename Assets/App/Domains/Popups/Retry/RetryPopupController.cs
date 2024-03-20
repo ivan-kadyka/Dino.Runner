@@ -2,6 +2,7 @@ using System.Threading;
 using Character.Controller;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
+using Infra.Controllers.View;
 
 namespace Controllers.RetryPopup
 {

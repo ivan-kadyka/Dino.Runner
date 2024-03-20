@@ -1,16 +1,8 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace Controllers
+namespace Infra.Controllers
 {
-    public interface IController : IDisposable
-    {
-        UniTask Start(CancellationToken token = default);
-
-        UniTask Stop(CancellationToken token = default);
-    }
-
     public static class ControllerExt
     {
         public static async UniTask Run(this IController controller, CancellationToken token = default)
@@ -22,5 +14,4 @@ namespace Controllers
             await controller.Stop(token);
         }
     }
-    
 }

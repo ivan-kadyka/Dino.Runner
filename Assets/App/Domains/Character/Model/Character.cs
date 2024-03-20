@@ -2,7 +2,7 @@ using System.Threading;
 using App.Domains.Character.Model.Behaviors;
 using Character.Model;
 using Cysharp.Threading.Tasks;
-using Models.Tickable;
+using Infra.Components.Tickable;
 using Types;
 using UniRx;
 

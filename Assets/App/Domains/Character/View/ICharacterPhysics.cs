@@ -1,6 +1,6 @@
 using System;
 using App.Domains.Character.Model;
-using Models.Tickable;
+using Infra.Components.Tickable;
 using UnityEngine;
 
 namespace Character.Model

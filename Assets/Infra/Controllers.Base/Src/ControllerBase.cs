@@ -1,10 +1,9 @@
 using System.Threading;
-using Controllers;
 using Cysharp.Threading.Tasks;
 using Types;
 using UniRx;
 
-namespace Infra.Controllers
+namespace Infra.Controllers.Base
 {
     public abstract class ControllerBase : DisposableBase, IController
     {

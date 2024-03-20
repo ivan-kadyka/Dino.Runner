@@ -7,6 +7,7 @@ using App.Models;
 using Character.Model;
 using Character.View;
 using Controllers;
+using Infra.Controllers;
 using UnityEngine;
 using Zenject;
 using CharacterController = Character.Controller.CharacterController;

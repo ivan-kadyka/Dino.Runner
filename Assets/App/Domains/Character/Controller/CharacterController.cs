@@ -7,10 +7,12 @@ using App.Domains.Character.Model.Behaviors.Context;
 using App.Domains.Character.Model.Behaviors.Factory;
 using Character.Model;
 using Cysharp.Threading.Tasks;
+using Infra.Components.Tickable;
 using Infra.Controllers;
-using Models.Tickable;
-using Observables;
+using Infra.Observable;
+using Infra.Observable.UniRx;
 using UniRx;
+using Unit = Infra.Observable.Src.Unit;
 
 namespace Character.Controller
 {
@@ -110,7 +112,7 @@ namespace Character.Controller
             }
         }
 
-        private async void OnJumpPressed(Types.Unit unit)
+        private async void OnJumpPressed(Unit unit)
         {
             await _character.Jump();
         }

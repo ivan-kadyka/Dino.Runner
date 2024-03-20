@@ -1,7 +1,7 @@
 using System;
 using UniRx;
 
-namespace Observables
+namespace Infra.Observable.UniRx
 {
     public class ObservableValue<T> : ISubject<T>, IDisposable, IOptimizedObservable<T>, IObservableValue<T>
     {

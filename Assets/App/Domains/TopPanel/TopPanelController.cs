@@ -4,8 +4,8 @@ using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors.Context;
 using App.Models;
 using Cysharp.Threading.Tasks;
+using Infra.Components.Tickable;
 using Infra.Controllers;
-using Models.Tickable;
 using UniRx;
 using UnityEngine;
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace Models.Tickable
+namespace Infra.Components.Tickable
 {
     public interface ITickableContext
     {

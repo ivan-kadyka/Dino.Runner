@@ -1,7 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Infra.Components.Tickable;
 using Infra.Controllers;
-using Models.Tickable;
 using UniRx;
 using UnityEngine;
 

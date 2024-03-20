@@ -1,9 +1,8 @@
 using System;
-using Models.Tickable;
 using UniRx;
 using UnityEngine;
 
-namespace Models
+namespace Infra.Components.Tickable
 {
     public class TickableContext : MonoBehaviour, ITickableContext
     {

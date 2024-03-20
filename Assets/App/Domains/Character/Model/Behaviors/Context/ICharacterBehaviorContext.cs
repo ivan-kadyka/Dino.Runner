@@ -1,5 +1,5 @@
 using System;
-using Observables;
+using Infra.Observable;
 
 namespace App.Domains.Character.Model.Behaviors.Context
 {

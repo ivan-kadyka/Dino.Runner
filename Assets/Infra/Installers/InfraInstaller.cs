@@ -1,5 +1,4 @@
-using Models;
-using Models.Tickable;
+using Infra.Components.Tickable;
 using UnityEngine;
 using Zenject;
 

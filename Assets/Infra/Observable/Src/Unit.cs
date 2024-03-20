@@ -1,4 +1,4 @@
-namespace Types
+namespace Infra.Observable
 {
     public struct Unit
     {

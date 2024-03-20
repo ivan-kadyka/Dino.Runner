@@ -1,0 +1,19 @@
+{
+    "name": "Infra.Controllers.Base",
+    "rootNamespace": "",
+    "references": [
+        "Infra.Disposable",
+        "UniTask",
+        "UniRx",
+        "Infra.Controllers"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

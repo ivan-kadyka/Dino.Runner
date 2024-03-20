@@ -5,7 +5,8 @@ using App.Models;
 using Controllers;
 using Controllers.Spawner.Obstacle.Factory;
 using Controllers.Spawner.Obstacle.Model;
-using Models.Tickable;
+using Infra.Components.Tickable;
+using Infra.Controllers;
 using UnityEngine;
 using Zenject;
 

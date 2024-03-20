@@ -1,6 +1,6 @@
 using System;
 
-namespace Observables
+namespace Infra.Observable
 {
     public interface IObservableValue<out TResult> : IObservable<TResult>
     {

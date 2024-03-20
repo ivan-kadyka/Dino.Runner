@@ -1,6 +1,6 @@
 using System;
 
-namespace Controllers
+namespace Infra.Controllers.View
 {
     public interface IView : IDisposable
     {

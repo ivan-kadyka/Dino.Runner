@@ -1,7 +1,7 @@
 using System;
 using UniRx;
 using UnityEngine;
-using Unit = Types.Unit;
+using Unit = Infra.Observable.Src.Unit;
 
 namespace App.Domains.Character.Controller.Inputs
 {
