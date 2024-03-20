@@ -32,9 +32,9 @@ namespace App.Spawner
 
         private IGameContext _gameContext;
     
-        public void SetUp(IGameContext gameContext, string typeName)
+        public void SetUp(IGameContext gameContext, string objectName)
         {
-            gameObject.name = typeName;
+            gameObject.name = objectName;
             _gameContext = gameContext;
         }
 

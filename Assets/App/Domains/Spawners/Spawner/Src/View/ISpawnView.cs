@@ -7,6 +7,6 @@ namespace App.Spawner
     {
         bool IsActive { get; set; }
 
-        void SetUp(IGameContext gameContext, string tagName);
+        void SetUp(IGameContext gameContext, string name);
     }
 }
