@@ -8,7 +8,7 @@ namespace App.Character.Dino
     public class CharacterInstaller : MonoInstaller
     {
         [SerializeField] 
-        private GameObject CharacterPrefab;
+        private GameObject _characterPrefab;
         
         public override void InstallBindings()
         {
@@ -20,8 +20,10 @@ namespace App.Character.Dino
             Container.Bind<Character>().AsSingle();
             Container.Bind<ICharacter>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
             Container.Bind<IGameContext>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
+            Container.Bind<ICharacterEffectContext>()
+                .FromMethod(it => it.Container.Resolve<Character>());
             
-            Container.Bind<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
+            Container.Bind<CharacterView>().FromComponentInNewPrefab(_characterPrefab).AsSingle();
             Container.Bind<ICharacterPhysics>().FromMethod(it => it.Container.Resolve<CharacterView>()).AsSingle();
             Container.Bind<ICharacterSounds>().FromMethod(it => it.Container.Resolve<CharacterView>()).AsSingle();
         
@@ -29,8 +31,7 @@ namespace App.Character.Dino
             Container.Bind<IController>()
                 .WithId("CharacterController")
                 .FromMethod(it => it.Container.Resolve<CharacterController>());
-            Container.Bind<ICharacterEffectContext>()
-                .FromMethod(it => it.Container.Resolve<Character>());
+
 
             Container.Bind<ICharacterBehaviorFactory>().To<CharacterBehaviorFactory>().AsSingle();
             Container.Bind<IJumpBehaviorFactory>().To<JumpBehaviorFactory>().AsSingle();

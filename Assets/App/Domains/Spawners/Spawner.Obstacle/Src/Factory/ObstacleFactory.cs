@@ -1,4 +1,5 @@
 using App.GameCore;
+using UnityEngine;
 using Zenject;
 
 namespace App.Spawner.Obstacle
@@ -8,11 +9,17 @@ namespace App.Spawner.Obstacle
         private readonly DiContainer _container;
         private readonly ObstacleScriptableObject _obstacleSo;
         private readonly IGameContext _gameContext;
+        private readonly Transform _parentTransform;
 
-        public ObstacleFactory(DiContainer container, ObstacleScriptableObject obstacleSo, IGameContext gameContext)
+        public ObstacleFactory(
+            DiContainer container,
+            ObstacleScriptableObject obstacleSo,
+            Transform parentTransform,
+            IGameContext gameContext)
         {
             _container = container;
             _obstacleSo = obstacleSo;
+            _parentTransform = parentTransform;
             _gameContext = gameContext;
         }
 
@@ -22,7 +29,7 @@ namespace App.Spawner.Obstacle
 
             var obstacleObject = _obstacleSo.items[index];
             
-            var view = _container.InstantiatePrefab(obstacleObject.prefab).GetComponent<ISpawnView>();
+            var view = _container.InstantiatePrefab(obstacleObject.prefab, _parentTransform).GetComponent<ISpawnView>();
             
             view.SetUp(_gameContext, "Obstacle");
 

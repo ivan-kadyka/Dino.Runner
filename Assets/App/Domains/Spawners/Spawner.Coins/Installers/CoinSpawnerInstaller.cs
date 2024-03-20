@@ -9,6 +9,9 @@ namespace App.Spawner.Coins
     {
         [SerializeField] 
         private CoinsScriptableObject _coinsScriptableObject;
+
+        [SerializeField]
+        private GameObject _spawnPoolContainer;
         public override void InstallBindings()
         {
             Container.Bind<ISpawnerController>()
@@ -16,7 +19,7 @@ namespace App.Spawner.Coins
                 .To<CoinSpawnerController>().AsSingle();
 
             Container.Bind<ICoinFactory>().FromMethod(it =>
-                new CoinFactory(it.Container, _coinsScriptableObject, it.Container.Resolve<IGameContext>())).AsSingle();
+                new CoinFactory(it.Container, _coinsScriptableObject,  _spawnPoolContainer.transform, it.Container.Resolve<IGameContext>())).AsSingle();
 
             Container.Bind<ICoinsSettings>().FromInstance(new CoinsSettings(_coinsScriptableObject));
         }
