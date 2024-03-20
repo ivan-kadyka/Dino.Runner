@@ -4,7 +4,6 @@ using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
 using Controllers.Round.View;
-using Controllers.TopPanel;
 using Models;
 using Models.Tickable;
 using UnityEngine;
@@ -18,9 +17,6 @@ public class BootstraperInstaller : MonoInstaller
     
     [SerializeField]
     private GameObject RentryPopupPrefab;
-    
-    [SerializeField]
-    private GameObject _topPanelPrefab;
     
     [SerializeField]
     private GameObject Canvas;
@@ -37,16 +33,6 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IController>("RoundController"),
                 it.Container.ResolveId<IController>("RetryPopupController")
             ))
-            .AsSingle();
-        
-        // Top Panel
-        Container.Bind<ITopPanelView>()
-            .To<TopPanelView>()
-            .FromComponentInNewPrefab(_topPanelPrefab)
-            .UnderTransform(Canvas.transform)
-            .AsSingle();
-        
-        Container.Bind<IController>().WithId("TopPanelController").To<TopPanelController>()
             .AsSingle();
         
         //Round
