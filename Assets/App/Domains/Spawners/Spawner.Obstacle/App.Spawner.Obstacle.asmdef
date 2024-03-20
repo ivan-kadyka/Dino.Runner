@@ -1,0 +1,23 @@
+{
+    "name": "App.Spawner.Obstacle",
+    "rootNamespace": "",
+    "references": [
+        "Zenject",
+        "UniTask",
+        "App.Spawner",
+        "Infra.Controllers",
+        "Infra.Controllers.Base",
+        "Infra.Disposable",
+        "UniRx",
+        "App.GameCore"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -3,6 +3,7 @@ using System.Threading;
 using Controllers;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;
+using Infra.Controllers.Base;
 using UnityEngine;
 
 namespace AppContext
