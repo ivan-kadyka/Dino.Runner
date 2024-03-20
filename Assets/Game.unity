@@ -563,9 +563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15e24a2e8a3d245dca1b68f103461973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RentryPopupPrefab: {fileID: 4198678832094007700, guid: 6b27caff61b8049dba1572b4aeda5af2, type: 3}
-  Canvas: {fileID: 808728476}
-  _tickableGameObject: {fileID: 2070956615}
 --- !u!114 &1561776543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,6 +582,8 @@ MonoBehaviour:
   - {fileID: 613904080}
   - {fileID: 1449713653}
   - {fileID: 1316828525}
+  - {fileID: 1759743486}
+  - {fileID: 2038002164}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -632,6 +631,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1759743485}
+  - component: {fileID: 1759743486}
   m_Layer: 0
   m_Name: PopupsInstaller
   m_TagString: Untagged
@@ -654,6 +654,20 @@ Transform:
   m_Father: {fileID: 1561776544}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1759743486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759743484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b377e78d6d894f91ac9be18e104027b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _retryPopupPrefab: {fileID: 4198678832094007700, guid: 6b27caff61b8049dba1572b4aeda5af2, type: 3}
+  _canvas: {fileID: 808728476}
 --- !u!1 &1804594923
 GameObject:
   m_ObjectHideFlags: 0
@@ -744,6 +758,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2038002163}
+  - component: {fileID: 2038002164}
   m_Layer: 0
   m_Name: InfraInstaller
   m_TagString: Untagged
@@ -766,6 +781,19 @@ Transform:
   m_Father: {fileID: 1561776544}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2038002164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038002162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41196e41916c4146bf1687598b7e5506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tickableGameObject: {fileID: 2070956615}
 --- !u!1 &2070956615
 GameObject:
   m_ObjectHideFlags: 0

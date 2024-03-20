@@ -1,0 +1,32 @@
+using Controllers;
+using Controllers.RetryPopup;
+using UnityEngine;
+using Zenject;
+
+namespace App.Domains.Popups.Installers
+{
+    public class PopupsInstaller : MonoInstaller
+    {
+        [SerializeField]
+        private GameObject _retryPopupPrefab;
+    
+        [SerializeField]
+        private GameObject _canvas;
+        
+        public override void InstallBindings()
+        {
+            // Retry popup
+            Container.Bind<IPopupView>()
+                .WithId("RetryPopupView")
+                .To<RetryPopupView>()
+                .FromComponentInNewPrefab(_retryPopupPrefab)
+                .UnderTransform(_canvas.transform)
+                .AsCached();
+        
+            Container.Bind<IController>().WithId("RetryPopupController")
+                .FromMethod(it => new RetryPopupController(
+                    it.Container.ResolveId<IPopupView>("RetryPopupView")
+                )).AsCached();
+        }
+    }
+}
