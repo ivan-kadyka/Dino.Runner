@@ -1,0 +1,27 @@
+{
+    "name": "App.Character.Dino.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "UniTask",
+        "App.Character.Dino",
+        "App.Character",
+        "Infra.Components.Tickable",
+        "Infra.Disposable"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Moq.dll",
+        "System.Runtime.CompilerServices.Unsafe.dll",
+        "System.Threading.Tasks.Extensions.dll",
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -22,6 +22,10 @@ namespace App.Character.Dino
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Default);
                     return new DefaultCharacterBehavior(jumpBehavior, _settings);
                 }
+                case CharacterEffect.Idle:
+                {
+                    return new IdleCharacterBehavior();
+                }
                 case CharacterEffect.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
