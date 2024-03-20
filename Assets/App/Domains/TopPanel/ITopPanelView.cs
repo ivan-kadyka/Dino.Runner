@@ -1,6 +1,5 @@
 using System;
 using App.Domains.Character.Model;
-using Character.Model;
 using Infra.Controllers;
 using Infra.Controllers.View;
 

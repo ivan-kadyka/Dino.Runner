@@ -1,0 +1,25 @@
+{
+    "name": "App.Character.Dino",
+    "references": [
+        "Zenject",
+        "App.Character",
+        "App.GameCore",
+        "Infra.Controllers",
+        "Infra.Controllers.Base",
+        "Infra.Observable",
+        "Infra.Components.Tickable",
+        "Infra.Observable.UniRx",
+        "UniRx",
+        "Infra.Disposable",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

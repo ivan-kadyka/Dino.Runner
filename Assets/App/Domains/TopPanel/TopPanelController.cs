@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using App.Domains.Character.Model;
 using App.Domains.Character.Model.Behaviors.Context;
+using App.Domains.GameCore.Src;
 using App.Models;
 using Cysharp.Threading.Tasks;
 using Infra.Components.Tickable;
