@@ -13,7 +13,5 @@ namespace App.Character.Dino
         Transform Transform { get; }
 
         void Move(Vector3 motion);
-
-        void Play(CharacterSoundType soundType);
     }
 }

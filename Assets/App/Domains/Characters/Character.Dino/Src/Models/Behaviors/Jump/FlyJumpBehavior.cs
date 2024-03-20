@@ -7,13 +7,18 @@ namespace App.Character.Dino
     public class FlyJumpBehavior : IJumpBehavior
     {
         private readonly ICharacterPhysics _physics;
+        private readonly ICharacterSounds _sounds;
         private readonly CharacterSettings _settings;
         
         private Vector3 _motion;
 
-        public FlyJumpBehavior(ICharacterPhysics physics, CharacterSettings settings)
+        public FlyJumpBehavior(
+            ICharacterPhysics physics,
+            ICharacterSounds sounds,
+            CharacterSettings settings)
         {
             _physics = physics;
+            _sounds = sounds;
             _settings = settings;
         }
 
@@ -27,7 +32,7 @@ namespace App.Character.Dino
 
         public UniTask Execute(CancellationToken token = default)
         {
-            _physics.Play(CharacterSoundType.Jump);
+            _sounds.Play(CharacterSoundType.Jump);
             _motion = Vector3.up * _settings.JumpForce;
             ExecuteJumping();
 

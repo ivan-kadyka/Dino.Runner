@@ -18,9 +18,9 @@ namespace App.Character.Dino
         
         private UniTaskCompletionSource _runTaskSource = new UniTaskCompletionSource();
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
-
-        private readonly ICharacterPhysics _physics;
         
+        private readonly ICharacterSounds _sounds;
+
         private readonly ITickableContext _tickableContext;
         private readonly ICharacterBehaviorFactory _behaviorFactory;
 
@@ -31,11 +31,12 @@ namespace App.Character.Dino
         private readonly ObservableValue<TimeSpan> _timeSubject = new ObservableValue<TimeSpan>(TimeSpan.Zero);
         private readonly SerialDisposable _timerDisposable = new SerialDisposable();
         
-        public Character(ICharacterPhysics physics,
+        public Character(
+            ICharacterSounds sounds,
             ITickableContext tickableContext,
             ICharacterBehaviorFactory behaviorFactory)
         {
-            _physics = physics;
+            _sounds = sounds;
             _behaviorFactory = behaviorFactory;
             _tickableContext = tickableContext;
             
@@ -67,7 +68,7 @@ namespace App.Character.Dino
             _timerDisposable.Disposable = default;
             ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
             
-            _physics.Play(CharacterSoundType.Die);
+            _sounds.Play(CharacterSoundType.Die);
             _runTaskSource.TrySetResult();
             
             return UniTask.CompletedTask;
@@ -75,7 +76,7 @@ namespace App.Character.Dino
 
         public UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default)
         {
-            _physics.Play(CharacterSoundType.Coin);
+            _sounds.Play(CharacterSoundType.Coin);
             
             var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(options.Type, _currentBehavior.Speed));
                   

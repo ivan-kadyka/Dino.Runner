@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public class CharacterView : MonoBehaviour, ICharacterPhysics
+    public class CharacterView : MonoBehaviour, ICharacterPhysics, ICharacterSounds
     {
         public IObservable<float> Updated => _updateSubject;
         public IObservable<string> Collider => _colliderSubject;

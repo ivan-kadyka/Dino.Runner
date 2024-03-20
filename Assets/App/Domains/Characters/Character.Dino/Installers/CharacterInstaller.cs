@@ -21,7 +21,9 @@ namespace App.Character.Dino
             Container.Bind<ICharacter>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
             Container.Bind<IGameContext>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
             
-            Container.Bind<ICharacterPhysics>().To<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
+            Container.Bind<CharacterView>().FromComponentInNewPrefab(CharacterPrefab).AsSingle();
+            Container.Bind<ICharacterPhysics>().FromMethod(it => it.Container.Resolve<CharacterView>()).AsSingle();
+            Container.Bind<ICharacterSounds>().FromMethod(it => it.Container.Resolve<CharacterView>()).AsSingle();
         
             Container.Bind<CharacterController>().AsSingle();
             Container.Bind<IController>()

@@ -8,13 +8,18 @@ namespace App.Character.Dino
     public class JumpBehavior : IJumpBehavior
     {
         private readonly ICharacterPhysics _physics;
+        private readonly ICharacterSounds _sounds;
         private readonly CharacterSettings _settings;
         
         private Vector3 _motion;
 
-        public JumpBehavior(ICharacterPhysics physics, CharacterSettings settings)
+        public JumpBehavior(
+            ICharacterPhysics physics,
+            ICharacterSounds sounds,
+            CharacterSettings settings)
         {
             _physics = physics;
+            _sounds = sounds;
             _settings = settings;
         }
         
@@ -31,7 +36,7 @@ namespace App.Character.Dino
         {
             if (_physics.IsGrounded)
             {
-                _physics.Play(CharacterSoundType.Jump);
+                _sounds.Play(CharacterSoundType.Jump);
                 
                 _motion = Vector3.up * _settings.JumpForce;
                 _motion += _settings.Gravity * Time.deltaTime * Vector3.down;

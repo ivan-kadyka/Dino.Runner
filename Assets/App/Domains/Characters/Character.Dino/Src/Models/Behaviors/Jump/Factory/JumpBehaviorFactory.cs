@@ -5,11 +5,16 @@ namespace App.Character.Dino
     public class JumpBehaviorFactory : IJumpBehaviorFactory
     {
         private readonly ICharacterPhysics _physics;
+        private readonly ICharacterSounds _sounds;
         private readonly CharacterSettings _settings;
 
-        public JumpBehaviorFactory(ICharacterPhysics physics, CharacterSettings settings)
+        public JumpBehaviorFactory(
+            ICharacterPhysics physics,
+            ICharacterSounds sounds,
+            CharacterSettings settings)
         {
             _physics = physics;
+            _sounds = sounds;
             _settings = settings;
         }
         
@@ -18,9 +23,9 @@ namespace App.Character.Dino
             switch (type)
             {
                 case JumpBehaviorType.Default:
-                    return new JumpBehavior(_physics, _settings);
+                    return new JumpBehavior(_physics, _sounds, _settings);
                 case JumpBehaviorType.Fly:
-                    return new FlyJumpBehavior(_physics, _settings);
+                    return new FlyJumpBehavior(_physics, _sounds, _settings);
                 case JumpBehaviorType.NoJump:
                     return new NoJumpBehavior();
                 default:
