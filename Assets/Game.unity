@@ -207,6 +207,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &613904078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613904079}
+  - component: {fileID: 613904080}
+  m_Layer: 0
+  m_Name: SpawnerInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &613904079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613904078}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085104395}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &613904080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613904078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e247d2ee612494b9e5a7c0e94f48059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obstacleObjects: {fileID: 11400000, guid: afee2a949d1c84b52ba0d255528164f6, type: 2}
+  _coinsScriptableObject: {fileID: 11400000, guid: e02e9bfcbde5b44408c2f40d6081d0a0, type: 2}
 --- !u!1 &648228468
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +472,7 @@ Transform:
   m_Children:
   - {fileID: 1561776544}
   - {fileID: 648228469}
+  - {fileID: 613904079}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -464,8 +511,6 @@ MonoBehaviour:
   _topPanelPrefab: {fileID: 7134783175086555799, guid: bb778cea110f0492cbbe9ccf9a4f279b, type: 3}
   Canvas: {fileID: 808728476}
   _tickableGameObject: {fileID: 2070956615}
-  _obstacleObjects: {fileID: 11400000, guid: afee2a949d1c84b52ba0d255528164f6, type: 2}
-  _coinsScriptableObject: {fileID: 11400000, guid: e02e9bfcbde5b44408c2f40d6081d0a0, type: 2}
 --- !u!114 &1561776543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +527,7 @@ MonoBehaviour:
   _monoInstallers:
   - {fileID: 1561776542}
   - {fileID: 648228470}
+  - {fileID: 613904080}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:

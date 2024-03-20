@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Character.Controller;
 using Controllers;
 using Cysharp.Threading.Tasks;
 using Infra.Controllers;

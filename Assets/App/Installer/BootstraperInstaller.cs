@@ -1,15 +1,9 @@
-using App.Domains.Spawner;
-using App.Domains.Spawner.Coins;
-using App.Domains.Spawner.Coins.Factory;
-using App.Domains.Spawner.Obstacle;
 using App.Models;
 using AppContext;
 using Controllers;
 using Controllers.RetryPopup;
 using Controllers.Round;
 using Controllers.Round.View;
-using Controllers.Spawner.Obstacle.Factory;
-using Controllers.Spawner.Obstacle.Model;
 using Controllers.TopPanel;
 using Models;
 using Models.Tickable;
@@ -33,12 +27,6 @@ public class BootstraperInstaller : MonoInstaller
     
     [SerializeField]
     private GameObject _tickableGameObject;
-    
-    [SerializeField]
-    private ObstacleScriptableObject _obstacleObjects;
-
-    [SerializeField] 
-    private CoinsScriptableObject _coinsScriptableObject;
 
     public override void InstallBindings()
     {
@@ -70,35 +58,6 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IController>("CompositeSpawnerController"),
                 it.Container.Resolve<IRoundView>(),
                 it.Container.Resolve<IGameContext>())).AsSingle();
-        
-        // Spawner - Generic
-        Container.Bind<IController>().WithId("CompositeSpawnerController")
-            .FromMethod(it => new CompositeSpawnerController(
-                it.Container.Resolve<SpawnSettings>(),
-                    it.Container.ResolveId<ISpawnerController>("ObstaclesController"),
-                    it.Container.ResolveId<ISpawnerController>("CoinController"),
-                it.Container.Resolve<ITickableContext>()));
-
-        Container.BindInstance(new SpawnSettings(1, 1.5f)).AsSingle();
-        
-        // Spawner - Obstacles
-        Container.Bind<IObstacleFactory>().FromMethod(it =>
-            new ObstacleFactory(it.Container, _obstacleObjects, it.Container.Resolve<IGameContext>())).AsSingle();
-
-        Container.Bind<ISpawnerController>() 
-            .WithId("ObstaclesController")
-            .To<ObstaclesController>().AsSingle();
-
-        
-        Container.Bind<IObstacleSettings>().FromInstance(new ObstacleSettings(_obstacleObjects));
-        
-        // Spawner - Coins
-        Container.Bind<ISpawnerController>()
-          .WithId("CoinController")
-          .To<CoinSpawnerController>().AsSingle();
-
-        Container.Bind<ICoinFactory>().FromMethod(it =>
-          new CoinFactory(it.Container, _coinsScriptableObject, it.Container.Resolve<IGameContext>())).AsSingle();
         
         // Retry popup
         Container.Bind<IPopupView>()

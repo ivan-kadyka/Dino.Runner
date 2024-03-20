@@ -11,5 +11,9 @@ namespace App.Domains.Spawner
             MinSpawnRate = minSpawnRate;
             MaxSpawnRate = maxSpawnRate;
         }
+
+        public SpawnSettings() : this(1, 1.5f)
+        {
+        }
     }
 }
