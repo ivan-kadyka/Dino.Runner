@@ -2,7 +2,7 @@ using Infra.Controllers;
 using UnityEngine;
 using Zenject;
 
-namespace Controllers.TopPanel.Installers
+namespace App.TopPanel
 {
     public class TopPanelInstaller : MonoInstaller
     {

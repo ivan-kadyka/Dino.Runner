@@ -1,9 +1,8 @@
 using System;
-using App.Domains.Character.Model;
-using Infra.Controllers;
+using App.Character;
 using Infra.Controllers.View;
 
-namespace Controllers.TopPanel
+namespace App.TopPanel
 {
     public interface ITopPanelView : IView
     {

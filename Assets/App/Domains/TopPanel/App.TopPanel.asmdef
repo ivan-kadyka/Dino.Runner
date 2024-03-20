@@ -1,11 +1,18 @@
 {
-    "name": "App.Character",
+    "name": "App.TopPanel",
     "rootNamespace": "",
     "references": [
-        "UniTask",
+        "Infra.Controllers",
+        "App.Character",
+        "Infra.Controllers.Base",
         "Infra.Components.Tickable",
         "App.GameCore",
-        "Infra.Observable"
+        "UniRx",
+        "Infra.Observable",
+        "Infra.Disposable",
+        "UniTask",
+        "Unity.TextMeshPro",
+        "Zenject"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

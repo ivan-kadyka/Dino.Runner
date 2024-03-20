@@ -1,4 +1,4 @@
-namespace App.Character.Dino
+namespace App.Character
 {
     public enum CharacterBehaviorType
     {

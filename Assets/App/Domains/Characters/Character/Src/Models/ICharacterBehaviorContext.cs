@@ -1,7 +1,7 @@
 using System;
 using Infra.Observable;
 
-namespace App.Character.Dino
+namespace App.Character
 {
     public interface ICharacterBehaviorContext
     {

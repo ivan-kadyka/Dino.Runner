@@ -1,9 +1,9 @@
 using System;
-using App.Domains.Character.Model;
+using App.Character;
 using TMPro;
 using UnityEngine;
 
-namespace Controllers.TopPanel
+namespace App.TopPanel
 {
     public class TopPanelView : MonoBehaviour, ITopPanelView
     {

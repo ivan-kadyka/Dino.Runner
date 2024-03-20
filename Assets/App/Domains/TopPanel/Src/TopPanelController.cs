@@ -1,16 +1,14 @@
 using System;
 using System.Threading;
-using App.Domains.Character.Model;
-using App.Domains.Character.Model.Behaviors.Context;
-using App.Domains.GameCore.Src;
-using App.Models;
+using App.Character;
+using App.GameCore;
 using Cysharp.Threading.Tasks;
 using Infra.Components.Tickable;
-using Infra.Controllers;
+using Infra.Controllers.Base;
 using UniRx;
 using UnityEngine;
 
-namespace Controllers.TopPanel
+namespace App.TopPanel
 {
     public class TopPanelController : ControllerBase
     {
