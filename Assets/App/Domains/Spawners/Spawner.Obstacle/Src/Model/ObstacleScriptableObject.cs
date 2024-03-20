@@ -4,8 +4,6 @@ using UnityEngine;
 public class ObstacleScriptableObject : ScriptableObject
 {
     public ObstacleObject[] items;
-    public float minSpawnRate = 1f;
-    public float maxSpawnRate = 2f;
 }
 
 [System.Serializable]

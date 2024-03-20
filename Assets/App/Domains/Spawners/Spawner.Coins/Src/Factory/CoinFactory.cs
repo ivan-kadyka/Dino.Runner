@@ -18,22 +18,19 @@ namespace App.Spawner.Coins
 
         public ISpawnView Create(SpawnOptions options)
         {
-            var spawnObject = _coinsScriptableObject.prefabs[options.Id];
+            var coin = _coinsScriptableObject.Coins[options.Id];
             
-            var view = _container.InstantiatePrefab(spawnObject).GetComponent<ISpawnView>();
-            var colliderTag = GetColliderTag(options.Id);
+            var view = _container.InstantiatePrefab(coin.Prefab).GetComponent<ISpawnView>();
+            var objectName = GetObjectName(coin.CoinType);
             
-            view.SetUp(_gameContext, colliderTag);
+            view.SetUp(_gameContext, objectName);
 
             return view;
         }
-
-        //temp simplified converting
-        private string GetColliderTag(int id)
+        
+        private string GetObjectName(CoinType coinType)
         {
-            CoinType type = (CoinType)id;
-
-            return "Coin_" + type;
+            return "Coin_" + coinType;
         }
     }
 }
