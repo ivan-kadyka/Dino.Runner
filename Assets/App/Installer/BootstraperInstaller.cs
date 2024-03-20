@@ -1,9 +1,6 @@
-using App.Models;
 using AppContext;
 using Controllers;
 using Controllers.RetryPopup;
-using Controllers.Round;
-using Controllers.Round.View;
 using Models;
 using Models.Tickable;
 using UnityEngine;
@@ -12,9 +9,6 @@ using Zenject;
 
 public class BootstraperInstaller : MonoInstaller
 {
-    [SerializeField]
-    private GameObject RoundPrefab;
-    
     [SerializeField]
     private GameObject RentryPopupPrefab;
     
@@ -34,16 +28,6 @@ public class BootstraperInstaller : MonoInstaller
                 it.Container.ResolveId<IController>("RetryPopupController")
             ))
             .AsSingle();
-        
-        //Round
-        Container.Bind<IRoundView>().To<Ground>().FromComponentInNewPrefab(RoundPrefab).AsSingle();
-
-        Container.Bind<IController>().WithId("RoundController")
-            .FromMethod(it => new RoundController(
-                it.Container.ResolveId<IController>("CharacterController"),
-                it.Container.ResolveId<IController>("CompositeSpawnerController"),
-                it.Container.Resolve<IRoundView>(),
-                it.Container.Resolve<IGameContext>())).AsSingle();
         
         // Retry popup
         Container.Bind<IPopupView>()
