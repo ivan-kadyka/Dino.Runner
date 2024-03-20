@@ -9,7 +9,7 @@ using UniRx;
 
 namespace App.Character.Dino
 {
-    public class Character : DisposableBase, ICharacter
+    internal class Character : DisposableBase, ICharacter
     {
         public IObservableValue<CharacterEffect> CurrentType => _behaviorTypeSubject;
         public IObservable<TimeSpan> TimeLeft => _timeSubject;

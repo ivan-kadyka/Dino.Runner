@@ -12,7 +12,7 @@ namespace App.Character.Dino.Tests
         [SetUp]
         public void Setup()
         {
-         //   ICharacter character = new Character();
+            ICharacter character = new Character(default, default, default);
         }
 
         [TearDown]

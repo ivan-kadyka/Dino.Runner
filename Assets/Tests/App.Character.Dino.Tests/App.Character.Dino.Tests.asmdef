@@ -7,7 +7,8 @@
         "App.Character.Dino",
         "App.Character",
         "Infra.Components.Tickable",
-        "Infra.Disposable"
+        "Infra.Disposable",
+        "App.GameCore"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
