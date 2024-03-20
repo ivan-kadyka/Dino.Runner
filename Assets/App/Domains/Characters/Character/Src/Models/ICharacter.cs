@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 namespace App.Character
 {
-    public interface ICharacter : IGameContext, IDisposable
+    public interface ICharacter : IGameContext, ICharacterEffectContext, IDisposable
     {
         UniTask Jump(CancellationToken token = default);
 
@@ -13,6 +13,6 @@ namespace App.Character
         
         UniTask Idle(CancellationToken token = default);
 
-        void ChangeBehavior(ICharacterBehavior behavior);
+        UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default);
     }
 }

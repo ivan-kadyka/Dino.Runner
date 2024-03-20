@@ -1,5 +1,4 @@
 using System;
-using App.GameCore;
 
 namespace App.Character.Dino
 {
@@ -7,42 +6,37 @@ namespace App.Character.Dino
     {
         private readonly IJumpBehaviorFactory _jumpBehaviorFactory;
         private readonly CharacterSettings _settings;
-        private readonly IGameContext _gameContext;
 
-        public CharacterBehaviorFactory(
-            IJumpBehaviorFactory jumpBehaviorFactory,
-            CharacterSettings settings,
-            IGameContext gameContext)
+        public CharacterBehaviorFactory(IJumpBehaviorFactory jumpBehaviorFactory, CharacterSettings settings)
         {
             _jumpBehaviorFactory = jumpBehaviorFactory;
             _settings = settings;
-            _gameContext = gameContext;
         }
         
-        public ICharacterBehavior Create(CharacterBehaviorType type)
+        public ICharacterBehavior Create(CharacterBehaviorOptions options)
         {
-            switch (type)
+            switch (options.Effect)
             {
-                case CharacterBehaviorType.Default:
+                case CharacterEffect.Default:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Default);
                     return new DefaultCharacterBehavior(jumpBehavior, _settings);
                 }
-                case CharacterBehaviorType.Fly:
+                case CharacterEffect.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
-                    return new CharacterBehavior(jumpBehavior, _gameContext.Speed);
+                    return new CharacterBehavior(jumpBehavior, options.Speed);
                 }
-                case CharacterBehaviorType.Fast:
+                case CharacterEffect.Fast:
                 {
-                    return CreateSpeedBehavior(_gameContext.Speed * 1.5f);
+                    return CreateSpeedBehavior(options.Speed * 1.5f);
                 }
-                case CharacterBehaviorType.Slow:
+                case CharacterEffect.Slow:
                 {
-                    return CreateSpeedBehavior(_gameContext.Speed / 1.5f);
+                    return CreateSpeedBehavior(options.Speed / 1.5f);
                 }
                 default:
-                    throw new InvalidOperationException($"Can't create selected '{type}' character behavior type");
+                    throw new InvalidOperationException($"Can't create selected '{options.Effect}' character behavior type");
             }
         }
 

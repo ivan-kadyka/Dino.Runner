@@ -3,9 +3,9 @@ using Infra.Observable;
 
 namespace App.Character
 {
-    public interface ICharacterBehaviorContext
+    public interface ICharacterEffectContext
     {
-        IObservableValue<CharacterBehaviorType> CurrentType { get; }
+        IObservableValue<CharacterEffect> CurrentType { get; }
         
         IObservable<TimeSpan> TimeLeft { get; }
     }

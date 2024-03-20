@@ -1,6 +1,9 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Infra.Components.Tickable;
+using Infra.Observable;
+using Infra.Observable.UniRx;
 using Types;
 using UniRx;
 
@@ -8,56 +11,113 @@ namespace App.Character.Dino
 {
     public class Character : DisposableBase, ICharacter
     {
-        public float Speed => _behavior.Speed;
+        public IObservableValue<CharacterEffect> CurrentType => _behaviorTypeSubject;
+        public IObservable<TimeSpan> TimeLeft => _timeSubject;
+        
+        public float Speed => _currentBehavior.Speed;
         
         private UniTaskCompletionSource _runTaskSource = new UniTaskCompletionSource();
-        private readonly CompositeDisposable _disposable = new CompositeDisposable();
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
         private readonly ICharacterPhysics _physics;
-        private ICharacterBehavior _behavior = new IdleCharacterBehavior();
         
-        public Character(ITickableContext tickableContext)
+        private readonly ITickableContext _tickableContext;
+        private readonly ICharacterBehaviorFactory _behaviorFactory;
+
+        private ICharacterBehavior _defaultBehavior;
+        private ICharacterBehavior _currentBehavior = new IdleCharacterBehavior();
+
+        private readonly ObservableValue<CharacterEffect> _behaviorTypeSubject = new ObservableValue<CharacterEffect>(CharacterEffect.Default);
+        private readonly ObservableValue<TimeSpan> _timeSubject = new ObservableValue<TimeSpan>(TimeSpan.Zero);
+        private readonly SerialDisposable _timerDisposable = new SerialDisposable();
+        
+        public Character(ICharacterPhysics physics,
+            ITickableContext tickableContext,
+            ICharacterBehaviorFactory behaviorFactory)
         {
-            _disposable.Add( tickableContext.Updated.Subscribe(Update));
+            _physics = physics;
+            _behaviorFactory = behaviorFactory;
+            _tickableContext = tickableContext;
+            
+            _disposables.Add( tickableContext.Updated.Subscribe(Update));
+            _disposables.Add(_timerDisposable);
         }
-        
-        public void ChangeBehavior(ICharacterBehavior behavior)
+
+        private void ChangeBehavior(ICharacterBehavior behavior, CharacterEffect effect)
         {
-            if (behavior != null)
-                _behavior = behavior;
+            if (_currentBehavior == behavior) 
+                return;
+            
+            _currentBehavior = behavior;
+            _behaviorTypeSubject.OnNext(effect);
         }
 
         public async UniTask Run(CancellationToken token = default)
         {
+            
+            _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorOptions.Default);
+            ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
+            
             _runTaskSource = new UniTaskCompletionSource();
             await _runTaskSource.Task;
         }
 
         public UniTask Idle(CancellationToken token = default)
         {
-            _behavior = new IdleCharacterBehavior();
+            _timerDisposable.Disposable = default;
+            ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
             
+            _physics.Play(CharacterSoundType.Die);
             _runTaskSource.TrySetResult();
             
+            return UniTask.CompletedTask;
+        }
+
+        public UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default)
+        {
+            _physics.Play(CharacterSoundType.Coin);
+            
+            var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(options.Type, _currentBehavior.Speed));
+                  
+            ChangeBehavior(newBehavior, options.Type);
+            
+            _timerDisposable.Disposable = _tickableContext.Updated.Subscribe(OnEffectTimer);
+            _timeSubject.OnNext(options.Duration);
+
             return UniTask.CompletedTask;
         }
         
 
         public async UniTask Jump(CancellationToken token = default)
         {
-            await _behavior.Execute(token);
+            await _currentBehavior.Execute(token);
+        }
+
+        private void OnEffectTimer(float deltaTime)
+        {
+            var timeLeft = _timeSubject.Value - TimeSpan.FromMilliseconds(deltaTime * 1000);
+
+            if (timeLeft.TotalMilliseconds > 0)
+            {
+                _timeSubject.OnNext(timeLeft);
+            }
+            else
+            {
+                _timerDisposable.Disposable = default;
+                ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
+            }
         }
         
         private void Update(float deltaTime)
         {
-            _behavior.Update(deltaTime);
+            _currentBehavior.Update(deltaTime);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _disposable.Dispose();
+                _disposables.Dispose();
             }
         }
     }

@@ -27,8 +27,8 @@ namespace App.Character.Dino
             Container.Bind<IController>()
                 .WithId("CharacterController")
                 .FromMethod(it => it.Container.Resolve<CharacterController>());
-            Container.Bind<ICharacterBehaviorContext>()
-                .FromMethod(it => it.Container.Resolve<CharacterController>());
+            Container.Bind<ICharacterEffectContext>()
+                .FromMethod(it => it.Container.Resolve<Character>());
 
             Container.Bind<ICharacterBehaviorFactory>().To<CharacterBehaviorFactory>().AsSingle();
             Container.Bind<IJumpBehaviorFactory>().To<JumpBehaviorFactory>().AsSingle();

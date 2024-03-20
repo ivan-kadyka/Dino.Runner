@@ -2,6 +2,6 @@ namespace App.Character.Dino
 {
     public interface ICharacterBehaviorFactory
     {
-        ICharacterBehavior Create(CharacterBehaviorType type);
+        ICharacterBehavior Create(CharacterBehaviorOptions options);
     }
 }

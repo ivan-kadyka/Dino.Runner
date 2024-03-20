@@ -1,8 +1,9 @@
 namespace App.Character
 {
-    public enum CharacterBehaviorType
+    public enum CharacterEffect
     {
         Default,
+        Idle,
         Slow,
         Fast,
         Fly
