@@ -1,11 +1,10 @@
-using Controllers;
-using Controllers.RetryPopup;
+using App.Popups.Retry;
 using Infra.Controllers;
 using Infra.Controllers.View;
 using UnityEngine;
 using Zenject;
 
-namespace App.Domains.Popups.Installers
+namespace App.Popups
 {
     public class PopupsInstaller : MonoInstaller
     {

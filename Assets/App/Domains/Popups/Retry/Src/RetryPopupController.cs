@@ -1,9 +1,9 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Infra.Controllers;
+using Infra.Controllers.Base;
 using Infra.Controllers.View;
 
-namespace Controllers.RetryPopup
+namespace App.Popups.Retry
 {
     public class RetryPopupController : ControllerBase
     {

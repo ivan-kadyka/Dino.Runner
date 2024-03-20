@@ -1,11 +1,10 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Infra.Controllers;
 using Infra.Controllers.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controllers.RetryPopup
+namespace App.Popups.Retry
 {
     public class RetryPopupView : MonoBehaviour, IPopupView
     {
