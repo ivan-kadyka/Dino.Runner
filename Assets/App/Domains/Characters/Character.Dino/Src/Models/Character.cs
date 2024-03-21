@@ -11,7 +11,7 @@ namespace App.Character.Dino
 {
     internal class Character : DisposableBase, ICharacter
     {
-        public IObservableValue<CharacterEffect> CurrentType => _behaviorTypeSubject;
+        public IObservableValue<CharacterEffect> Effect => _behaviorTypeSubject;
         public IObservable<TimeSpan> TimeLeft => _timeSubject;
         
         public float Speed => _currentBehavior.Speed;
@@ -55,15 +55,16 @@ namespace App.Character.Dino
 
         public async UniTask Run(CancellationToken token = default)
         {
-            
             _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorOptions.Default);
             ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
             
             _runTaskSource = new UniTaskCompletionSource();
+           // _disposables.Add(token.Register(()=> _runTaskSource.TrySetCanceled()));
+            
             await _runTaskSource.Task;
         }
 
-        public UniTask Idle(CancellationToken token = default)
+        public async UniTask Idle(CancellationToken token = default)
         {
             _timerDisposable.Disposable = default;
             ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
@@ -71,7 +72,7 @@ namespace App.Character.Dino
             _sounds.Play(CharacterSoundType.Idle);
             _runTaskSource.TrySetResult();
             
-            return UniTask.CompletedTask;
+            await _currentBehavior.Execute(token);
         }
 
         public UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default)
@@ -118,6 +119,7 @@ namespace App.Character.Dino
         {
             if (disposing)
             {
+                _runTaskSource.TrySetCanceled();
                 _disposables.Dispose();
             }
         }

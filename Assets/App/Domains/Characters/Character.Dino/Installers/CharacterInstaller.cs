@@ -5,7 +5,7 @@ using Zenject;
 
 namespace App.Character.Dino
 {
-    public class CharacterInstaller : MonoInstaller
+    internal class CharacterInstaller : MonoInstaller
     {
         [SerializeField] 
         private GameObject _characterPrefab;

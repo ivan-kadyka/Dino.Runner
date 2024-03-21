@@ -1,55 +1,62 @@
-using System.Threading;
-using App.Character;
+using System;
+using System.Collections;
 using Cysharp.Threading.Tasks;
-using Infra.Components.Tickable;
 using Moq;
 using NUnit.Framework;
+using UniRx;
+using UnityEngine.TestTools;
 
 namespace App.Character.Dino.Tests
 {
     public class CharacterTests
     {
+        private TestTickableContext _tickableContext;
+        private ICharacter _character;
+        
+        private Mock<ICharacterSounds> _soundsMock;
+        private Mock<ICharacterPhysics> _physicsMock;
+
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+
         [SetUp]
         public void Setup()
         {
-            ICharacter character = new Character(default, default, default);
+            _soundsMock = new Mock<ICharacterSounds>();
+            _physicsMock = new Mock<ICharacterPhysics>();
+
+            _tickableContext = new TestTickableContext();
+            
+            var settings = new CharacterSettings();
+            var jumpBehaviorFactory = new JumpBehaviorFactory(_physicsMock.Object, _soundsMock.Object, settings);
+            var characterBehaviorFactory = new CharacterBehaviorFactory(jumpBehaviorFactory, settings);
+            
+            _character = new Character(_soundsMock.Object, _tickableContext, characterBehaviorFactory);
         }
 
         [TearDown]
         public void TearDown()
         {
+            _disposables.Clear();
+            _character.Dispose();
         }
         
-        [Test]
-        public void TestRunMethodInitiatesDefaultBehavior()
+        
+        [UnityTest]
+        public IEnumerator ApplyEffect_UseFly_ShouldBeApplied() => UniTask.ToCoroutine(async () =>
         {
-            Assert.Pass();
+            //Arrange
+            CharacterEffect nextEffect = CharacterEffect.Default;
+            var effectOptions = new CharacterEffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
             
-            /*
+            _disposables.Add(_character.Effect.Subscribe(t => { nextEffect = t;}));
             
-            // Arrange
-            var soundsMock = new Mock<ICharacterSounds>();
-            var tickableContextMock = new Mock<ITickableContext>();
-            var behaviorFactoryMock = new Mock<ICharacterBehaviorFactory>();
-            var defaultBehaviorMock = new Mock<ICharacterBehavior>();
-
-            behaviorFactoryMock.Setup(f => f.Create(It.IsAny<CharacterBehaviorOptions>()))
-                .Returns(defaultBehaviorMock.Object);
-
-            var character = new Character(soundsMock.Object, tickableContextMock.Object, behaviorFactoryMock.Object);
-
             // Act
-            character.Run(CancellationToken.None).Forget();
-
+            await _character.ApplyEffect(effectOptions);
+            
+            
             // Assert
-            defaultBehaviorMock.Verify(b => b.Execute(It.IsAny<CancellationToken>()), Times.Once);
-
-            // Additionally, verify that the behavior factory was called with the correct parameters.
-            behaviorFactoryMock.Verify(f => f.Create(CharacterBehaviorOptions.Default), Times.Once);
-
-            // Verify that no sound is played when running (based on example; adjust as needed).
-            soundsMock.Verify(s => s.Play(It.IsAny<CharacterSoundType>()), Times.Never);
-            */
-        }
+            Assert.AreEqual(CharacterEffect.Fly, nextEffect);
+            _soundsMock.Verify(s => s.Play(It.IsAny<CharacterSoundType>()), Times.Once);
+        });
     }
 }

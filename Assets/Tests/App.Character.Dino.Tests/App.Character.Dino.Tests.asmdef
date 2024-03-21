@@ -8,7 +8,9 @@
         "App.Character",
         "Infra.Components.Tickable",
         "Infra.Disposable",
-        "App.GameCore"
+        "App.GameCore",
+        "UniRx",
+        "Infra.Observable"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

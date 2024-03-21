@@ -5,7 +5,7 @@ namespace App.Character
 {
     public interface ICharacterEffectContext
     {
-        IObservableValue<CharacterEffect> CurrentType { get; }
+        IObservableValue<CharacterEffect> Effect { get; }
         
         IObservable<TimeSpan> TimeLeft { get; }
     }

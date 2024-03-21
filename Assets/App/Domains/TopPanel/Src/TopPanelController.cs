@@ -28,7 +28,7 @@ namespace App.TopPanel
             _gameContext = gameContext;
             _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
             
-            _disposables.Add(characterEffectContext.CurrentType.Subscribe(OnBehaviorTypeChanged));
+            _disposables.Add(characterEffectContext.Effect.Subscribe(OnBehaviorTypeChanged));
             _disposables.Add(characterEffectContext.TimeLeft.Subscribe(OnTimeLeft));
         }
 
