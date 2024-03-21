@@ -4,7 +4,7 @@ using Zenject;
 
 namespace App
 {
-    public class AppContextComponent : MonoBehaviour
+    internal class AppContextComponent : MonoBehaviour
     {
         [Inject]
         private AppController _appController;

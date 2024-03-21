@@ -3,7 +3,7 @@ using Zenject;
 
 namespace App
 {
-    public class AppInstaller : MonoInstaller
+    internal class AppInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {

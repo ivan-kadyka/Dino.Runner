@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace App
 {
-    public class AppController : ControllerBase
+    internal class AppController : ControllerBase
     {
         private readonly IController _topPanelController;
         private readonly IController _roundController;
