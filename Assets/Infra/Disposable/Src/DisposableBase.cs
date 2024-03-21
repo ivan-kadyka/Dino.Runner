@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
+
 namespace Types
 {
     using System;
@@ -5,29 +8,22 @@ namespace Types
     
         public abstract class DisposableBase : IDisposable
         {
-#if UNITY_EDITOR || PROFILING_ENABLED
-            public static event Action<IDisposable> RegisterDisposable;
-            public static event Action<IDisposable> UnRegisterDisposable;
-            public static event Action<IDisposable> FinalizerCall;
-            public static event Action<IDisposable> DoubleDispose;
-#endif
             private int _disposed;
 
             protected bool IsDisposed => _disposed == 1;
-            protected DisposableBase()
-            {
-#if UNITY_EDITOR || PROFILING_ENABLED
-                RegisterDisposable?.Invoke(this);
-#endif
-            }
-
-#if UNITY_EDITOR || PROFILING_ENABLED
+            
             ~DisposableBase()
             {
-                FinalizerCall?.Invoke(this);
+#if UNITY_EDITOR || PROFILING_ENABLED
+                if (Debugger.IsAttached)
+                {
+                    Debug.LogWarning($"Executing Dispose from finalizer call for object '{GetType().FullName}'");
+                    Debugger.Break();
+                }
+#endif
                 Dispose(false);
             }
-#endif
+
 
             #region IDisposable implementation
 
@@ -38,10 +34,6 @@ namespace Types
                 if (disposed == 0)
                 {
                     GC.SuppressFinalize(this);
-#if UNITY_EDITOR || PROFILING_ENABLED
-                    UnRegisterDisposable?.Invoke(this);
-#endif
-
                     Dispose(true);
 
                     _disposed |= 2;
@@ -49,7 +41,11 @@ namespace Types
                 else
                 {
 #if UNITY_EDITOR || PROFILING_ENABLED
-                    DoubleDispose?.Invoke(this);
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.LogWarning($"Double disposed object '{GetType().FullName}'");
+                        Debugger.Break();
+                    }
 #endif
                 }
             }

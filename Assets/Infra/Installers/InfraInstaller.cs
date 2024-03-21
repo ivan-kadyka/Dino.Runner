@@ -5,7 +5,7 @@ using Zenject;
 
 namespace Infra.Installers
 {
-    public class InfraInstaller : MonoInstaller
+    internal class InfraInstaller : MonoInstaller
     {
         [SerializeField]
         private GameObject _tickableGameObject;
