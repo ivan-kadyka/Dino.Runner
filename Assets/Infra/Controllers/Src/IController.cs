@@ -5,7 +5,8 @@ using Cysharp.Threading.Tasks;
 namespace Infra.Controllers
 {
     /// <summary>
-    /// Defines a generic controller interface with start and stop asynchronous operations. It also ensures cleanup by extending IDisposable.
+    /// Defines a generic controller interface with start and stop asynchronous operations.
+    /// It also ensures cleanup by extending IDisposable.
     /// </summary>
     public interface IController : IDisposable
     {
