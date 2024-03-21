@@ -1,6 +1,6 @@
 namespace App.Character.Dino
 {
-    public enum JumpBehaviorType
+    internal enum JumpBehaviorType
     {
         Default,
         Fly,

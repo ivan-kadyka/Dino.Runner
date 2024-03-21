@@ -1,8 +1,7 @@
 namespace App.Character.Dino
 {
-    public interface ICharacterSounds
+    internal interface ICharacterSounds
     {
-        
         void Play(CharacterSoundType soundType);
     }
 }

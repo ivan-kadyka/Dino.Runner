@@ -1,6 +1,7 @@
 namespace App.Character.Dino
 {
-    public class CharacterSettings
+    //TODO: move to SO
+    internal class CharacterSettings
     {
         public readonly float JumpForce = 8f;
         public readonly float Gravity = 9.81f * 2f;

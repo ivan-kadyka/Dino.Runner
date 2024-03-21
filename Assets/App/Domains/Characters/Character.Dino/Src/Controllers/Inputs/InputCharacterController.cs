@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public class InputCharacterController: MonoBehaviour, IInputCharacterController
+    internal class InputCharacterController: MonoBehaviour, IInputCharacterController
     {
         public IObservable<Unit> JumpPressed => _jumpSubject;
 

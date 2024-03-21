@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace App.Character.Dino
 {
-    public class NoJumpBehavior : IJumpBehavior
+    internal class NoJumpBehavior : IJumpBehavior
     {
         public void Update(float deltaTime)
         {

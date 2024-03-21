@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public class FlyJumpBehavior : IJumpBehavior
+    internal class FlyJumpBehavior : IJumpBehavior
     {
         private readonly ICharacterPhysics _physics;
         private readonly ICharacterSounds _sounds;

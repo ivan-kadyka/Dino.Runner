@@ -1,6 +1,6 @@
 namespace App.Character.Dino
 {
-    public interface IJumpBehaviorFactory
+    internal interface IJumpBehaviorFactory
     {
         IJumpBehavior Create(JumpBehaviorType type);
     }

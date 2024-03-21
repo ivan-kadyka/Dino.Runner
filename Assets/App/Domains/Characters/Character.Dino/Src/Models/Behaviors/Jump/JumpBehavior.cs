@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public class JumpBehavior : IJumpBehavior
+    internal class JumpBehavior : IJumpBehavior
     {
         private readonly ICharacterPhysics _physics;
         private readonly ICharacterSounds _sounds;

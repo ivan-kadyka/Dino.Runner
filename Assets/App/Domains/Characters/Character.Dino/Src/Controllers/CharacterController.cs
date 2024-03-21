@@ -6,7 +6,7 @@ using UniRx;
 
 namespace App.Character.Dino
 {
-    public class CharacterController : ControllerBase
+    internal class CharacterController : ControllerBase
     {
         private readonly ICharacter _character;
         

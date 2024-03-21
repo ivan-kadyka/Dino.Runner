@@ -1,6 +1,6 @@
 namespace App.Character.Dino
 {
-    public class CharacterBehaviorOptions
+    internal class CharacterBehaviorOptions
     {
         public static readonly CharacterBehaviorOptions Default = new CharacterBehaviorOptions(CharacterEffect.Default, 0);
         public CharacterEffect Effect { get; }

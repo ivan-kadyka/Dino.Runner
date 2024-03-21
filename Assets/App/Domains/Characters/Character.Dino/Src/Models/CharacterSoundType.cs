@@ -1,6 +1,6 @@
 namespace App.Character.Dino
 {
-    public enum CharacterSoundType
+    internal enum CharacterSoundType
     {
         Jump,
         Effect,

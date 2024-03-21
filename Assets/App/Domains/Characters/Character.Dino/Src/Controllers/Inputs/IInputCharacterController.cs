@@ -3,7 +3,7 @@ using UniRx;
 
 namespace App.Character.Dino
 {
-    public interface IInputCharacterController
+    internal interface IInputCharacterController
     {
         IObservable<Unit> JumpPressed { get; }
     }

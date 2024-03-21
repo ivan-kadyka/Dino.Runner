@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public interface ICharacterPhysics : ITickableContext
+    internal interface ICharacterPhysics : ITickableContext
     {
         IObservable<string> Collider { get; }
         

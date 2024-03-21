@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace App.Character.Dino
 {
-    public class CharacterBehavior : ICharacterBehavior
+    internal class CharacterBehavior : ICharacterBehavior
     {
         public float Speed { get; }
 

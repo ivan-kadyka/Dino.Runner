@@ -2,7 +2,7 @@ using System;
 
 namespace App.Character.Dino
 {
-    public class JumpBehaviorFactory : IJumpBehaviorFactory
+    internal class JumpBehaviorFactory : IJumpBehaviorFactory
     {
         private readonly ICharacterPhysics _physics;
         private readonly ICharacterSounds _sounds;

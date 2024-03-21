@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Character.Dino
 {
-    public class DefaultCharacterBehavior : ICharacterBehavior
+    internal class DefaultCharacterBehavior : ICharacterBehavior
     {
         public float Speed => _speed;
         
