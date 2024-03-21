@@ -19,7 +19,11 @@ namespace App.Spawner.Coins
                 .To<CoinSpawnerController>().AsSingle();
 
             Container.Bind<ICoinFactory>().FromMethod(it =>
-                new CoinFactory(it.Container, _coinsScriptableObject,  _spawnPoolContainer.transform, it.Container.Resolve<IGameContext>())).AsSingle();
+                new CoinFactory(it.Container,
+                    _coinsScriptableObject, 
+                    _spawnPoolContainer.transform,
+                    it.Container.Resolve<IGameContext>(),
+                    it.Container.Resolve<IColliderObjectObserver>())).AsSingle();
 
             Container.Bind<ICoinsSettings>().FromInstance(new CoinsSettings(_coinsScriptableObject));
         }

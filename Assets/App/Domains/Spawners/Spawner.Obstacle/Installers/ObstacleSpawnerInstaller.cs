@@ -16,7 +16,11 @@ namespace App.Spawner.Obstacle
         public override void InstallBindings()
         {
             Container.Bind<IObstacleFactory>().FromMethod(it =>
-                new ObstacleFactory(it.Container, _obstacleObjects, _spawnPoolContainer.transform,it.Container.Resolve<IGameContext>())).AsSingle();
+                new ObstacleFactory(it.Container,
+                    _obstacleObjects,
+                    _spawnPoolContainer.transform,
+                    it.Container.Resolve<IGameContext>(),
+                    it.Container.Resolve<IColliderObjectObserver>())).AsSingle();
 
             Container.Bind<ISpawnerController>() 
                 .WithId("ObstaclesController")

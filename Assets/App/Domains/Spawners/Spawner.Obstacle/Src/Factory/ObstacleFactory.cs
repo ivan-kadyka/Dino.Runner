@@ -9,29 +9,33 @@ namespace App.Spawner.Obstacle
         private readonly DiContainer _container;
         private readonly ObstacleScriptableObject _obstacleSo;
         private readonly IGameContext _gameContext;
+        private readonly IColliderObjectObserver _colliderObjectObserver;
         private readonly Transform _parentTransform;
 
         public ObstacleFactory(
             DiContainer container,
             ObstacleScriptableObject obstacleSo,
             Transform parentTransform,
-            IGameContext gameContext)
+            IGameContext gameContext,
+            IColliderObjectObserver colliderObjectObserver)
         {
             _container = container;
             _obstacleSo = obstacleSo;
             _parentTransform = parentTransform;
             _gameContext = gameContext;
+            _colliderObjectObserver = colliderObjectObserver;
         }
 
         public override ISpawnView Create(SpawnOptions options)
         {
             int index = options.Id;
 
-            var obstacleObject = _obstacleSo.items[index];
+            var obstacleItem = _obstacleSo.items[index];
             
-            var view = _container.InstantiatePrefab(obstacleObject.prefab, _parentTransform).GetComponent<ISpawnView>();
-            
-            view.SetUp(_gameContext, "Obstacle");
+            var view = _container.InstantiatePrefab(obstacleItem.prefab, _parentTransform).GetComponent<ISpawnView>();
+
+            var obstacleObject = new GameCore.Obstacle.ObstacleObject();
+            view.SetUp(_gameContext, _colliderObjectObserver, obstacleObject);
 
             return view;
         }

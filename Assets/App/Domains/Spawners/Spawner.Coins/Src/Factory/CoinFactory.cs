@@ -10,17 +10,20 @@ namespace App.Spawner.Coins
         private readonly CoinsScriptableObject _coinsScriptableObject;
         private readonly Transform _parentTransform;
         private readonly IGameContext _gameContext;
+        private readonly IColliderObjectObserver _colliderObjectObserver;
 
         public CoinFactory(
             DiContainer container,
             CoinsScriptableObject coinsScriptableObject,
             Transform parentTransform,
-            IGameContext gameContext)
+            IGameContext gameContext,
+            IColliderObjectObserver colliderObjectObserver)
         {
             _container = container;
             _coinsScriptableObject = coinsScriptableObject;
             _parentTransform = parentTransform;
             _gameContext = gameContext;
+            _colliderObjectObserver = colliderObjectObserver;
         }
 
         public ISpawnView Create(SpawnOptions options)
@@ -28,16 +31,11 @@ namespace App.Spawner.Coins
             var coin = _coinsScriptableObject.Coins[options.Id];
             
             var view = _container.InstantiatePrefab(coin.Prefab, _parentTransform).GetComponent<ISpawnView>();
-            var objectName = GetObjectName(coin.CoinType);
-            
-            view.SetUp(_gameContext, objectName);
+
+            var coinObject = new GameCore.CoinObject(coin.CoinType);
+            view.SetUp(_gameContext, _colliderObjectObserver, coinObject);
 
             return view;
-        }
-        
-        private string GetObjectName(CoinType coinType)
-        {
-            return "Coin_" + coinType;
         }
     }
 }

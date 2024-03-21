@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.GameCore;
 
 namespace App.Spawner.Coins.Settings
 {

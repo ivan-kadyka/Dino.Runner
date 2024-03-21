@@ -1,9 +1,9 @@
-namespace App.Spawner.Coins
+namespace App.GameCore
 {
     /// <summary>
     /// Enumerates the types of coins, each associated with a specific effect or characteristic that can be applied to or influence the game's characters or environment.
     /// </summary>
-    internal enum CoinType
+    public enum CoinType
     {
         /// <summary>
         /// Represents a coin that, when collected, applies a slow effect, possibly reducing movement or action speed.
@@ -20,5 +20,4 @@ namespace App.Spawner.Coins
         /// </summary>
         Fly,
     }
-
 }

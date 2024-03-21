@@ -31,11 +31,17 @@ namespace App.Spawner
         }
 
         private IGameContext _gameContext;
+        private IColliderObjectObserver _objectObserver;
+        private IObject _spawnObject;
     
-        public void SetUp(IGameContext gameContext, string objectName)
+        public void SetUp(
+            IGameContext gameContext,
+            IColliderObjectObserver objectObserver,
+            IObject spawnObject)
         {
-            gameObject.name = objectName;
+            _objectObserver = objectObserver;
             _gameContext = gameContext;
+            _spawnObject = spawnObject;
         }
 
         private void OnEnable()
@@ -57,6 +63,21 @@ namespace App.Spawner
             {
                 gameObject.SetActive(false);
             }
+        }
+        
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                OnColliderHandle();
+                
+                if (_objectObserver != null)
+                    _objectObserver.OnNext(_spawnObject);
+            }
+        }
+
+        protected virtual void OnColliderHandle()
+        {
         }
         
         public void Dispose()

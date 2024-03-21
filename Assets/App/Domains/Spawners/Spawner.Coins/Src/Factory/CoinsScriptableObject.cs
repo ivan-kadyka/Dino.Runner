@@ -1,3 +1,4 @@
+using App.GameCore;
 using UnityEngine;
 
 namespace App.Spawner.Coins
