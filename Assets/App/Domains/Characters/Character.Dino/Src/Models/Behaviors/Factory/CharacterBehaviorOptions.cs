@@ -2,13 +2,13 @@ namespace App.Character.Dino
 {
     internal class CharacterBehaviorOptions
     {
-        public static readonly CharacterBehaviorOptions Default = new CharacterBehaviorOptions(CharacterEffect.Default, 0);
-        public CharacterEffect Effect { get; }
+        public static readonly CharacterBehaviorOptions Default = new CharacterBehaviorOptions(CharacterState.Default, 0);
+        public CharacterState State { get; }
         public float Speed { get; }
 
-        public CharacterBehaviorOptions(CharacterEffect effect, float speed)
+        public CharacterBehaviorOptions(CharacterState state, float speed)
         {
-            Effect = effect;
+            State = state;
             Speed = speed;
         }
     }

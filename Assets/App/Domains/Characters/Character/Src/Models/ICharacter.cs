@@ -9,7 +9,7 @@ namespace App.Character
     /// Defines the behavior and properties of a character in the game, including actions like jump, run, and idle,
     /// and the ability to apply effects. It also integrates with the game's context for speed and character effect management.
     /// </summary>
-    public interface ICharacter : IGameContext, ICharacterEffectContext, IDisposable
+    public interface ICharacter : IGameContext, ICharacterStateContext, IDisposable
     {
         /// <summary>
         /// Initiates a jump action for the character.
@@ -38,7 +38,7 @@ namespace App.Character
         /// <param name="options">The options defining the effect to apply.</param>
         /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
         /// <returns>A UniTask that represents the asynchronous operation.</returns>
-        UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default);
+        UniTask ApplyEffect(CharacterOptions options, CancellationToken token = default);
     }
 
 }

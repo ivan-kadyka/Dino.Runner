@@ -34,19 +34,19 @@ namespace App.Character.Dino
                     break;
                 case "Coin_Fly":
                 {
-                    var options = new CharacterEffectOptions(CharacterEffect.Fly, TimeSpan.FromSeconds(10));
+                    var options = new CharacterOptions(CharacterState.Fly, TimeSpan.FromSeconds(10));
                     await _character.ApplyEffect(options);
                     break;  
                 }
                 case "Coin_Slow":
                 {
-                    var options = new CharacterEffectOptions(CharacterEffect.Slow, TimeSpan.FromSeconds(10));
+                    var options = new CharacterOptions(CharacterState.Slow, TimeSpan.FromSeconds(10));
                     await _character.ApplyEffect(options);
                     break;
                 }
                 case "Coin_Fast":
                 {
-                    var options = new CharacterEffectOptions(CharacterEffect.Fast, TimeSpan.FromSeconds(10));
+                    var options = new CharacterOptions(CharacterState.Fast, TimeSpan.FromSeconds(10));
                     await _character.ApplyEffect(options);
                     break;
                 }

@@ -20,7 +20,7 @@ namespace App.Character.Dino
             Container.Bind<Character>().AsSingle();
             Container.Bind<ICharacter>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
             Container.Bind<IGameContext>().FromMethod(it => it.Container.Resolve<Character>()).AsSingle();
-            Container.Bind<ICharacterEffectContext>()
+            Container.Bind<ICharacterStateContext>()
                 .FromMethod(it => it.Container.Resolve<Character>());
             
             Container.Bind<CharacterView>().FromComponentInNewPrefab(_characterPrefab).AsSingle();

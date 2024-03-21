@@ -11,7 +11,7 @@ namespace App.Character.Dino
 {
     internal class Character : DisposableBase, ICharacter
     {
-        public IObservableValue<CharacterEffect> Effect => _behaviorTypeSubject;
+        public IObservableValue<CharacterState> State => _behaviorTypeSubject;
         public IObservable<TimeSpan> TimeLeft => _timeSubject;
         
         public float Speed => _currentBehavior.Speed;
@@ -27,7 +27,7 @@ namespace App.Character.Dino
         private ICharacterBehavior _defaultBehavior;
         private ICharacterBehavior _currentBehavior = new IdleCharacterBehavior();
 
-        private readonly ObservableValue<CharacterEffect> _behaviorTypeSubject = new ObservableValue<CharacterEffect>(CharacterEffect.Default);
+        private readonly ObservableValue<CharacterState> _behaviorTypeSubject = new ObservableValue<CharacterState>(CharacterState.Default);
         private readonly ObservableValue<TimeSpan> _timeSubject = new ObservableValue<TimeSpan>(TimeSpan.Zero);
         private readonly SerialDisposable _timerDisposable = new SerialDisposable();
         
@@ -44,19 +44,19 @@ namespace App.Character.Dino
             _disposables.Add(_timerDisposable);
         }
 
-        private void ChangeBehavior(ICharacterBehavior behavior, CharacterEffect effect)
+        private void ChangeBehavior(ICharacterBehavior behavior, CharacterState state)
         {
             if (_currentBehavior == behavior) 
                 return;
             
             _currentBehavior = behavior;
-            _behaviorTypeSubject.OnNext(effect);
+            _behaviorTypeSubject.OnNext(state);
         }
 
         public async UniTask Run(CancellationToken token = default)
         {
             _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorOptions.Default);
-            ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
+            ChangeBehavior(_defaultBehavior, CharacterState.Default);
             
             _runTaskSource = new UniTaskCompletionSource();
            // _disposables.Add(token.Register(()=> _runTaskSource.TrySetCanceled()));
@@ -67,7 +67,7 @@ namespace App.Character.Dino
         public async UniTask Idle(CancellationToken token = default)
         {
             _timerDisposable.Disposable = default;
-            ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
+            ChangeBehavior(new IdleCharacterBehavior(), CharacterState.Idle);
             
             _sounds.Play(CharacterSoundType.Idle);
             _runTaskSource.TrySetResult();
@@ -75,7 +75,7 @@ namespace App.Character.Dino
             await _currentBehavior.Execute(token);
         }
 
-        public UniTask ApplyEffect(CharacterEffectOptions options, CancellationToken token = default)
+        public UniTask ApplyEffect(CharacterOptions options, CancellationToken token = default)
         {
             _sounds.Play(CharacterSoundType.Effect);
             
@@ -106,7 +106,7 @@ namespace App.Character.Dino
             else
             {
                 _timerDisposable.Disposable = default;
-                ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
+                ChangeBehavior(_defaultBehavior, CharacterState.Default);
             }
         }
         

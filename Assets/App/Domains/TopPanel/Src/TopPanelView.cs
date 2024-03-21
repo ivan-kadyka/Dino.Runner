@@ -32,16 +32,16 @@ namespace App.TopPanel
             _scoreText.text = value.ToString("D5");
         }
 
-        public void UpdateEffectType(CharacterEffect effect)
+        public void UpdateEffectType(CharacterState state)
         {
-            if (effect == CharacterEffect.Default || effect == CharacterEffect.Idle)
+            if (state == CharacterState.Default || state == CharacterState.Idle)
             {
                 _effectNameText.text = "None";
                 _timePanel.SetActive(false);
             }
             else
             {
-                _effectNameText.text = effect.ToString();
+                _effectNameText.text = state.ToString();
                 _timePanel.SetActive(true);
             }
         }

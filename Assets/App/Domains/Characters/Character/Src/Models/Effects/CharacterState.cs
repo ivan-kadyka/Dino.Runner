@@ -1,9 +1,9 @@
 namespace App.Character
 {
     /// <summary>
-    /// Enumerates the different effects that can be applied to a character's behavior or state.
+    /// Enumerates the different states that can be applied to a character's behavior or state.
     /// </summary>
-    public enum CharacterEffect
+    public enum CharacterState
     {
         /// <summary>
         /// Represents the default state, with no modifications applied.
@@ -16,12 +16,12 @@ namespace App.Character
         Idle,
 
         /// <summary>
-        /// Applies a slow effect to the character, reducing its movement speed or action speed.
+        /// Applies a slow state to the character, reducing its movement speed or action speed.
         /// </summary>
         Slow,
 
         /// <summary>
-        /// Applies a fast effect to the character, increasing its movement speed or action speed.
+        /// Applies a fast state to the character, increasing its movement speed or action speed.
         /// </summary>
         Fast,
 

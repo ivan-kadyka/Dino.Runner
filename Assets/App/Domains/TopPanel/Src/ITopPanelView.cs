@@ -10,7 +10,7 @@ namespace App.TopPanel
         
         void UpdateScore(int value);
 
-        void UpdateEffectType(CharacterEffect effect);
+        void UpdateEffectType(CharacterState state);
         
         void UpdateEffectTime(TimeSpan timeLeft);
     }

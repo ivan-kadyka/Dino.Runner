@@ -15,32 +15,32 @@ namespace App.Character.Dino
         
         public ICharacterBehavior Create(CharacterBehaviorOptions options)
         {
-            switch (options.Effect)
+            switch (options.State)
             {
-                case CharacterEffect.Default:
+                case CharacterState.Default:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Default);
                     return new DefaultCharacterBehavior(jumpBehavior, _settings);
                 }
-                case CharacterEffect.Idle:
+                case CharacterState.Idle:
                 {
                     return new IdleCharacterBehavior();
                 }
-                case CharacterEffect.Fly:
+                case CharacterState.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
                     return new CharacterBehavior(jumpBehavior, options.Speed);
                 }
-                case CharacterEffect.Fast:
+                case CharacterState.Fast:
                 {
                     return CreateSpeedBehavior(options.Speed * 1.5f);
                 }
-                case CharacterEffect.Slow:
+                case CharacterState.Slow:
                 {
                     return CreateSpeedBehavior(options.Speed / 1.5f);
                 }
                 default:
-                    throw new InvalidOperationException($"Can't create selected '{options.Effect}' character behavior type");
+                    throw new InvalidOperationException($"Can't create selected '{options.State}' character behavior type");
             }
         }
 

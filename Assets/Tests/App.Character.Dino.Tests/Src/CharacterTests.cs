@@ -45,18 +45,18 @@ namespace App.Character.Dino.Tests
         public IEnumerator ApplyEffect_UseFly_ShouldBeApplied() => UniTask.ToCoroutine(async () =>
         {
             //Arrange
-            CharacterEffect nextEffect = CharacterEffect.Default;
-            _disposables.Add(_character.Effect.Subscribe(t => { nextEffect = t;}));
+            CharacterState nextState = CharacterState.Default;
+            _disposables.Add(_character.State.Subscribe(t => { nextState = t;}));
             
-            var effectOptions = new CharacterEffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
+            var effectOptions = new CharacterOptions(CharacterState.Fly, TimeSpan.Zero);
             
             // Act
             await _character.ApplyEffect(effectOptions);
             
             
             // Assert
-            Assert.AreEqual(CharacterEffect.Fly, nextEffect);
-            Assert.AreEqual(CharacterEffect.Fly, _character.Effect.Value);
+            Assert.AreEqual(CharacterState.Fly, nextState);
+            Assert.AreEqual(CharacterState.Fly, _character.State.Value);
         });
     }
 }

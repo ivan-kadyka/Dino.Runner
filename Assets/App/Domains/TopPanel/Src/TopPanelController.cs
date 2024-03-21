@@ -21,22 +21,22 @@ namespace App.TopPanel
         public TopPanelController(
             ITopPanelView view,
             ITickableContext tickableContext,
-            ICharacterEffectContext characterEffectContext,
+            ICharacterStateContext characterStateContext,
             IGameContext gameContext)
         {
             _view = view;
             _gameContext = gameContext;
             _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
             
-            _disposables.Add(characterEffectContext.Effect.Subscribe(OnBehaviorTypeChanged));
-            _disposables.Add(characterEffectContext.TimeLeft.Subscribe(OnTimeLeft));
+            _disposables.Add(characterStateContext.State.Subscribe(OnBehaviorTypeChanged));
+            _disposables.Add(characterStateContext.TimeLeft.Subscribe(OnTimeLeft));
         }
 
         protected override UniTask OnStarted(CancellationToken token = default)
         {
             _score = 0;
             UpdateHiScore();
-            _view.UpdateEffectType(CharacterEffect.Default);
+            _view.UpdateEffectType(CharacterState.Default);
             return base.OnStarted(token);
         }
 
@@ -46,7 +46,7 @@ namespace App.TopPanel
             return base.OnStopped(token);
         }
 
-        private void OnBehaviorTypeChanged(CharacterEffect type)
+        private void OnBehaviorTypeChanged(CharacterState type)
         {
             _view.UpdateEffectType(type);
         }
