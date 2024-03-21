@@ -40,7 +40,9 @@ namespace App.Spawner
 
         private void OnEnable()
         {
-            _leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 2f;
+            if (Camera.main != null) 
+                _leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 2f;
+            
             transform.position = new Vector3(10, 0, 0);
         }
         

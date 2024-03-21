@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace App.Spawner.Coins.Settings
 {
-    public class CoinsSettings : ICoinsSettings
+    internal class CoinsSettings : ICoinsSettings
     {
         public IReadOnlyDictionary<int, CoinType> Items { get; }
 

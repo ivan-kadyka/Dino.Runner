@@ -4,7 +4,7 @@ using Zenject;
 
 namespace App.Spawner.Obstacle
 {
-    public class ObstacleFactory : PlaceholderFactory<SpawnOptions, ISpawnView>, IObstacleFactory
+    internal class ObstacleFactory : PlaceholderFactory<SpawnOptions, ISpawnView>, IObstacleFactory
     {
         private readonly DiContainer _container;
         private readonly ObstacleScriptableObject _obstacleSo;

@@ -5,11 +5,11 @@ using UniRx;
 
 namespace App.Spawner
 {
-    public class SpawnPool<TOptions, TView>  : DisposableBase 
-        where TView : ISpawnView
+    public class SpawnPool<TOptions, TView>  : DisposableBase
+        where TView : class, ISpawnView
         where TOptions: SpawnOptions
     {
-        private readonly Dictionary<int, List<ISpawnView>> _poolDictionary = new Dictionary<int, List<ISpawnView>>();
+        private readonly Dictionary<int, List<TView>> _poolDictionary = new Dictionary<int, List<TView>>();
         private readonly ISpawnFactory<TOptions, TView> _objectFactory;
 
         private readonly CompositeDisposable _disposable = new CompositeDisposable();
@@ -19,13 +19,13 @@ namespace App.Spawner
             _objectFactory = objectFactory;
         }
     
-        public ISpawnView GetObject(TOptions options)
+        public TView GetObject(TOptions options)
         {
             var id = options.Id;
         
             if (!_poolDictionary.ContainsKey(id))
             {
-                _poolDictionary[id] = new List<ISpawnView>();
+                _poolDictionary[id] = new List<TView>();
             }
 
             var localPool = _poolDictionary[id];
@@ -33,7 +33,7 @@ namespace App.Spawner
 
             if (availableObject == null)
             {
-                ISpawnView newObject = _objectFactory.Create(options);
+                var newObject = _objectFactory.Create(options);
                 localPool.Add(newObject);
                 _disposable.Add(newObject);
                 availableObject = newObject;

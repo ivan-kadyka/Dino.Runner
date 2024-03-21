@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace App.Spawner.Coins
 {
-    public class CoinView : SpawnView
+    internal class CoinView : SpawnView
     {
         void OnTriggerEnter(Collider other)
         {

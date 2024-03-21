@@ -41,7 +41,7 @@ namespace App
             }
             catch (Exception e)
             {
-                Debug.Log(e);
+                Debug.LogError(e);
                 //here high level generic handling logic for unhandled exceptions.
                 //for example: show popup "Something went wrong" and send logs to analytics
             }

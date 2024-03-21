@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace Controllers.Spawner.Obstacle.Model
 {
-    public class ObstacleSettings : IObstacleSettings
+    internal class ObstacleSettings : IObstacleSettings
     {
         public float[] ObjectChances { get; }
 

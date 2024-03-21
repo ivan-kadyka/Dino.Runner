@@ -4,7 +4,7 @@ using Zenject;
 
 namespace App.Spawner.Coins
 {
-    public class CoinFactory : ICoinFactory
+    internal class CoinFactory : ICoinFactory
     {
         private readonly DiContainer _container;
         private readonly CoinsScriptableObject _coinsScriptableObject;

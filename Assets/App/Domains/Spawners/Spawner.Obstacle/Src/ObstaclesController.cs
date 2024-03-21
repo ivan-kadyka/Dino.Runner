@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace App.Spawner.Obstacle
 {
-    public class ObstaclesController : ControllerBase, ISpawnerController
+    internal class ObstaclesController : ControllerBase, ISpawnerController
     {
         private readonly IObstacleSettings _settings;
         

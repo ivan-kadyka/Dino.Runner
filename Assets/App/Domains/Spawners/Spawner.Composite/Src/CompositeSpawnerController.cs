@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace App.Spawner.Composite
 {
-    public class CompositeSpawnerController : ControllerBase
+    internal class CompositeSpawnerController : ControllerBase
     {
         private readonly SpawnSettings _settings;
         private readonly ISpawnerController _obstacleController;

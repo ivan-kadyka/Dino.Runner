@@ -4,7 +4,7 @@ using Zenject;
 
 namespace App.Spawner.Composite
 {
-    public class SpawnerInstaller : MonoInstaller
+    internal class SpawnerInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {

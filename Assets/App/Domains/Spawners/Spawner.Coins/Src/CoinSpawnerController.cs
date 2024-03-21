@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace App.Spawner.Coins
 {
-    public class CoinSpawnerController : ControllerBase, ISpawnerController
+    internal class CoinSpawnerController : ControllerBase, ISpawnerController
     {
         private readonly ICoinsSettings _settings;
         private readonly SpawnPool<SpawnOptions, ISpawnView> _spawnPool;

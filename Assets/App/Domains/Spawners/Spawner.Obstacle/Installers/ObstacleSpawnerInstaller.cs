@@ -5,7 +5,7 @@ using Zenject;
 
 namespace App.Spawner.Obstacle
 {
-    public class ObstacleSpawnerInstaller : MonoInstaller
+    internal class ObstacleSpawnerInstaller : MonoInstaller
     {
         [SerializeField]
         private ObstacleScriptableObject _obstacleObjects;

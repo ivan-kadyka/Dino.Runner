@@ -1,6 +1,7 @@
 namespace App.Spawner.Composite
 {
-    public class SpawnSettings
+    //TODO: move to SO
+    internal class SpawnSettings
     {
         public float MinSpawnRate { get; }
         

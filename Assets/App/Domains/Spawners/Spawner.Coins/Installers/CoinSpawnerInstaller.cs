@@ -5,7 +5,7 @@ using Zenject;
 
 namespace App.Spawner.Coins
 {
-    public class CoinSpawnerInstaller : MonoInstaller
+    internal class CoinSpawnerInstaller : MonoInstaller
     {
         [SerializeField] 
         private CoinsScriptableObject _coinsScriptableObject;
