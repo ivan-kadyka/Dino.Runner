@@ -347,7 +347,7 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-1. Use exists MonoBehaviour `CoinView` or create own by implementing interface `ISpawnView`
+2. Use exists MonoBehaviour `CoinView` or create own by implementing interface `ISpawnView`
 
 ```csharp
     /// <summary>
@@ -369,9 +369,9 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-1. Attach your `CoinView` or your MonoBehaviour to root selected prefab
+3. Attach your `CoinView` or your MonoBehaviour to root selected prefab
 
-2. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
+4. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
 
 ![image](Docs/Images/coins_so.png)
 
