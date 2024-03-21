@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace App.TopPanel
 {
-    public class TopPanelController : ControllerBase
+    internal class TopPanelController : ControllerBase
     {
         private readonly ITopPanelView _view;
         private readonly IGameContext _gameContext;
@@ -64,6 +64,7 @@ namespace App.TopPanel
         
         private void UpdateHiScore()
         {
+            //TODO: extract work with PlayerPrefs to IStorage
             int hiscore = PlayerPrefs.GetInt("hiScore", 0);
 
             if (_score > hiscore)

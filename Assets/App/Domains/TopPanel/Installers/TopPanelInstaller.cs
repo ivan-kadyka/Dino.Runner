@@ -4,7 +4,7 @@ using Zenject;
 
 namespace App.TopPanel
 {
-    public class TopPanelInstaller : MonoInstaller
+    internal class TopPanelInstaller : MonoInstaller
     {
         [SerializeField]
         private GameObject _topPanelPrefab;

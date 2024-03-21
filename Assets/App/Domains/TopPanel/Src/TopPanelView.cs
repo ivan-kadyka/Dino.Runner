@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace App.TopPanel
 {
-    public class TopPanelView : MonoBehaviour, ITopPanelView
+    internal class TopPanelView : MonoBehaviour, ITopPanelView
     {
         [SerializeField]
         private TextMeshProUGUI _scoreText;
