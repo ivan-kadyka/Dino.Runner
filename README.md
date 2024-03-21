@@ -1,6 +1,7 @@
 # Dino Runner
 
-> Current project was inspired by exist [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial) but completely has different design architecture implementation. Additionally game has coins feature which change character behavior.
+> The current project draws inspiration from the existing [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial), but project has a fundamentally different design architecture.
+> Additionally, this version introduces a coins feature that change character behavior.
 
 ![image](Docs/Images/game_preview.png)
 
@@ -25,13 +26,11 @@ The project is organized into several key folder groups, each serving a distinct
     - _Spawner_
         - _Coins_
         - _Obstacle_
-
+- `Infra`: Contains the infrastructure parts of the project, providing foundational services and utilities.
 - `Plugins`: Third-party libraries and frameworks integrated to enhance development efficiency and game functionality.
     - [Zenject](https://github.com/modesttree/Zenject): A dependency injection framework.
     - [UniTask](https://github.com/Cysharp/UniTask/blob/master/README.md): An efficient asynchronous programming model.
     - [UniRx](https://github.com/neuecc/UniRx): Reactive extensions for Unity.
-
-- `Infra`: Contains the infrastructure parts of the project, providing foundational services and utilities.
 
 - `Tests`: Houses unit tests for the project, ensuring reliability and robustness.
     - Utilizes the [Moq](https://docs.unity3d.com/Packages/nuget.moq@2.0/manual/index.html) library for mocking dependencies in tests.
