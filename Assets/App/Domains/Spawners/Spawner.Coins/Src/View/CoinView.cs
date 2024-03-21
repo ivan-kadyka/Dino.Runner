@@ -1,10 +1,15 @@
+using UnityEngine;
+
 namespace App.Spawner.Coins
 {
     internal class CoinView : SpawnView
     {
-        protected override void OnColliderHandle()
+        void OnTriggerEnter(Collider other)
         {
-            gameObject.SetActive(false);
+            if (other.CompareTag("Player"))
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

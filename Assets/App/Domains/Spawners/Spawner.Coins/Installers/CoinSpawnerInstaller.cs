@@ -22,8 +22,7 @@ namespace App.Spawner.Coins
                 new CoinFactory(it.Container,
                     _coinsScriptableObject, 
                     _spawnPoolContainer.transform,
-                    it.Container.Resolve<IGameContext>(),
-                    it.Container.Resolve<IColliderObjectObserver>())).AsSingle();
+                    it.Container.Resolve<IGameContext>())).AsSingle();
 
             Container.Bind<ICoinsSettings>().FromInstance(new CoinsSettings(_coinsScriptableObject));
         }

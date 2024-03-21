@@ -7,6 +7,5 @@ namespace Infra.Controllers.View
     /// </summary>
     public interface IView : IDisposable
     {
-        // This interface can be expanded with methods and properties that are common to all views
     }
 }

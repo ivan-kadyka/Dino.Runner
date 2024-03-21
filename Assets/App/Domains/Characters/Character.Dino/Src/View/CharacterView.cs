@@ -1,4 +1,5 @@
 using System;
+using App.GameCore;
 using UniRx;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace App.Character.Dino
     internal class CharacterView : MonoBehaviour, ICharacterPhysics, ICharacterSounds
     {
         public IObservable<float> Updated => _updateSubject;
-        public IObservable<string> Collider => _colliderSubject;
+        public IObservable<IObject> Collider => _colliderSubject;
         public bool IsGrounded => _characterComponentController.isGrounded;
         
         [SerializeField]
@@ -25,7 +26,7 @@ namespace App.Character.Dino
         private AudioSource _audioSource;
 
         private readonly Subject<float> _updateSubject = new Subject<float>();
-        private readonly Subject<string> _colliderSubject = new Subject<string>();
+        private readonly Subject<IObject> _colliderSubject = new Subject<IObject>();
 
         private void Awake()
         {
@@ -61,7 +62,12 @@ namespace App.Character.Dino
 
         public void OnTriggerEnter(Collider other)
         {
-            _colliderSubject.OnNext(other.name);
+           var objectView =  other.GetComponent<IObjectView>();
+
+           if (objectView != null && objectView.Object != null)
+           {
+               _colliderSubject.OnNext(objectView.Object);
+           }
         }
     }
 }

@@ -15,14 +15,13 @@ namespace App.Character.Dino
         public CharacterController(
             ICharacter character,
             ICharacterPhysics physics, 
-            IInputCharacterController inputCharacterController,
-            IColliderObjectObservable colliderObjectObservable)
+            IInputCharacterController inputCharacterController)
         {
             _character = character;
-
-           // _disposables.Add(physics.Collider.Subscribe(OnCollider));
+            
             _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
-            _disposables.Add(colliderObjectObservable.Subscribe(OnCollider));
+            _disposables.Add(physics.Collider.Subscribe(OnCollider));
+          //  _disposables.Add(colliderObjectObservable.Subscribe(OnCollider));
         }
         
         protected override async UniTask OnStarted(CancellationToken token = default)
@@ -38,12 +37,12 @@ namespace App.Character.Dino
                     await _character.Idle();
                     break;
                 case CoinObject coinObject:
-                    await CoinsHandlingStrategy(coinObject.CoinType);
+                    await CoinHandleStrategy(coinObject.CoinType);
                     break;
             }
         }
 
-        private async UniTask CoinsHandlingStrategy(CoinType coinType)
+        private async UniTask CoinHandleStrategy(CoinType coinType)
         {
             switch (coinType)
             {
@@ -70,36 +69,6 @@ namespace App.Character.Dino
                 }
             }
         }
-        
-
-        private async void OnCollider(string objectName)
-        {
-            switch (objectName)
-            {
-                case "Obstacle":
-                    await _character.Idle();
-                    break;
-                case "Coin_Fly":
-                {
-                    var options = new CharacterOptions(CharacterState.Fly, TimeSpan.FromSeconds(10));
-                    await _character.ApplyEffect(options);
-                    break;  
-                }
-                case "Coin_Slow":
-                {
-                    var options = new CharacterOptions(CharacterState.Slow, TimeSpan.FromSeconds(10));
-                    await _character.ApplyEffect(options);
-                    break;
-                }
-                case "Coin_Fast":
-                {
-                    var options = new CharacterOptions(CharacterState.Fast, TimeSpan.FromSeconds(10));
-                    await _character.ApplyEffect(options);
-                    break;
-                }
-            }
-        }
-
         
         private async void OnJumpPressed(Unit unit)
         {

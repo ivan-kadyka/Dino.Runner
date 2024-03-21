@@ -19,8 +19,7 @@ namespace App.Spawner.Obstacle
                 new ObstacleFactory(it.Container,
                     _obstacleObjects,
                     _spawnPoolContainer.transform,
-                    it.Container.Resolve<IGameContext>(),
-                    it.Container.Resolve<IColliderObjectObserver>())).AsSingle();
+                    it.Container.Resolve<IGameContext>())).AsSingle();
 
             Container.Bind<ISpawnerController>() 
                 .WithId("ObstaclesController")

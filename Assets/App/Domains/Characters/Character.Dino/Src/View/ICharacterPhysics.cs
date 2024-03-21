@@ -1,4 +1,5 @@
 using System;
+using App.GameCore;
 using Infra.Components.Tickable;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace App.Character.Dino
         /// <summary>
         /// An observable that emits the identifier of the collider the character interacts with.
         /// </summary>
-        IObservable<string> Collider { get; }
+        IObservable<IObject> Collider { get; }
     
         /// <summary>
         /// Indicates whether the character is currently grounded, i.e., standing on a surface.

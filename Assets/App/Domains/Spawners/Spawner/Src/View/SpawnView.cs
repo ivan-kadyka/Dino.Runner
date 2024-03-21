@@ -5,6 +5,8 @@ namespace App.Spawner
 {
     public class SpawnView : MonoBehaviour, ISpawnView
     {
+        public IObject Object { get; private set; }
+        
         public bool IsActive
         {
             get => gameObject.activeSelf;
@@ -14,6 +16,7 @@ namespace App.Spawner
         private float _leftEdge;
         
         private Rigidbody _rigidbody;
+        private IGameContext _gameContext;
 
         void Start()
         {
@@ -29,19 +32,11 @@ namespace App.Spawner
             _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
 
         }
-
-        private IGameContext _gameContext;
-        private IColliderObjectObserver _objectObserver;
-        private IObject _spawnObject;
-    
-        public void SetUp(
-            IGameContext gameContext,
-            IColliderObjectObserver objectObserver,
-            IObject spawnObject)
+        
+        public void SetUp(IGameContext gameContext, IObject spawnObject)
         {
-            _objectObserver = objectObserver;
             _gameContext = gameContext;
-            _spawnObject = spawnObject;
+            Object = spawnObject;
         }
 
         private void OnEnable()
@@ -63,21 +58,6 @@ namespace App.Spawner
             {
                 gameObject.SetActive(false);
             }
-        }
-        
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                OnColliderHandle();
-                
-                if (_objectObserver != null)
-                    _objectObserver.OnNext(_spawnObject);
-            }
-        }
-
-        protected virtual void OnColliderHandle()
-        {
         }
         
         public void Dispose()

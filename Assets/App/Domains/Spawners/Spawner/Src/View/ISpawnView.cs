@@ -6,7 +6,7 @@ namespace App.Spawner
     /// <summary>
     /// Extends the IView interface to define specific behavior for spawn views
     /// </summary>
-    public interface ISpawnView : IView
+    public interface ISpawnView : IView, IObjectView
     {
         /// <summary>
         /// Gets or sets a value indicating whether the spawn view is active.
@@ -17,9 +17,8 @@ namespace App.Spawner
         /// Sets up the spawn view with necessary game context and assigns a name to the view.
         /// </summary>
         /// <param name="gameContext">The game context to associate with the spawn view.</param>
-        /// <param name="objectObserver">The objectObserver to notify other observable game objects</param>
-        /// <param name="spawnObject">Spawn object type</param>
-        void SetUp(IGameContext gameContext, IColliderObjectObserver objectObserver, IObject spawnObject);
+        /// <param name="spawnObject">The spawn game object</param>
+        void SetUp(IGameContext gameContext, IObject spawnObject);
     }
 
 }
