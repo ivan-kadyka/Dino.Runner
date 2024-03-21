@@ -347,7 +347,7 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-2. Use exists MonoBehaviour `CoinView` or create own by implementing interface `ISpawnView`
+1. Use exists MonoBehaviour `CoinView` or create own by implementing interface `ISpawnView`
 
 ```csharp
     /// <summary>
@@ -369,8 +369,109 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-3. Attach your `CoinView` or your MonoBehaviour to root selected prefab
+1. Attach your `CoinView` or your MonoBehaviour to root selected prefab
 
-4. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
+2. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
 
 ![image](Docs/Images/coins_so.png)
+
+## How to add new character behavior
+
+---
+
+1. Add new character state type in `CharacterState`
+
+```csharp
+    /// <summary>
+    /// Enumerates the different states that can be applied to a character's behavior or state.
+    /// </summary>
+    public enum CharacterState
+    {
+        /// <summary>
+        /// Represents the default state, with no modifications applied.
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// Indicates that the character is in an idle state
+        /// </summary>
+        Idle,
+
+        /// <summary>
+        /// Applies a slow state to the character, reducing its movement speed or action speed.
+        /// </summary>
+        Slow,
+
+        /// <summary>
+        /// Applies a fast state to the character, increasing its movement speed or action speed.
+        /// </summary>
+        Fast,
+
+        /// <summary>
+        /// Enables the character to fly, possibly changing its mode of movement and interaction with the environment.
+        /// </summary>
+        Fly
+    }
+```
+
+2. Implement  `ICharacterBehavior` interface with your logic
+
+```csharp
+    /// <summary>
+    /// Extends the ITickable interface to define behaviors specific to a character,
+    /// including execution of behavior-specific actions and managing speed.
+    /// </summary>
+    public interface ICharacterBehavior : ITickable
+    {
+        /// <summary>
+        /// Gets the speed associated with the character's current behavior.
+        /// </summary>
+        float Speed { get; }
+    
+        /// <summary>
+        /// Executes the behavior's main action asynchronously.
+        /// </summary>
+        /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
+        /// <returns>A UniTask that represents the asynchronous operation of the behavior's execution.</returns>
+        UniTask Execute(CancellationToken token = default);
+    }
+```
+
+3. Register created yours new implemented types `ICharacterBehavior` & `CharacterState`  in  factory `CharacterBehaviorFactory`
+```csharp
+        //Example
+        public ICharacterBehavior Create(CharacterBehaviorOptions options)
+        {
+            switch (options.State)
+            {
+                ...
+                case CharacterState.Fly:
+                {
+                    var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
+                    return new CharacterBehavior(jumpBehavior, options.Speed);
+                }
+                ...
+            }
+        }
+```
+
+
+4. Create strategy with your `ICharacterBehavior` and, for example coin type, in `CharacterController`
+```csharp
+        //Example
+        private async UniTask CoinHandleStrategy(CoinType coinType)
+        {
+            switch (coinType)
+            {
+                ...
+                case CoinType.Fly:
+                {
+                    var duration = TimeSpan.FromSeconds(10);
+                    var options = new CharacterOptions(CharacterState.Fly, duration);
+                    await _character.ApplyEffect(options);
+                    break;  
+                }
+                ...
+            }
+        }
+```

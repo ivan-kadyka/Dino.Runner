@@ -5,7 +5,8 @@ using Infra.Components.Tickable;
 namespace App.Character
 {
     /// <summary>
-    /// Extends the ITickable interface to define behaviors specific to a character, including execution of behavior-specific actions and managing speed.
+    /// Extends the ITickable interface to define behaviors specific to a character,
+    /// including execution of behavior-specific actions and managing speed.
     /// </summary>
     public interface ICharacterBehavior : ITickable
     {
@@ -21,5 +22,4 @@ namespace App.Character
         /// <returns>A UniTask that represents the asynchronous operation of the behavior's execution.</returns>
         UniTask Execute(CancellationToken token = default);
     }
-
 }
