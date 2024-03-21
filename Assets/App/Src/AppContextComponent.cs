@@ -6,18 +6,20 @@ namespace App
 {
     public class AppContextComponent : MonoBehaviour
     {
-        [Inject] private AppController appController;
+        [Inject]
+        private AppController _appController;
 
         private readonly CancellationTokenSource _cancellationSource = new CancellationTokenSource();
 
         private void Awake()
         {
+            // to force frame rate, especially for mobile devices
             Application.targetFrameRate = 60;
         }
 
         async void Start()
         {
-            await appController.Start(_cancellationSource.Token);
+            await _appController.Start(_cancellationSource.Token);
         }
 
         private void OnDestroy()

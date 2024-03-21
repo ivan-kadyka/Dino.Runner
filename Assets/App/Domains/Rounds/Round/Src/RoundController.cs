@@ -6,7 +6,7 @@ using Infra.Controllers.Base;
 
 namespace App.Round
 {
-    public class RoundController : ControllerBase
+    internal class RoundController : ControllerBase
     {
         private readonly IController _characterController;
         private readonly IController _obstaclesController;

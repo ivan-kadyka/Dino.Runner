@@ -2,8 +2,10 @@ using App.GameCore;
 using App.Round;
 using UnityEngine;
 
+//TODO: need optimize resources via tiles and small sprites. current Groud.png is too big :(
+
 [RequireComponent(typeof(MeshRenderer))]
-public class Ground : MonoBehaviour, IRoundView
+internal class Ground : MonoBehaviour, IRoundView
 {
     private MeshRenderer _meshRenderer;
     private IGameContext _gameContext;

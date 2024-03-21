@@ -5,7 +5,7 @@ using Zenject;
 
 namespace App.Round
 {
-    public class RoundInstaller : MonoInstaller
+    internal class RoundInstaller : MonoInstaller
     {
         [SerializeField]
         private GameObject _roundPrefab;

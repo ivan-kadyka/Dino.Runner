@@ -5,7 +5,7 @@ using Infra.Controllers.View;
 
 namespace App.Popups.Retry
 {
-    public class RetryPopupController : ControllerBase
+    internal class RetryPopupController : ControllerBase
     {
         private readonly IPopupView _popupView;
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace App.Popups.Retry
 {
-    public class RetryPopupView : MonoBehaviour, IPopupView
+    internal class RetryPopupView : MonoBehaviour, IPopupView
     {
         [SerializeField] private Button restartButton;
 

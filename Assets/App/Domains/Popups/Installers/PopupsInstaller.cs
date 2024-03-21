@@ -6,7 +6,7 @@ using Zenject;
 
 namespace App.Popups
 {
-    public class PopupsInstaller : MonoInstaller
+    internal class PopupsInstaller : MonoInstaller
     {
         [SerializeField]
         private GameObject _retryPopupPrefab;
