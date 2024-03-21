@@ -29,9 +29,9 @@ namespace App
             {
                 while (!token.IsCancellationRequested)
                 {
-                    await _topPanelController.Start(token);
-                    await _roundController.Run(token);
-                    await _topPanelController.Stop(token);
+                    await UniTask.WhenAll(_topPanelController.Start(token), _roundController.Start(token));
+                    
+                    await UniTask.WhenAll(_topPanelController.Stop(token), _roundController.Stop(token));
 
                     await _retryPopupController.Run(token);
                 }

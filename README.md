@@ -1,8 +1,38 @@
-# Dino Game (2D)
+# Dino Runner
 
-> The Dinosaur Game is a browser game developed by Google and built into the Google Chrome web browser. The player guides a pixelated Tyrannosaurus rex across a side-scrolling landscape, avoiding obstacles to achieve a higher score. The game was created by members of the Chrome UX team in 2014.
+> Current project was inspired by exist [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial) but completely has different design architecture implementation. Additionally game has coins feature which change character behavior.
 
-- **Topics**: Side Scrolling, Infinite Generation, Hiscores
+- **Platforms**: Android, WebGL. see exists builds in folder 'Builds'
 - **Version**: Unity 2021.3 (LTS)
-- [**Download**](https://github.com/zigurous/unity-dino-game-tutorial/archive/refs/heads/main.zip)
-- [**Watch Video**](https://youtu.be/UPvW8kYqxZk)
+
+### App Life Cycle
+
+```mermaid
+  stateDiagram-v2
+   state AppController
+   {
+   [*] --> RoundController
+   [*] --> TopPanelController
+
+    RoundController --> RetryController
+    TopPanelController --> RetryController
+    RetryController --> [*]
+   
+    state RoundController {
+        [*] -->CharacterController
+        [*] -->CompositeSpawnerController
+
+        CharacterController --> [*]
+        CompositeSpawnerController --> [*]
+
+         state CharacterController {
+        [*] --> Character.Run
+        Character.Run --> [*]
+        }
+    state CompositeSpawnerController {
+        CoinsSpawnerController
+        ObstaclesSpawnerController
+    }
+    }
+   }
+```
