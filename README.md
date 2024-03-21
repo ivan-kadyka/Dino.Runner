@@ -2,7 +2,7 @@
 
 > Current project was inspired by exist [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial) but completely has different design architecture implementation. Additionally game has coins feature which change character behavior.
 
-![image](Docs/images/game_preview.png)
+![image](Docs/Images/game_preview.png)
 
 - **Platforms**: Android, WebGL. see exists builds in folder 'Builds'
 - **Version**: Unity 2021.3 (LTS)
@@ -37,7 +37,7 @@ The project is organized into several key folder groups, each serving a distinct
     - Utilizes the [Moq](https://docs.unity3d.com/Packages/nuget.moq@2.0/manual/index.html) library for mocking dependencies in tests.
 
 #### Project Structure Overview
-![image](Docs/images/project_structure.png)
+![image](Docs/Images/project_structure.png)
 
 ### Game Logic
 
