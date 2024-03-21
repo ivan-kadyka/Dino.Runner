@@ -6,7 +6,7 @@ namespace App.Character
     public enum CharacterEffect
     {
         /// <summary>
-        /// Represents the default state or effect, with no modifications applied.
+        /// Represents the default state, with no modifications applied.
         /// </summary>
         Default,
 
