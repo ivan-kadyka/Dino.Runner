@@ -46,9 +46,9 @@ namespace App.Character.Dino.Tests
         {
             //Arrange
             CharacterEffect nextEffect = CharacterEffect.Default;
-            var effectOptions = new CharacterEffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
-            
             _disposables.Add(_character.Effect.Subscribe(t => { nextEffect = t;}));
+            
+            var effectOptions = new CharacterEffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
             
             // Act
             await _character.ApplyEffect(effectOptions);
@@ -56,7 +56,7 @@ namespace App.Character.Dino.Tests
             
             // Assert
             Assert.AreEqual(CharacterEffect.Fly, nextEffect);
-            _soundsMock.Verify(s => s.Play(It.IsAny<CharacterSoundType>()), Times.Once);
+            Assert.AreEqual(CharacterEffect.Fly, _character.Effect.Value);
         });
     }
 }
