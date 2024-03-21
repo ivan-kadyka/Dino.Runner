@@ -47,6 +47,7 @@ namespace App.Character.Dino
             // Calculate the potential new position without actually moving the character
             Vector3 potentialPosition = _physics.Transform.position + (_motion * Time.deltaTime);
 
+            //TODO: 5f - hardcoded value. better way is handling collider by others game object
             // Check if the potential new position exceeds the maximum allowed height
             if (potentialPosition.y > 5f)
             {
