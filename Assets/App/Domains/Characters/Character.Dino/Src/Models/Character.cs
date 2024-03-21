@@ -59,7 +59,6 @@ namespace App.Character.Dino
             ChangeBehavior(_defaultBehavior, CharacterState.Default);
             
             _runTaskSource = new UniTaskCompletionSource();
-           // _disposables.Add(token.Register(()=> _runTaskSource.TrySetCanceled()));
             
             await _runTaskSource.Task;
         }
