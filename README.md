@@ -8,7 +8,7 @@
 - **Platforms**: Android, WebGL. see exists builds in folder 'Builds'
 - **Version**: Unity 2021.3 (LTS)
 
-### Project Structure
+## Project Structure
 
 ---
 
@@ -22,23 +22,26 @@ The project is organized into several key folder groups, each serving a distinct
     - _TopPanel_
     - _Popups_
         - _Retry_
-    - _Round_
-    - _Spawner_
+    - _Rounds_
+      - _Round_
+    - _Spawners_
+        - _Spawner_
         - _Coins_
         - _Obstacle_
+        - _Composite_
 - `Infra`: Contains the infrastructure parts of the project, providing foundational services and utilities.
 - `Plugins`: Third-party libraries and frameworks integrated to enhance development efficiency and game functionality.
     - [Zenject](https://github.com/modesttree/Zenject): A dependency injection framework.
-    - [UniTask](https://github.com/Cysharp/UniTask/blob/master/README.md): An efficient asynchronous programming model.
+    - [UniTask](https://github.com/Cysharp/UniTask): An efficient asynchronous programming model. P.S. Added in project via upm.
     - [UniRx](https://github.com/neuecc/UniRx): Reactive extensions for Unity.
 
 - `Tests`: Houses unit tests for the project, ensuring reliability and robustness.
     - Utilizes the [Moq](https://docs.unity3d.com/Packages/nuget.moq@2.0/manual/index.html) library for mocking dependencies in tests.
 
-#### Project Structure Overview
+### Project Structure Overview
 ![image](Docs/Images/project_structure.png)
 
-### Game Logic
+## Game Logic
 
 ---
 Application game logic  based on `IController` which can control others controls or control model with view via MVC pattern. 
@@ -67,7 +70,7 @@ Application game logic  based on `IController` which can control others controls
 ```
 
 
-### Application Life Cycle
+## Application Life Cycle
 
 ---
 ```mermaid
@@ -100,7 +103,7 @@ Application game logic  based on `IController` which can control others controls
    }
 ```
 
-### IGameContext & ITickable
+### Game Core
 
 ---
 `IGameContext` provides access to global game context properties, such as game speed.
@@ -134,8 +137,55 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
+`IObject` Defines a basic interface for game data objects
 
-### ICharacter & ICharacterStateContext & CharacterState
+```csharp
+     /// <summary>
+    /// Defines a basic interface for game objects, allowing for the identification
+    /// of the object's type within the game's ecosystem.
+    /// </summary>
+    public interface IObject
+    {
+        /// <summary>
+        /// Gets the type of the object, as defined by the ObjectType enum.
+        /// This property allows for easy identification and categorization of game objects.
+        /// </summary>
+        ObjectType ObjectType { get; }
+    }
+```
+
+`ObjectType` Defines a basic interface for game data objects
+
+```csharp
+    /// <summary>
+    /// Enumerates different types of objects that can exist within the game
+    /// </summary>
+    public enum ObjectType
+    {
+        /// <summary>
+        /// Represents an object type that is not known or specified.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
+        /// Represents a character
+        /// </summary>
+        Character,
+
+        /// <summary>
+        /// Represents an obstacle that players must avoid or overcome.
+        /// </summary>
+        Obstacle,
+
+        /// <summary>
+        /// Represents a coin or collectible that players can collect for rewards or points.
+        /// </summary>
+        Coin,
+    }
+```
+
+
+### Character
 
 ---
 `ICharacter` is main entry model interface for character.
@@ -267,4 +317,60 @@ Application game logic  based on `IController` which can control others controls
     }
 </details>
 
+## How to add new coin
 
+---
+
+1. Add new coin type in `CoinType`
+
+```csharp
+    /// <summary>
+    /// Enumerates the types of coins, each associated with a specific effect
+    /// or characteristic that can be applied to or influence the game's characters or environment.
+    /// </summary>
+    public enum CoinType
+    {
+        /// <summary>
+        /// Represents a slow effect, possibly reducing movement or action speed.
+        /// </summary>
+        Slow,
+
+        /// <summary>
+        /// Represents a fast effect, increasing movement or action speed.
+        /// </summary>
+        Fast,
+
+        /// <summary>
+        /// Represents fly effect, allowing for aerial movement or other fly-related abilities.
+        /// </summary>
+        Fly,
+    }
+```
+
+2. Use exists MonoBehaviour `CoinView` or create own by implementing interface `ISpawnView`
+
+```csharp
+    /// <summary>
+    /// Extends the IView interface to define specific behavior for spawn views
+    /// </summary>
+    public interface ISpawnView : IView, IObjectView
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether the spawn view is active.
+        /// </summary>
+        bool IsActive { get; set; }
+
+        /// <summary>
+        /// Sets up the spawn view with necessary game context and assigns a name to the view.
+        /// </summary>
+        /// <param name="gameContext">The game context to associate with the spawn view.</param>
+        /// <param name="spawnObject">The spawn game object</param>
+        void SetUp(IGameContext gameContext, IObject spawnObject);
+    }
+```
+
+3. Attach your `CoinView` or your MonoBehaviour to root selected prefab
+
+4. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
+
+![image](Docs/Images/coins_so.png)

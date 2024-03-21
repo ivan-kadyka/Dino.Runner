@@ -1,7 +1,8 @@
 namespace App.GameCore
 {
     /// <summary>
-    /// Defines a basic interface for game objects, allowing for the identification of the object's type within the game's ecosystem.
+    /// Defines a basic interface for game objects, allowing for the identification
+    /// of the object's type within the game's ecosystem.
     /// </summary>
     public interface IObject
     {

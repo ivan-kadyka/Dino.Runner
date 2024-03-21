@@ -1,7 +1,8 @@
 namespace App.GameCore
 {
     /// <summary>
-    /// Enumerates the types of coins, each associated with a specific effect or characteristic that can be applied to or influence the game's characters or environment.
+    /// Enumerates the types of coins, each associated with a specific effect
+    /// or characteristic that can be applied to or influence the game's characters or environment.
     /// </summary>
     public enum CoinType
     {

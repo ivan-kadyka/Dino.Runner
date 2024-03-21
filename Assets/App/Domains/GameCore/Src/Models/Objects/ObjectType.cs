@@ -11,7 +11,7 @@ namespace App.GameCore
         Unknown,
 
         /// <summary>
-        /// Represents a character, such as a player or NPC (Non-Player Character).
+        /// Represents a character
         /// </summary>
         Character,
 
