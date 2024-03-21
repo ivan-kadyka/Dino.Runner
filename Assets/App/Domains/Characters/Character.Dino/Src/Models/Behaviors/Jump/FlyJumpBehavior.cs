@@ -41,10 +41,7 @@ namespace App.Character.Dino
         
         private void ExecuteJumping()
         {
-            // Apply gravity to the motion
             _motion += _settings.Gravity * Time.deltaTime * Vector3.down;
-    
-            // Calculate the potential new position without actually moving the character
             Vector3 potentialPosition = _physics.Transform.position + (_motion * Time.deltaTime);
 
             //TODO: 5f - hardcoded value. better way is handling collider by others game object
@@ -55,8 +52,7 @@ namespace App.Character.Dino
                 float deltaY = 5f - _physics.Transform.position.y; // Difference between current height and maximum allowed height
                 _motion = (deltaY / Time.deltaTime) * Vector3.up; // Adjust _motion so after the movement, the character ends up 
             }
-
-            // Apply the movement
+            
             _physics.Move(_motion * Time.deltaTime);
         }
     }
