@@ -2,10 +2,10 @@
 
 > The current project draws inspiration from the existing [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial), but project has a fundamentally different design architecture.
 > Additionally, this version introduces a coins feature that change character behavior.
+[README.md](Builds%2FWebGL%2FREADME.md)
+![image](docs/Images/game_preview.png)
 
-![image](Docs/Images/game_preview.png)
-
-- **Platforms**: Android, WebGL. see exists builds in folder 'Builds'
+- **Platforms**: Android, WebGL. see exists builds in folder 'Builds' or [**Play online**](https://ivan-kadyka.github.io/Runner/)
 - **Version**: Unity 2021.3 (LTS)
 
 ## Project Structure
@@ -39,7 +39,7 @@ The project is organized into several key folder groups, each serving a distinct
     - Utilizes the [Moq](https://docs.unity3d.com/Packages/nuget.moq@2.0/manual/index.html) library for mocking dependencies in tests.
 
 ### Project Structure Overview
-![image](Docs/Images/project_structure.png)
+![image](docs/Images/project_structure.png)
 
 ## Game Logic
 
@@ -373,7 +373,7 @@ Application game logic  based on `IController` which can control others controls
 
 4. Set up scriptable object `CoinsSO.asset`, add in list your prefab game object and CoinType.
 
-![image](Docs/Images/coins_so.png)
+![image](docs/Images/coins_so.png)
 
 ## How to add new character behavior
 
