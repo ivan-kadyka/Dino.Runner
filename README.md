@@ -10,7 +10,6 @@
 ## Project Structure
 
 ---
-
 The project is organized into several key folder groups, each serving a distinct purpose within the overall architecture:
 
 - `App`: Contains the core game logic, divided into isolated domains for clarity and maintainability.
