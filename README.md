@@ -2,7 +2,6 @@
 
 > The current project draws inspiration from the existing [**Dino Game (2D)**](https://github.com/zigurous/unity-dino-game-tutorial), but project has a fundamentally different design architecture.
 > Additionally, this version introduces a coins feature that change character behavior.
-[README.md](Builds%2FWebGL%2FREADME.md)
 ![image](Docs/Images/game_preview.png)
 
 - **Platforms**: Android, WebGL. see exists builds in folder 'Builds' or [**Play online**](https://ivan-kadyka.github.io/Runner/)
