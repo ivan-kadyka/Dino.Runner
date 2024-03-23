@@ -25,6 +25,7 @@ namespace App
         private void OnDestroy()
         {
             _cancellationSource.Cancel();
+            _appController.Dispose();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace App.Round
             IController obstaclesController,
             IRoundView roundView,
             IGameContext gameContext)
+         : base(characterController, obstaclesController)
         {
             _characterController = characterController;
             _obstaclesController = obstaclesController;

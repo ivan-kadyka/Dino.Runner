@@ -23,6 +23,7 @@ namespace App.Spawner.Composite
             ISpawnerController obstacleController,
             ISpawnerController coinController,
             ITickableContext tickableContext)
+        : base(obstacleController, coinController)
         {
             _settings = settings;
             _obstacleController = obstacleController;

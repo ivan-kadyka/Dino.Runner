@@ -16,7 +16,8 @@ namespace App
         public AppController(
             IController topPanelController,
             IController roundController,
-            IController retryPopupController)
+            IController retryPopupController) 
+            : base(topPanelController, roundController, retryPopupController)
         {
             _topPanelController = topPanelController;
             _roundController = roundController;

@@ -24,6 +24,7 @@ namespace App.Character.Dino
 
             _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
             _disposables.Add(physics.Collider.Subscribe(OnCollider));
+            _disposables.Add(character);
         }
         
         protected override async UniTask OnStarted(CancellationToken token = default)

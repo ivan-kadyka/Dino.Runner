@@ -8,6 +8,14 @@ namespace Infra.Controllers.Base
     public abstract class ControllerBase : DisposableBase, IController
     {
         protected CompositeDisposable _disposables = new CompositeDisposable();
+
+        protected ControllerBase(params IController[] children)
+        {
+            foreach (var child in children)
+            {
+                _disposables.Add(child);
+            }
+        }
         
         public async UniTask Start(CancellationToken token = default)
         {
