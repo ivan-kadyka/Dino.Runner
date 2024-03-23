@@ -36,10 +36,10 @@ namespace App.Character
         /// Applies an effect to the character based on the provided options.
         /// </summary>
         /// <param name="behavior">Character effect behavior</param>
-        /// <param name="startOptions">The options defining the effect to apply.</param>
+        /// <param name="optins">The options defining the effect to apply.</param>
         /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
         /// <returns>A UniTask that represents the asynchronous operation.</returns>
-        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions startOptions, CancellationToken token = default);
+        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions optins, CancellationToken token = default);
     }
 
 }
