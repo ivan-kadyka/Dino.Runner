@@ -1,3 +1,5 @@
+using App.GameCore;
+using App.GameCore.Character;
 using UnityEngine;
 
 namespace App.Spawner.Coins
@@ -6,7 +8,9 @@ namespace App.Spawner.Coins
     {
         void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            var objectView = other.GetComponent<IObjectView>();
+            
+            if (objectView != null && objectView.Object is CharacterObject)
             {
                 gameObject.SetActive(false);
             }

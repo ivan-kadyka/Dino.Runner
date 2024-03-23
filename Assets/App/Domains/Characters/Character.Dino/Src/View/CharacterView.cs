@@ -1,15 +1,18 @@
 using System;
 using App.GameCore;
+using App.GameCore.Character;
 using UniRx;
 using UnityEngine;
 
 namespace App.Character.Dino
 {
-    internal class CharacterView : MonoBehaviour, ICharacterPhysics, ICharacterSounds
+    internal class CharacterView : MonoBehaviour, IObjectView, ICharacterPhysics, ICharacterSounds
     {
         public IObservable<float> Updated => _updateSubject;
         public IObservable<IObject> Collider => _colliderSubject;
         public bool IsGrounded => _characterComponentController.isGrounded;
+
+        public IObject Object { get; } = new CharacterObject();
         
         [SerializeField]
         private AudioClip _coinSound;
