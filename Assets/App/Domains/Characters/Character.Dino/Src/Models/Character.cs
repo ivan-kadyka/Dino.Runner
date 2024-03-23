@@ -11,7 +11,7 @@ namespace App.Character.Dino
 {
     internal class Character : DisposableBase, ICharacter
     {
-        public IObservableValue<CharacterState> State => _behaviorTypeSubject;
+        public IObservableValue<CharacterEffect> Effects => _behaviorTypeSubject;
         public IObservable<EffectUpdateOptions> Updated => _updateSubject;
 
         public float Speed => _currentBehavior.Speed;
@@ -27,8 +27,8 @@ namespace App.Character.Dino
         private ICharacterBehavior _defaultBehavior;
         private ICharacterBehavior _currentBehavior = new IdleCharacterBehavior();
         
-        private readonly ObservableValue<CharacterState> _behaviorTypeSubject = new ObservableValue<CharacterState>(CharacterState.Default);
-        private readonly ObservableValue<EffectUpdateOptions> _updateSubject = new ObservableValue<EffectUpdateOptions>(new EffectUpdateOptions(CharacterState.Default, TimeSpan.Zero));
+        private readonly ObservableValue<CharacterEffect> _behaviorTypeSubject = new ObservableValue<CharacterEffect>(CharacterEffect.Default);
+        private readonly ObservableValue<EffectUpdateOptions> _updateSubject = new ObservableValue<EffectUpdateOptions>(new EffectUpdateOptions(CharacterEffect.Default, TimeSpan.Zero));
         
         private readonly SerialDisposable _timerDisposable = new SerialDisposable();
         
@@ -45,18 +45,18 @@ namespace App.Character.Dino
             _disposables.Add(_timerDisposable);
         }
 
-        private void ChangeBehavior(ICharacterBehavior behavior, CharacterState state)
+        private void ChangeBehavior(ICharacterBehavior behavior, CharacterEffect effect)
         {
             if (_currentBehavior == behavior) 
                 return;
             
             _currentBehavior = behavior;
-            _behaviorTypeSubject.OnNext(state);
+            _behaviorTypeSubject.OnNext(effect);
         }
 
         public async UniTask Run(CancellationToken token = default)
         {
-            var state = CharacterState.Default;
+            var state = CharacterEffect.Default;
             _defaultBehavior = _behaviorFactory.Create(state);
             ChangeBehavior(_defaultBehavior, state);
             
@@ -68,7 +68,7 @@ namespace App.Character.Dino
         public async UniTask Idle(CancellationToken token = default)
         {
             _timerDisposable.Disposable = default;
-            ChangeBehavior(new IdleCharacterBehavior(), CharacterState.Idle);
+            ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
             
             _sounds.Play(CharacterSoundType.Idle);
             _runTaskSource.TrySetResult();
@@ -101,12 +101,12 @@ namespace App.Character.Dino
 
             if (timeLeft.TotalMilliseconds > 0)
             {
-                _updateSubject.OnNext(new EffectUpdateOptions(prevOptions.State, timeLeft));
+                _updateSubject.OnNext(new EffectUpdateOptions(prevOptions.Effect, timeLeft));
             }
             else
             {
                 _timerDisposable.Disposable = default;
-                ChangeBehavior(_defaultBehavior, CharacterState.Default);
+                ChangeBehavior(_defaultBehavior, CharacterEffect.Default);
             }
         }
         

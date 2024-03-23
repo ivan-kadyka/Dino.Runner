@@ -10,7 +10,7 @@ namespace App.Character.Dino
         /// </summary>
         /// <param name="type">The type that define the behavior characteristics and parameters.</param>
         /// <returns>An instance of ICharacterBehavior that matches the provided options.</returns>
-        ICharacterBehavior Create(CharacterState type);
+        ICharacterBehavior Create(CharacterEffect type);
     }
 
 }

@@ -9,7 +9,7 @@ namespace App.Character
     /// Defines the behavior and properties of a character in the game, including actions like jump, run, and idle,
     /// and the ability to apply effects. It also integrates with the game's context for speed and character effect management.
     /// </summary>
-    public interface ICharacter : IGameContext, ICharacterStateContext, IDisposable
+    public interface ICharacter : IGameContext, ICharacterEffectsContext, IDisposable
     {
         /// <summary>
         /// Initiates a jump action for the character.

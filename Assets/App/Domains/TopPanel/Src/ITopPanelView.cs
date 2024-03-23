@@ -26,8 +26,8 @@ namespace App.TopPanel
         /// <summary>
         /// Updates the display with the type of effect currently applied to the character.
         /// </summary>
-        /// <param name="state">The current state or effect applied to the character.</param>
-        void UpdateEffectType(CharacterState state);
+        /// <param name="effect">The current state or effect applied to the character.</param>
+        void UpdateEffectType(CharacterEffect effect);
     
         /// <summary>
         /// Updates the display with the remaining time for the current effect applied to the character.

@@ -10,7 +10,7 @@ namespace App.Character
         /// <summary>
         /// Gets the type of effect to be applied to the character.
         /// </summary>
-        public CharacterState Type { get; }
+        public CharacterEffect Type { get; }
     
         /// <summary>
         /// Gets the duration for which the effect is applied.
@@ -22,7 +22,7 @@ namespace App.Character
         /// </summary>
         /// <param name="type">The type of character state.</param>
         /// <param name="duration">The duration of the state.</param>
-        public EffectStartOptions(CharacterState type, TimeSpan duration)
+        public EffectStartOptions(CharacterEffect type, TimeSpan duration)
         {
             Type = type;
             Duration = duration;

@@ -30,7 +30,7 @@ namespace App.Character.Dino
                 return character;
             }).AsSingle();
           
-            Container.Bind<ICharacterStateContext>()
+            Container.Bind<ICharacterEffectsContext>()
                 .FromMethod(it => it.Container.Resolve<Character>());
             
             Container.Bind<CharacterView>().FromComponentInNewPrefab(_characterPrefab).AsSingle();

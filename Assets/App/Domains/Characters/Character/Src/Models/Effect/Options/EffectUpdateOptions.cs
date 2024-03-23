@@ -4,12 +4,12 @@ namespace App.Character
 {
     public struct EffectUpdateOptions
     {
-        public CharacterState State { get; }
+        public CharacterEffect Effect { get; }
         public TimeSpan TimeLeft { get; }
 
-        public EffectUpdateOptions(CharacterState state, TimeSpan timeLeft)
+        public EffectUpdateOptions(CharacterEffect effect, TimeSpan timeLeft)
         {
-            State = state;
+            Effect = effect;
             TimeLeft = timeLeft;
         }
     }

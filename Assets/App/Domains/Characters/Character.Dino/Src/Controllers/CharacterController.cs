@@ -53,19 +53,19 @@ namespace App.Character.Dino
                 case CoinType.Fly:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterState.Fly, duration);
+                    options = new EffectStartOptions(CharacterEffect.Fly, duration);
                     break;  
                 }
                 case CoinType.Slow:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterState.Slow, duration);
+                    options = new EffectStartOptions(CharacterEffect.Slow, duration);
                     break;
                 }
                 case CoinType.Fast:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterState.Fast, duration);
+                    options = new EffectStartOptions(CharacterEffect.Fast, duration);
                     break;
                 }
             }

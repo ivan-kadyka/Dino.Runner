@@ -19,29 +19,29 @@ namespace App.Character.Dino
             _gameContext = gameContext;
         }
         
-        public ICharacterBehavior Create(CharacterState type)
+        public ICharacterBehavior Create(CharacterEffect type)
         {
             switch (type)
             {
-                case CharacterState.Default:
+                case CharacterEffect.Default:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Default);
                     return new DefaultCharacterBehavior(jumpBehavior, _settings);
                 }
-                case CharacterState.Idle:
+                case CharacterEffect.Idle:
                 {
                     return new IdleCharacterBehavior();
                 }
-                case CharacterState.Fly:
+                case CharacterEffect.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
                     return new CharacterBehavior(jumpBehavior, _gameContext.Speed);
                 }
-                case CharacterState.Fast:
+                case CharacterEffect.Fast:
                 {
                     return CreateSpeedBehavior(_gameContext.Speed * 1.5f);
                 }
-                case CharacterState.Slow:
+                case CharacterEffect.Slow:
                 {
                     return CreateSpeedBehavior(_gameContext.Speed / 1.5f);
                 }
