@@ -8,9 +8,9 @@ namespace App.Character.Dino
         /// <summary>
         /// Creates an instance of a character behavior based on the specified options.
         /// </summary>
-        /// <param name="options">The options that define the behavior characteristics and parameters.</param>
+        /// <param name="type">The type that define the behavior characteristics and parameters.</param>
         /// <returns>An instance of ICharacterBehavior that matches the provided options.</returns>
-        ICharacterBehavior Create(CharacterBehaviorOptions options);
+        ICharacterBehavior Create(CharacterState type);
     }
 
 }

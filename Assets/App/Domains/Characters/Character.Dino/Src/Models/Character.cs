@@ -56,8 +56,9 @@ namespace App.Character.Dino
 
         public async UniTask Run(CancellationToken token = default)
         {
-            _defaultBehavior = _behaviorFactory.Create(CharacterBehaviorOptions.Default);
-            ChangeBehavior(_defaultBehavior, CharacterState.Default);
+            var state = CharacterState.Default;
+            _defaultBehavior = _behaviorFactory.Create(state);
+            ChangeBehavior(_defaultBehavior, state);
             
             _runTaskSource = new UniTaskCompletionSource();
             
@@ -75,14 +76,14 @@ namespace App.Character.Dino
             await _currentBehavior.Execute(token);
         }
 
-        public UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions startOptions, CancellationToken token = default)
+        public UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions options, CancellationToken token = default)
         {
             _sounds.Play(CharacterSoundType.Effect);
                   
-            ChangeBehavior(behavior, startOptions.Type);
+            ChangeBehavior(behavior, options.Type);
             
             _timerDisposable.Disposable = _tickableContext.Updated.Subscribe(OnEffectTimer);
-            _updateSubject.OnNext(new EffectUpdateOptions(startOptions.Type, startOptions.Duration));
+            _updateSubject.OnNext(new EffectUpdateOptions(options.Type, options.Duration));
 
             return UniTask.CompletedTask;
         }

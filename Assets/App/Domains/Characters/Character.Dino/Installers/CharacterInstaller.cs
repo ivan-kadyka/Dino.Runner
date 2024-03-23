@@ -16,7 +16,6 @@ namespace App.Character.Dino
                 .To<InputCharacterController>()
                 .FromComponentsInHierarchy()
                 .AsSingle();
-
             
             Container.Bind<GameContext.GameContext>().AsSingle();
             Container.Bind<IGameContext>().FromMethod(it => it.Container.Resolve<GameContext.GameContext>()).AsSingle();

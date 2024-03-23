@@ -46,34 +46,34 @@ namespace App.Character.Dino
 
         private async UniTask CoinHandleStrategy(CoinType coinType)
         {
-            EffectStartOptions startOptions = default;
+            EffectStartOptions options = default;
             
             switch (coinType)
             {
                 case CoinType.Fly:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    startOptions = new EffectStartOptions(CharacterState.Fly, duration);
+                    options = new EffectStartOptions(CharacterState.Fly, duration);
                     break;  
                 }
                 case CoinType.Slow:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    startOptions = new EffectStartOptions(CharacterState.Slow, duration);
+                    options = new EffectStartOptions(CharacterState.Slow, duration);
                     break;
                 }
                 case CoinType.Fast:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    startOptions = new EffectStartOptions(CharacterState.Fast, duration);
+                    options = new EffectStartOptions(CharacterState.Fast, duration);
                     break;
                 }
             }
 
-            if (startOptions != null)
+            if (options != null)
             {
-                var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(startOptions.Type, _character.Speed));
-                await _character.ApplyEffectBehavior(newBehavior, startOptions);
+                var newBehavior = _behaviorFactory.Create(options.Type);
+                await _character.ApplyEffectBehavior(newBehavior, options);
             }
         }
         

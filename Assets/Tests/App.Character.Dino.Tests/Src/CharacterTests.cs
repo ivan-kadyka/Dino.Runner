@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using App.Character.Dino.GameContext;
 using Cysharp.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -28,8 +29,10 @@ namespace App.Character.Dino.Tests
             _tickableContext = new TestTickableContext();
             
             var settings = new CharacterSettings();
+            var gameContext = new StubGameContext();
+            
             var jumpBehaviorFactory = new JumpBehaviorFactory(_physicsMock.Object, _soundsMock.Object, settings);
-             _characterBehaviorFactory = new CharacterBehaviorFactory(jumpBehaviorFactory, settings);
+             _characterBehaviorFactory = new CharacterBehaviorFactory(jumpBehaviorFactory, settings, gameContext);
             
             _character = new Character(_soundsMock.Object, _tickableContext, _characterBehaviorFactory);
             _disposables.Add(_character);
@@ -49,12 +52,11 @@ namespace App.Character.Dino.Tests
             CharacterState nextState = CharacterState.Default;
             _disposables.Add(_character.State.Subscribe(t => { nextState = t;}));
             
-            var effectOptions = new EffectStartOptions(CharacterState.Fly, TimeSpan.Zero);
-            var behaviorOptions = new CharacterBehaviorOptions(CharacterState.Fly, 1);
-            var newBehavior = _characterBehaviorFactory.Create(behaviorOptions);
+            var options = new EffectStartOptions(CharacterState.Fly, TimeSpan.Zero);
+            var newBehavior = _characterBehaviorFactory.Create(options.Type);
             
             // Act
-            await _character.ApplyEffectBehavior(newBehavior, effectOptions);
+            await _character.ApplyEffectBehavior(newBehavior, options);
             
             
             // Assert

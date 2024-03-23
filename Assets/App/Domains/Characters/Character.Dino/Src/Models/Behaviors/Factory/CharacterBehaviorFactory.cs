@@ -1,4 +1,5 @@
 using System;
+using App.GameCore;
 
 namespace App.Character.Dino
 {
@@ -6,16 +7,21 @@ namespace App.Character.Dino
     {
         private readonly IJumpBehaviorFactory _jumpBehaviorFactory;
         private readonly CharacterSettings _settings;
+        private readonly IGameContext _gameContext;
 
-        public CharacterBehaviorFactory(IJumpBehaviorFactory jumpBehaviorFactory, CharacterSettings settings)
+        public CharacterBehaviorFactory(
+            IJumpBehaviorFactory jumpBehaviorFactory,
+            CharacterSettings settings,
+            IGameContext gameContext)
         {
             _jumpBehaviorFactory = jumpBehaviorFactory;
             _settings = settings;
+            _gameContext = gameContext;
         }
         
-        public ICharacterBehavior Create(CharacterBehaviorOptions options)
+        public ICharacterBehavior Create(CharacterState type)
         {
-            switch (options.State)
+            switch (type)
             {
                 case CharacterState.Default:
                 {
@@ -29,18 +35,18 @@ namespace App.Character.Dino
                 case CharacterState.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
-                    return new CharacterBehavior(jumpBehavior, options.Speed);
+                    return new CharacterBehavior(jumpBehavior, _gameContext.Speed);
                 }
                 case CharacterState.Fast:
                 {
-                    return CreateSpeedBehavior(options.Speed * 1.5f);
+                    return CreateSpeedBehavior(_gameContext.Speed * 1.5f);
                 }
                 case CharacterState.Slow:
                 {
-                    return CreateSpeedBehavior(options.Speed / 1.5f);
+                    return CreateSpeedBehavior(_gameContext.Speed / 1.5f);
                 }
                 default:
-                    throw new InvalidOperationException($"Can't create selected '{options.State}' character behavior type");
+                    throw new InvalidOperationException($"Can't create selected '{type}' character behavior type");
             }
         }
 
