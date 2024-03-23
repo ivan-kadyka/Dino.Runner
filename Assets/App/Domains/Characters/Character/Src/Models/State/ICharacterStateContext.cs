@@ -12,10 +12,10 @@ namespace App.Character
         /// Gets an observable value representing the current state applied to the character.
         /// </summary>
         IObservableValue<CharacterState> State { get; }
-    
+        
         /// <summary>
         /// An observable that emits the remaining duration of the current character state.
         /// </summary>
-        IObservable<TimeSpan> TimeLeft { get; }
+        IObservable<EffectUpdateOptions> Updated { get; }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using App.Character;
 using App.GameCore;
@@ -29,7 +28,7 @@ namespace App.TopPanel
             _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
             
             _disposables.Add(characterStateContext.State.Subscribe(OnBehaviorTypeChanged));
-            _disposables.Add(characterStateContext.TimeLeft.Subscribe(OnTimeLeft));
+            _disposables.Add(characterStateContext.Updated.Subscribe(OnEffectUpdated));
         }
 
         protected override UniTask OnStarted(CancellationToken token = default)
@@ -51,9 +50,9 @@ namespace App.TopPanel
             _view.UpdateEffectType(type);
         }
         
-        private void OnTimeLeft(TimeSpan timeLeft)
+        private void OnEffectUpdated(EffectUpdateOptions options)
         {
-            _view.UpdateEffectTime(timeLeft);
+            _view.UpdateEffectTime(options.TimeLeft);
         }
 
         private void OnUpdated(float deltaTime)

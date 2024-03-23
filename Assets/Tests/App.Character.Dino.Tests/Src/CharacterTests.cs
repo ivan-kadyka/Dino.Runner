@@ -17,6 +17,7 @@ namespace App.Character.Dino.Tests
         private Mock<ICharacterPhysics> _physicsMock;
 
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private ICharacterBehaviorFactory _characterBehaviorFactory;
 
         [SetUp]
         public void Setup()
@@ -28,16 +29,16 @@ namespace App.Character.Dino.Tests
             
             var settings = new CharacterSettings();
             var jumpBehaviorFactory = new JumpBehaviorFactory(_physicsMock.Object, _soundsMock.Object, settings);
-            var characterBehaviorFactory = new CharacterBehaviorFactory(jumpBehaviorFactory, settings);
+             _characterBehaviorFactory = new CharacterBehaviorFactory(jumpBehaviorFactory, settings);
             
-            _character = new Character(_soundsMock.Object, _tickableContext, characterBehaviorFactory);
+            _character = new Character(_soundsMock.Object, _tickableContext, _characterBehaviorFactory);
+            _disposables.Add(_character);
         }
 
         [TearDown]
         public void TearDown()
         {
             _disposables.Clear();
-            _character.Dispose();
         }
         
         
@@ -48,10 +49,12 @@ namespace App.Character.Dino.Tests
             CharacterState nextState = CharacterState.Default;
             _disposables.Add(_character.State.Subscribe(t => { nextState = t;}));
             
-            var effectOptions = new CharacterOptions(CharacterState.Fly, TimeSpan.Zero);
+            var effectOptions = new EffectStartOptions(CharacterState.Fly, TimeSpan.Zero);
+            var behaviorOptions = new CharacterBehaviorOptions(CharacterState.Fly, 1);
+            var newBehavior = _characterBehaviorFactory.Create(behaviorOptions);
             
             // Act
-            await _character.ApplyEffect(effectOptions);
+            await _character.ApplyEffectBehavior(newBehavior, effectOptions);
             
             
             // Assert

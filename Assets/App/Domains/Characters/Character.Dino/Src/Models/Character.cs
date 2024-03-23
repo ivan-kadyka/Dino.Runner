@@ -12,8 +12,8 @@ namespace App.Character.Dino
     internal class Character : DisposableBase, ICharacter
     {
         public IObservableValue<CharacterState> State => _behaviorTypeSubject;
-        public IObservable<TimeSpan> TimeLeft => _timeSubject;
-        
+        public IObservable<EffectUpdateOptions> Updated => _updateSubject;
+
         public float Speed => _currentBehavior.Speed;
         
         private UniTaskCompletionSource _runTaskSource = new UniTaskCompletionSource();
@@ -26,9 +26,10 @@ namespace App.Character.Dino
 
         private ICharacterBehavior _defaultBehavior;
         private ICharacterBehavior _currentBehavior = new IdleCharacterBehavior();
-
+        
         private readonly ObservableValue<CharacterState> _behaviorTypeSubject = new ObservableValue<CharacterState>(CharacterState.Default);
-        private readonly ObservableValue<TimeSpan> _timeSubject = new ObservableValue<TimeSpan>(TimeSpan.Zero);
+        private readonly ObservableValue<EffectUpdateOptions> _updateSubject = new ObservableValue<EffectUpdateOptions>(new EffectUpdateOptions(CharacterState.Default, TimeSpan.Zero));
+        
         private readonly SerialDisposable _timerDisposable = new SerialDisposable();
         
         public Character(
@@ -74,20 +75,17 @@ namespace App.Character.Dino
             await _currentBehavior.Execute(token);
         }
 
-        public UniTask ApplyEffect(CharacterOptions options, CancellationToken token = default)
+        public UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions startOptions, CancellationToken token = default)
         {
             _sounds.Play(CharacterSoundType.Effect);
-            
-            var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(options.Type, _currentBehavior.Speed));
                   
-            ChangeBehavior(newBehavior, options.Type);
+            ChangeBehavior(behavior, startOptions.Type);
             
             _timerDisposable.Disposable = _tickableContext.Updated.Subscribe(OnEffectTimer);
-            _timeSubject.OnNext(options.Duration);
+            _updateSubject.OnNext(new EffectUpdateOptions(startOptions.Type, startOptions.Duration));
 
             return UniTask.CompletedTask;
         }
-        
 
         public async UniTask Jump(CancellationToken token = default)
         {
@@ -96,11 +94,13 @@ namespace App.Character.Dino
 
         private void OnEffectTimer(float deltaTime)
         {
-            var timeLeft = _timeSubject.Value - TimeSpan.FromMilliseconds(deltaTime * 1000);
+            var prevOptions = _updateSubject.Value;
+            
+            var timeLeft = prevOptions.TimeLeft - TimeSpan.FromMilliseconds(deltaTime * 1000);
 
             if (timeLeft.TotalMilliseconds > 0)
             {
-                _timeSubject.OnNext(timeLeft);
+                _updateSubject.OnNext(new EffectUpdateOptions(prevOptions.State, timeLeft));
             }
             else
             {

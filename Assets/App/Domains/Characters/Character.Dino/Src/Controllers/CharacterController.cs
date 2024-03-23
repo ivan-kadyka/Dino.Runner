@@ -11,14 +11,17 @@ namespace App.Character.Dino
     internal class CharacterController : ControllerBase
     {
         private readonly ICharacter _character;
+        private readonly ICharacterBehaviorFactory _behaviorFactory;
 
         public CharacterController(
             ICharacter character,
             ICharacterPhysics physics, 
+            ICharacterBehaviorFactory behaviorFactory,
             IInputCharacterController inputCharacterController)
         {
             _character = character;
-            
+            _behaviorFactory = behaviorFactory;
+
             _disposables.Add(inputCharacterController.JumpPressed.Subscribe(OnJumpPressed));
             _disposables.Add(physics.Collider.Subscribe(OnCollider));
         }
@@ -43,29 +46,34 @@ namespace App.Character.Dino
 
         private async UniTask CoinHandleStrategy(CoinType coinType)
         {
+            EffectStartOptions startOptions = default;
+            
             switch (coinType)
             {
                 case CoinType.Fly:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    var options = new CharacterOptions(CharacterState.Fly, duration);
-                    await _character.ApplyEffect(options);
+                    startOptions = new EffectStartOptions(CharacterState.Fly, duration);
                     break;  
                 }
                 case CoinType.Slow:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    var options = new CharacterOptions(CharacterState.Slow, duration);
-                    await _character.ApplyEffect(options);
+                    startOptions = new EffectStartOptions(CharacterState.Slow, duration);
                     break;
                 }
                 case CoinType.Fast:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    var options = new CharacterOptions(CharacterState.Fast, duration);
-                    await _character.ApplyEffect(options);
+                    startOptions = new EffectStartOptions(CharacterState.Fast, duration);
                     break;
                 }
+            }
+
+            if (startOptions != null)
+            {
+                var newBehavior = _behaviorFactory.Create(new CharacterBehaviorOptions(startOptions.Type, _character.Speed));
+                await _character.ApplyEffectBehavior(newBehavior, startOptions);
             }
         }
         
