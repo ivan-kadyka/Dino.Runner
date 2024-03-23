@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using App.Character.Dino.GameContext;
 using Cysharp.Threading.Tasks;
 using Moq;
@@ -49,9 +51,6 @@ namespace App.Character.Dino.Tests
         public IEnumerator ApplyEffect_UseFly_ShouldBeApplied() => UniTask.ToCoroutine(async () =>
         {
             //Arrange
-            CharacterEffect nextEffect = CharacterEffect.Default;
-            _disposables.Add(_character.Effects.Subscribe(t => { nextEffect = t;}));
-            
             var options = new EffectStartOptions(CharacterEffect.Fly, TimeSpan.Zero);
             var newBehavior = _characterBehaviorFactory.Create(options.Type);
             
@@ -60,8 +59,26 @@ namespace App.Character.Dino.Tests
             
             
             // Assert
-            Assert.AreEqual(CharacterEffect.Fly, nextEffect);
-            Assert.AreEqual(CharacterEffect.Fly, _character.Effects.Value);
+            Assert.AreEqual(1, _character.Effects.Value.Count);
+            Assert.True(_character.Effects.Value.First() == CharacterEffect.Fly);
+        });
+        
+        [UnityTest]
+        public IEnumerator ApplyEffect_UseFly_ShouldBeChanged() => UniTask.ToCoroutine(async () =>
+        {
+            //Arrange
+            IReadOnlyCollection<CharacterEffect> changedEffects = new List<CharacterEffect>();
+            _disposables.Add(_character.Effects.Subscribe(t => { changedEffects = t;}));
+            
+            var options = new EffectStartOptions(CharacterEffect.Fly, TimeSpan.Zero);
+            var newBehavior = _characterBehaviorFactory.Create(options.Type);
+            
+            // Act
+            await _character.ApplyEffectBehavior(newBehavior, options);
+            
+            // Assert
+            Assert.AreEqual(1, changedEffects.Count);
+            Assert.AreEqual(CharacterEffect.Fly, changedEffects.First());
         });
     }
 }

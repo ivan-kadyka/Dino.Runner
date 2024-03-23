@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Infra.Components.Tickable;
@@ -11,7 +12,7 @@ namespace App.Character.Dino
 {
     internal class Character : DisposableBase, ICharacter
     {
-        public IObservableValue<CharacterEffect> Effects => _behaviorTypeSubject;
+        public IObservableValue<IReadOnlyCollection<CharacterEffect>> Effects => _effectsSubject;
         public IObservable<EffectUpdateOptions> Updated => _updateSubject;
 
         public float Speed => _currentBehavior.Speed;
@@ -27,7 +28,7 @@ namespace App.Character.Dino
         private ICharacterBehavior _defaultBehavior;
         private ICharacterBehavior _currentBehavior = new IdleCharacterBehavior();
         
-        private readonly ObservableValue<CharacterEffect> _behaviorTypeSubject = new ObservableValue<CharacterEffect>(CharacterEffect.Default);
+        private readonly ObservableValue<List<CharacterEffect>> _effectsSubject = new ObservableValue<List<CharacterEffect>>(new List<CharacterEffect>());
         private readonly ObservableValue<EffectUpdateOptions> _updateSubject = new ObservableValue<EffectUpdateOptions>(new EffectUpdateOptions(CharacterEffect.Default, TimeSpan.Zero));
         
         private readonly SerialDisposable _timerDisposable = new SerialDisposable();
@@ -51,14 +52,14 @@ namespace App.Character.Dino
                 return;
             
             _currentBehavior = behavior;
-            _behaviorTypeSubject.OnNext(effect);
+            _effectsSubject.OnNext(new List<CharacterEffect>() { effect});
         }
 
         public async UniTask Run(CancellationToken token = default)
         {
-            var state = CharacterEffect.Default;
-            _defaultBehavior = _behaviorFactory.Create(state);
-            ChangeBehavior(_defaultBehavior, state);
+            var type = CharacterEffect.Default;
+            _defaultBehavior = _behaviorFactory.Create(type);
+            ChangeBehavior(_defaultBehavior, type);
             
             _runTaskSource = new UniTaskCompletionSource();
             
@@ -68,7 +69,10 @@ namespace App.Character.Dino
         public async UniTask Idle(CancellationToken token = default)
         {
             _timerDisposable.Disposable = default;
-            ChangeBehavior(new IdleCharacterBehavior(), CharacterEffect.Idle);
+            
+            var type = CharacterEffect.Idle;
+            var newBehavior = _behaviorFactory.Create(type);
+            ChangeBehavior(newBehavior, CharacterEffect.Idle);
             
             _sounds.Play(CharacterSoundType.Idle);
             _runTaskSource.TrySetResult();

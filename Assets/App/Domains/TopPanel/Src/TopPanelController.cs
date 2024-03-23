@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using App.Character;
 using App.GameCore;
@@ -27,7 +29,7 @@ namespace App.TopPanel
             _gameContext = gameContext;
             _disposables.Add(tickableContext.Updated.Subscribe(OnUpdated));
             
-            _disposables.Add(characterEffectsContext.Effects.Subscribe(OnBehaviorTypeChanged));
+            _disposables.Add(characterEffectsContext.Effects.Subscribe(OnEffectsChanged));
             _disposables.Add(characterEffectsContext.Updated.Subscribe(OnEffectUpdated));
         }
 
@@ -45,9 +47,10 @@ namespace App.TopPanel
             return base.OnStopped(token);
         }
 
-        private void OnBehaviorTypeChanged(CharacterEffect type)
+        private void OnEffectsChanged(IReadOnlyCollection<CharacterEffect> effects)
         {
-            _view.UpdateEffectType(type);
+            if (effects.Count > 0)
+                _view.UpdateEffectType(effects.First());
         }
         
         private void OnEffectUpdated(EffectUpdateOptions options)
