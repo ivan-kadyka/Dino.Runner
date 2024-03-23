@@ -39,7 +39,7 @@ namespace App.Character
         /// <param name="options">The options defining the effect to apply.</param>
         /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
         /// <returns>A UniTask that represents the asynchronous operation.</returns>
-        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions options, CancellationToken token = default);
+        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectOptions options, CancellationToken token = default);
     }
 
 }

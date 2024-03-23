@@ -193,7 +193,7 @@ Application game logic  based on `IController` which can control others controls
     /// Defines the behavior and properties of a character in the game, including actions like jump, run, and idle,
     /// and the ability to apply effects. It also integrates with the game's context for speed and character effect management.
     /// </summary>
-    public interface ICharacter : IGameContext, ICharacterStateContext, IDisposable
+    public interface ICharacter : IGameContext, ICharacterEffectsContext, IDisposable
     {
         /// <summary>
         /// Initiates a jump action for the character.
@@ -219,29 +219,30 @@ Application game logic  based on `IController` which can control others controls
         /// <summary>
         /// Applies an effect to the character based on the provided options.
         /// </summary>
+        /// <param name="behavior">Character effect behavior</param>
         /// <param name="options">The options defining the effect to apply.</param>
         /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
         /// <returns>A UniTask that represents the asynchronous operation.</returns>
-        UniTask ApplyEffect(CharacterOptions options, CancellationToken token = default);
+        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions options, CancellationToken token = default);
     }
 ```
 `ICharacterStateContext` is interface to observable character state changes
 
 ```csharp
     /// <summary>
-    /// Defines a context for observing and managing character states and their remaining durations.
+    /// Defines a context for observing and managing character effects and their remaining updates.
     /// </summary>
-    public interface ICharacterStateContext
+    public interface ICharacterEffectsContext
     {
         /// <summary>
-        /// Gets an observable value representing the current state applied to the character.
+        /// Gets an observable collection representing the current effects applied to the character.
         /// </summary>
-        IObservableValue<CharacterState> State { get; }
-    
+        IObservableValue<IReadOnlyCollection<CharacterEffect>> Effects { get; }
+        
         /// <summary>
         /// An observable that emits the remaining duration of the current character state.
         /// </summary>
-        IObservable<TimeSpan> TimeLeft { get; }
+        IObservable<EffectUpdateOptions> Updated { get; }
     }
 ```
 
@@ -249,70 +250,98 @@ Application game logic  based on `IController` which can control others controls
 
 ```csharp
     /// <summary>
-    /// Enumerates the different states that can be applied to a character's behavior or state.
+    /// Enumerates the different effects that can be applied to a character's behavior or state.
     /// </summary>
-    public enum CharacterState
+    public enum CharacterEffect
     {
         /// <summary>
-        /// Represents the default state, with no modifications applied.
+        /// Represents the default effect, with no modifications applied.
         /// </summary>
         Default,
 
         /// <summary>
-        /// Indicates that the character is in an idle state
+        /// Indicates that the character is in an idle effect
         /// </summary>
         Idle,
 
         /// <summary>
-        /// Applies a slow state to the character, reducing its movement speed or action speed.
+        /// Applies a slow effect to the character, reducing its movement speed or action speed.
         /// </summary>
         Slow,
 
         /// <summary>
-        /// Applies a fast state to the character, increasing its movement speed or action speed.
+        /// Applies a fast effect to the character, increasing its movement speed or action speed.
         /// </summary>
         Fast,
 
         /// <summary>
-        /// Enables the character to fly, possibly changing its mode of movement and interaction with the environment.
+        /// Enables the effect to fly, possibly changing its mode of movement and interaction with the environment.
         /// </summary>
         Fly
     }
 ```
 
-`CharacterOptions`  Represents the options for applying effects to a character, including the type of effect and its duration.
+`EffectStartOptions`  Represents the options for applying  effects on start to a character, including the type of effect and its duration.
 <details>
 <summary>More details </summary>
-
     /// <summary>
-    /// Enumerates the different states that can be applied to a character's behavior or state.
+    /// Represents the options for applying effects to a character, including the type of effect and its duration.
     /// </summary>
-    public enum CharacterState
+    public class EffectStartOptions
     {
         /// <summary>
-        /// Represents the default state, with no modifications applied.
+        /// Gets the type of effect to be applied to the character.
         /// </summary>
-        Default,
+        public CharacterEffect Type { get; }
+    
         /// <summary>
-        /// Indicates that the character is in an idle state
+        /// Gets the duration for which the effect is applied.
         /// </summary>
-        Idle,
+        public TimeSpan Duration { get; }
 
         /// <summary>
-        /// Applies a slow state to the character, reducing its movement speed or action speed.
+        /// Initializes a new instance of the CharacterStateOptions class with specified effect type and duration.
         /// </summary>
-        Slow,
-
-        /// <summary>
-        /// Applies a fast state to the character, increasing its movement speed or action speed.
-        /// </summary>
-        Fast,
-
-        /// <summary>
-        /// Enables the character to fly, possibly changing its mode of movement and interaction with the environment.
-        /// </summary>
-        Fly
+        /// <param name="type">The type of character state.</param>
+        /// <param name="duration">The duration of the state.</param>
+        public EffectStartOptions(CharacterEffect type, TimeSpan duration)
+        {
+            Type = type;
+            Duration = duration;
+        }
     }
+</details>
+
+`EffectUpdateOptions`  Represents the options for applying  effect updates to a character, including the type of effect and its time left.
+<details>
+<summary>More details </summary>
+/// <summary>
+/// Represents the options for updating character effects, including the type of effect and the remaining time for that effect.
+/// </summary>
+public struct EffectUpdateOptions
+{
+    /// <summary>
+    /// Gets the specific character effect being applied.
+    /// </summary>
+    public CharacterEffect Effect { get; private set; }
+
+    /// <summary>
+    /// Gets the time span indicating how much time is left until the effect expires.
+    /// </summary>
+    public TimeSpan TimeLeft { get; private set; }
+
+    /// <summary>
+    /// Initializes a new instance of the EffectUpdateOptions struct with specified effect type and time left.
+    /// </summary>
+    /// <param name="effect">The character effect type.</param>
+    /// <param name="timeLeft">The remaining duration of the effect.</param>
+    public EffectUpdateOptions(CharacterEffect effect, TimeSpan timeLeft)
+    {
+        Effect = effect;
+        TimeLeft = timeLeft;
+    }
+}
+
 </details>
 
 ## How to add new coin
@@ -438,9 +467,9 @@ Application game logic  based on `IController` which can control others controls
 3. Register created yours new implemented types `ICharacterBehavior` & `CharacterState`  in  factory `CharacterBehaviorFactory`
 ```csharp
         //Example
-        public ICharacterBehavior Create(CharacterBehaviorOptions options)
+        public ICharacterBehavior Create(CharacterEffect type)
         {
-            switch (options.State)
+            switch (type)
             {
                 ...
                 case CharacterState.Fly:
@@ -457,7 +486,7 @@ Application game logic  based on `IController` which can control others controls
 4. Create strategy with your `ICharacterBehavior` and, for example coin type, in `CharacterController`
 ```csharp
         //Example
-        private async UniTask CoinHandleStrategy(CoinType coinType)
+        private async UniTask CoinEffectBehaviorStrategy(CoinType coinType)
         {
             switch (coinType)
             {
@@ -465,8 +494,10 @@ Application game logic  based on `IController` which can control others controls
                 case CoinType.Fly:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    var options = new CharacterOptions(CharacterState.Fly, duration);
-                    await _character.ApplyEffect(options);
+                    var options = new EffectOptions(CharacterEffect.Fly, duration);
+                    
+                    var newBehavior = _behaviorFactory.Create(options.Type);
+                    await _character.ApplyEffectBehavior(newBehavior, options);
                     break;  
                 }
                 ...

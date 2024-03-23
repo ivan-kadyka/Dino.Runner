@@ -39,33 +39,33 @@ namespace App.Character.Dino
                     await _character.Idle();
                     break;
                 case CoinObject coinObject:
-                    await CoinHandleStrategy(coinObject.CoinType);
+                    await CoinEffectBehaviorStrategy(coinObject.CoinType);
                     break;
             }
         }
 
-        private async UniTask CoinHandleStrategy(CoinType coinType)
+        private async UniTask CoinEffectBehaviorStrategy(CoinType coinType)
         {
-            EffectStartOptions options = default;
+            EffectOptions options = default;
             
             switch (coinType)
             {
                 case CoinType.Fly:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterEffect.Fly, duration);
+                    options = new EffectOptions(CharacterEffect.Fly, duration);
                     break;  
                 }
                 case CoinType.Slow:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterEffect.Slow, duration);
+                    options = new EffectOptions(CharacterEffect.Slow, duration);
                     break;
                 }
                 case CoinType.Fast:
                 {
                     var duration = TimeSpan.FromSeconds(10);
-                    options = new EffectStartOptions(CharacterEffect.Fast, duration);
+                    options = new EffectOptions(CharacterEffect.Fast, duration);
                     break;
                 }
             }

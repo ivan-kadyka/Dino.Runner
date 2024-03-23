@@ -51,7 +51,7 @@ namespace App.Character.Dino.Tests
         public IEnumerator ApplyEffect_UseFly_ShouldBeApplied() => UniTask.ToCoroutine(async () =>
         {
             //Arrange
-            var options = new EffectStartOptions(CharacterEffect.Fly, TimeSpan.Zero);
+            var options = new EffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
             var newBehavior = _characterBehaviorFactory.Create(options.Type);
             
             // Act
@@ -70,7 +70,7 @@ namespace App.Character.Dino.Tests
             IReadOnlyCollection<CharacterEffect> changedEffects = new List<CharacterEffect>();
             _disposables.Add(_character.Effects.Subscribe(t => { changedEffects = t;}));
             
-            var options = new EffectStartOptions(CharacterEffect.Fly, TimeSpan.Zero);
+            var options = new EffectOptions(CharacterEffect.Fly, TimeSpan.Zero);
             var newBehavior = _characterBehaviorFactory.Create(options.Type);
             
             // Act

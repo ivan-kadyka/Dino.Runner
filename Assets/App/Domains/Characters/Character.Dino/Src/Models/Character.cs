@@ -80,7 +80,7 @@ namespace App.Character.Dino
             await _currentBehavior.Execute(token);
         }
 
-        public UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions options, CancellationToken token = default)
+        public UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectOptions options, CancellationToken token = default)
         {
             _sounds.Play(CharacterSoundType.Effect);
                   
