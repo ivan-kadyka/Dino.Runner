@@ -223,10 +223,10 @@ Application game logic  based on `IController` which can control others controls
         /// <param name="options">The options defining the effect to apply.</param>
         /// <param name="token">A CancellationToken for cancelling the task if needed.</param>
         /// <returns>A UniTask that represents the asynchronous operation.</returns>
-        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectStartOptions options, CancellationToken token = default);
+        UniTask ApplyEffectBehavior(ICharacterBehavior behavior, EffectOptions options, CancellationToken token = default);
     }
 ```
-`ICharacterStateContext` is interface to observable character state changes
+`ICharacterEffectsContext` is interface to observable character effect changes
 
 ```csharp
     /// <summary>
@@ -246,7 +246,7 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-`CharacterState` enumerates the different states that can be applied to a character's behavior or state.
+`CharacterEffect` enumerates the different effects that can be applied to a character's behavior or state.
 
 ```csharp
     /// <summary>
@@ -281,13 +281,13 @@ Application game logic  based on `IController` which can control others controls
     }
 ```
 
-`EffectStartOptions`  Represents the options for applying  effects on start to a character, including the type of effect and its duration.
+`EffectOptions`  Represents the options for applying  effects on start to a character, including the type of effect and its duration.
 <details>
 <summary>More details </summary>
     /// <summary>
     /// Represents the options for applying effects to a character, including the type of effect and its duration.
     /// </summary>
-    public class EffectStartOptions
+    public class EffectOptions
     {
         /// <summary>
         /// Gets the type of effect to be applied to the character.
@@ -300,11 +300,11 @@ Application game logic  based on `IController` which can control others controls
         public TimeSpan Duration { get; }
 
         /// <summary>
-        /// Initializes a new instance of the CharacterStateOptions class with specified effect type and duration.
+        /// Initializes a new instance of the EffectOptions class with specified effect type and duration.
         /// </summary>
-        /// <param name="type">The type of character state.</param>
-        /// <param name="duration">The duration of the state.</param>
-        public EffectStartOptions(CharacterEffect type, TimeSpan duration)
+        /// <param name="type">The type of character effect.</param>
+        /// <param name="duration">The duration of the effect.</param>
+        public EffectOptions(CharacterEffect type, TimeSpan duration)
         {
             Type = type;
             Duration = duration;
@@ -406,36 +406,36 @@ public struct EffectUpdateOptions
 
 ---
 
-1. Add new character state type in `CharacterState`
+1. Add new character effect type in `CharacterEffect`
 
 ```csharp
     /// <summary>
-    /// Enumerates the different states that can be applied to a character's behavior or state.
+    /// Enumerates the different effects that can be applied to a character's behavior or state.
     /// </summary>
-    public enum CharacterState
+    public enum CharacterEffect
     {
         /// <summary>
-        /// Represents the default state, with no modifications applied.
+        /// Represents the default effect, with no modifications applied.
         /// </summary>
         Default,
 
         /// <summary>
-        /// Indicates that the character is in an idle state
+        /// Indicates that the character is in an idle effect
         /// </summary>
         Idle,
 
         /// <summary>
-        /// Applies a slow state to the character, reducing its movement speed or action speed.
+        /// Applies a slow effect to the character, reducing its movement speed or action speed.
         /// </summary>
         Slow,
 
         /// <summary>
-        /// Applies a fast state to the character, increasing its movement speed or action speed.
+        /// Applies a fast effect to the character, increasing its movement speed or action speed.
         /// </summary>
         Fast,
 
         /// <summary>
-        /// Enables the character to fly, possibly changing its mode of movement and interaction with the environment.
+        /// Enables the effect to fly, possibly changing its mode of movement and interaction with the environment.
         /// </summary>
         Fly
     }
@@ -464,7 +464,7 @@ public struct EffectUpdateOptions
     }
 ```
 
-3. Register created yours new implemented types `ICharacterBehavior` & `CharacterState`  in  factory `CharacterBehaviorFactory`
+3. Register created yours new implemented types `ICharacterBehavior` & `CharacterEffect`  in  factory `CharacterBehaviorFactory`
 ```csharp
         //Example
         public ICharacterBehavior Create(CharacterEffect type)
@@ -472,7 +472,7 @@ public struct EffectUpdateOptions
             switch (type)
             {
                 ...
-                case CharacterState.Fly:
+                case CharacterEffect.Fly:
                 {
                     var jumpBehavior = _jumpBehaviorFactory.Create(JumpBehaviorType.Fly);
                     return new CharacterBehavior(jumpBehavior, options.Speed);
