@@ -4,7 +4,7 @@
 > Additionally, this version introduces a coins feature that change character behavior.
 ![image](docs/Images/game_preview.png)
 
-- **Platforms**: Android, WebGL. see exists builds in folder 'Builds' or [**Play online**](https://ivan-kadyka.github.io/Runner/)
+- **Platforms**: Android, WebGL. see exists builds in folder 'Builds' or [**Play online**](https://ivan-kadyka.github.io/Dino.Runner/)
 - **Version**: Unity 2021.3 (LTS)
 
 ## Project Structure
